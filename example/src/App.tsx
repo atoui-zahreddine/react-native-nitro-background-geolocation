@@ -1,12 +1,11 @@
 import { Text, View, StyleSheet } from 'react-native';
-import { multiply } from 'react-native-nitro-background-geolocation';
 
-const result = multiply(3, 7);
+// TODO: Task 9 will update the example app with geolocation usage
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>Background Geolocation Example</Text>
     </View>
   );
 }
