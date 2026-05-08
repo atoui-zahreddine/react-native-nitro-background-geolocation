@@ -7,6 +7,9 @@ import com.facebook.react.module.model.ReactModuleInfoProvider
 
 class NitroBackgroundGeolocationPackage : BaseReactPackage() {
     override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? {
+        // Provide the application context so the HybridObject can create
+        // the BackgroundGeolocationFacade without needing a constructor argument.
+        NitroBackgroundGeolocation.appContext = reactContext.applicationContext
         return null
     }
 
