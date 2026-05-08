@@ -112,7 +112,21 @@ android {
   }
 }
 
+repositories {
+  maven { url 'https://jitpack.io' }
+}
+
 dependencies {
   implementation "com.facebook.react:react-android"
   implementation project(":react-native-nitro-modules")
+
+  // Background geolocation native dependencies
+  implementation "com.google.android.gms:play-services-location:21.3.0"
+  implementation "com.github.tony19:logback-android:2.0.1"
+  implementation "org.slf4j:slf4j-api:2.0.13"
+  implementation "androidx.appcompat:appcompat:1.7.0"
+  implementation("io.github.nishkarsh:android-permissions:2.1.8") {
+    exclude group: 'com.android.support', module: 'appcompat-v7'
+  }
+  implementation "com.github.jparkie:promise:1.0.3"
 }

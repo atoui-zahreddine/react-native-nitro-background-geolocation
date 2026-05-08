@@ -1,2 +1,45 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <service
+            android:name="com.marianhello.bgloc.sync.SyncService"
+            android:exported="true"
+            android:process=":sync">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter"/>
+        </service>
+        <service
+            android:name="com.marianhello.bgloc.sync.AuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+        <provider
+            android:name="com.marianhello.bgloc.data.provider.LocationContentProvider"
+            android:authorities="${applicationId}.bgloc.provider"
+            android:exported="false"
+            android:syncable="true"/>
+        <service
+            android:name="com.marianhello.bgloc.service.LocationServiceImpl"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+        <receiver
+            android:name="com.marianhello.bgloc.BootCompletedReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.margelo.nitro.nitrobackgroundgeolocation.HeadlessTaskService"
+            android:enabled="true"
+            android:exported="false" />
+    </application>
 </manifest>

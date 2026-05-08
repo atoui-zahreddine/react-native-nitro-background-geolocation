@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">app_name</string>
+    <string name="plugin_bgloc_account_name">Locations</string>
+    <string name="plugin_bgloc_account_type">${applicationId}.bgloc.account</string>
+    <string name="plugin_bgloc_content_authority">${applicationId}.bgloc.provider</string>
 </resources>
