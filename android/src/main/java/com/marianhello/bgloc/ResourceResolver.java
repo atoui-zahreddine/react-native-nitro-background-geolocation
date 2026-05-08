@@ -42,11 +42,11 @@ public class ResourceResolver {
     }
 
     public String getAccountType() {
-        return getString(ACCOUNT_TYPE_RESOURCE);
+        return getApplicationContext().getPackageName() + ".bgloc.account";
     }
 
     public String getAuthority() {
-        return getString(AUTHORITY_TYPE_RESOURCE);
+        return getApplicationContext().getPackageName() + ".bgloc.provider";
     }
 
     public static ResourceResolver newInstance(Context context) {

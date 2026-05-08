@@ -1,9 +1,9 @@
 package com.margelo.nitro.nitrobackgroundgeolocation
 
-import android.content.Context
 import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import com.margelo.nitro.NitroModules
 import com.margelo.nitro.core.Promise
 import com.marianhello.bgloc.BackgroundGeolocationFacade
 import com.marianhello.bgloc.PluginDelegate
@@ -26,22 +26,14 @@ class NitroBackgroundGeolocation : HybridNitroBackgroundGeolocationSpec(), Plugi
 
     companion object {
         private const val TAG = "NitroBGGeo"
-
-        /**
-         * Holds the application context so the facade can be constructed
-         * without requiring a context in the HybridObject constructor.
-         * Must be set once during app startup (e.g. from the ReactPackage).
-         */
-        @Volatile
-        @JvmStatic
-        var appContext: Context? = null
     }
 
-    private val context: Context
-        get() = appContext ?: throw IllegalStateException(
-            "NitroBackgroundGeolocation: appContext has not been set. " +
-            "Call NitroBackgroundGeolocation.appContext = context from your ReactPackage."
-        )
+    private val context
+        get() = NitroModules.applicationContext?.applicationContext
+            ?: throw IllegalStateException(
+                "NitroBackgroundGeolocation: NitroModules.applicationContext is null. " +
+                "Ensure Nitro is installed before using this module."
+            )
 
     private val facade: BackgroundGeolocationFacade by lazy {
         BackgroundGeolocationFacade(context, this)
