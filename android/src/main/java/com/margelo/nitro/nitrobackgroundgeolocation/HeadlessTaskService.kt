@@ -15,8 +15,8 @@ import com.facebook.react.jstasks.HeadlessJsTaskConfig
  */
 class HeadlessTaskService : HeadlessJsTaskService() {
 
-    override fun getTaskConfig(intent: Intent): HeadlessJsTaskConfig? {
-        val extras = intent.extras ?: return null
+    override fun getTaskConfig(intent: Intent?): HeadlessJsTaskConfig? {
+        val extras = intent?.extras ?: return null
 
         val taskName = extras.getString(EXTRA_TASK_NAME) ?: return null
         val eventName = extras.getString(EXTRA_EVENT_NAME) ?: ""
