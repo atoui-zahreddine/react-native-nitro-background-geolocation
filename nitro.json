@@ -1,0 +1,23 @@
+{
+  "cxxNamespace": ["nitrobackgroundgeolocation"],
+  "ios": {
+    "iosModuleName": "NitroBackgroundGeolocation"
+  },
+  "android": {
+    "androidNamespace": ["nitrobackgroundgeolocation"],
+    "androidCxxLibName": "nitrobackgroundgeolocation"
+  },
+  "autolinking": {
+    "NitroBackgroundGeolocation": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "NitroBackgroundGeolocation"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "NitroBackgroundGeolocation"
+      }
+    }
+  },
+  "ignorePaths": ["node_modules"]
+}
