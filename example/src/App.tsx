@@ -16,48 +16,39 @@ import BackgroundGeolocation, {
   type ServiceStatus,
 } from 'react-native-nitro-background-geolocation';
 
+type AndroidPermission =
+  (typeof PermissionsAndroid.PERMISSIONS)[keyof typeof PermissionsAndroid.PERMISSIONS];
+
 async function requestLocationPermissions(): Promise<boolean> {
   if (Platform.OS !== 'android') {
     return true;
   }
 
   try {
-    const fineGranted = await PermissionsAndroid.request(
+    const permissions: AndroidPermission[] = [
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        title: 'Location Permission',
-        message:
-          'This app needs access to your location for background tracking.',
-        buttonPositive: 'OK',
-        buttonNegative: 'Cancel',
-      }
-    );
+    ];
 
-    if (fineGranted !== PermissionsAndroid.RESULTS.GRANTED) {
-      Alert.alert('Permission denied', 'Fine location permission is required.');
-      return false;
+    if (Platform.Version >= 29) {
+      permissions.push(PermissionsAndroid.PERMISSIONS.ACTIVITY_RECOGNITION);
     }
 
-    // Request background location separately (Android 10+)
-    if (Platform.Version >= 29) {
-      const bgGranted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
-        {
-          title: 'Background Location Permission',
-          message:
-            'This app needs background location access to track your position when the app is not in the foreground.',
-          buttonPositive: 'OK',
-          buttonNegative: 'Cancel',
-        }
-      );
+    if (Platform.Version >= 33) {
+      permissions.push(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+    }
 
-      if (bgGranted !== PermissionsAndroid.RESULTS.GRANTED) {
-        Alert.alert(
-          'Permission denied',
-          'Background location permission is required for background tracking.'
-        );
-        return false;
-      }
+    const results = await PermissionsAndroid.requestMultiple(permissions);
+    const requiredPermissions = [
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    ];
+
+    const missingPermissions = requiredPermissions.filter(
+      (permission) => results[permission] !== PermissionsAndroid.RESULTS.GRANTED
+    );
+
+    if (missingPermissions.length > 0) {
+      Alert.alert('Permission denied', 'Fine location permission is required.');
+      return false;
     }
 
     return true;
@@ -89,18 +80,12 @@ export default function App() {
   const handleConfigure = useCallback(async () => {
     try {
       await BackgroundGeolocation.configure({
-        headlessTaskName: 'BackgroundGeolocationHeadlessTask',
         locationProvider: LocationProvider.DISTANCE_FILTER,
         desiredAccuracy: LocationAccuracy.HIGH,
-        stationaryRadius: 50,
         distanceFilter: 50,
         debug: true,
         interval: 10000,
         fastestInterval: 5000,
-        activitiesInterval: 10000,
-        stopOnTerminate: false,
-        startOnBoot: true,
-        startForeground: true,
         notificationsEnabled: true,
         notificationTitle: 'BG Geolocation',
         notificationText: 'Tracking location in background',
@@ -203,6 +188,9 @@ export default function App() {
           <Text style={styles.locationText}>
             Altitude: {currentLocation.altitude.toFixed(1)}m
           </Text>
+          <Text style={styles.locationText}>
+            Altitude Accuracy: {currentLocation.altitudeAccuracy.toFixed(1)}m
+          </Text>
         </View>
       )}
 
@@ -253,6 +241,27 @@ export default function App() {
           onPress={handleGetCurrentLocation}
         >
           <Text style={styles.buttonText}>Get Location</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.buttonRow}>
+        <TouchableOpacity
+          style={[styles.button, styles.configButton]}
+          onPress={() => {
+            BackgroundGeolocation.showAppSettings();
+            addLog('Opened app settings');
+          }}
+        >
+          <Text style={styles.buttonText}>App Settings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.statusButton]}
+          onPress={() => {
+            BackgroundGeolocation.showLocationSettings();
+            addLog('Opened location settings');
+          }}
+        >
+          <Text style={styles.buttonText}>Location Settings</Text>
         </TouchableOpacity>
       </View>
 
