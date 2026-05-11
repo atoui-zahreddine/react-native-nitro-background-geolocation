@@ -1,16 +1,25 @@
 package com.margelo.nitro.nitrobackgroundgeolocation
 
+import android.app.Application
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.annotation.Keep
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.NitroModules
 import com.margelo.nitro.core.Promise
 import com.marianhello.bgloc.BackgroundGeolocationFacade
+import com.marianhello.bgloc.Config
 import com.marianhello.bgloc.PluginDelegate
 import com.marianhello.bgloc.PluginException
 import com.marianhello.bgloc.data.BackgroundActivity
 import com.marianhello.bgloc.data.BackgroundLocation
 import org.json.JSONObject
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * Kotlin HybridObject that bridges Nitro's generated spec to the Java
@@ -22,7 +31,11 @@ import org.json.JSONObject
  */
 @DoNotStrip
 @Keep
-class NitroBackgroundGeolocation : HybridNitroBackgroundGeolocationSpec(), PluginDelegate {
+class NitroBackgroundGeolocation :
+    HybridNitroBackgroundGeolocationSpec(),
+    PluginDelegate,
+    DefaultLifecycleObserver,
+    Application.ActivityLifecycleCallbacks {
 
     companion object {
         private const val TAG = "NitroBGGeo"
@@ -35,26 +48,55 @@ class NitroBackgroundGeolocation : HybridNitroBackgroundGeolocationSpec(), Plugi
                 "Ensure Nitro is installed before using this module."
             )
 
+    private val application
+        get() = context as? Application
+            ?: throw IllegalStateException(
+                "NitroBackgroundGeolocation: application context is not an Application."
+            )
+
     private val facade: BackgroundGeolocationFacade by lazy {
         BackgroundGeolocationFacade(context, this)
     }
+
+    private val mainHandler = Handler(Looper.getMainLooper())
+    private val trackedActivities = mutableSetOf<Int>()
+    private var lifecycleObserverRegistered = false
+    private var activityCallbacksRegistered = false
+    private var facadeDestroyed = false
 
     /** Name of the JS headless task registered via configure(). */
     private var headlessTaskName: String = ""
 
     // ---- Callback lists ----
 
-    private val locationCallbacks = mutableListOf<(Location) -> Unit>()
-    private val stationaryCallbacks = mutableListOf<(StationaryLocation) -> Unit>()
-    private val activityCallbacks = mutableListOf<(Activity) -> Unit>()
-    private val startCallbacks = mutableListOf<() -> Unit>()
-    private val stopCallbacks = mutableListOf<() -> Unit>()
-    private val errorCallbacks = mutableListOf<(BackgroundGeolocationError) -> Unit>()
-    private val authorizationCallbacks = mutableListOf<(AuthorizationStatus) -> Unit>()
-    private val foregroundCallbacks = mutableListOf<() -> Unit>()
-    private val backgroundCallbacks = mutableListOf<() -> Unit>()
-    private val abortRequestedCallbacks = mutableListOf<() -> Unit>()
-    private val httpAuthorizationCallbacks = mutableListOf<() -> Unit>()
+    private val locationCallbacks = CopyOnWriteArrayList<(Location) -> Unit>()
+    private val stationaryCallbacks = CopyOnWriteArrayList<(StationaryLocation) -> Unit>()
+    private val activityCallbacks = CopyOnWriteArrayList<(Activity) -> Unit>()
+    private val startCallbacks = CopyOnWriteArrayList<() -> Unit>()
+    private val stopCallbacks = CopyOnWriteArrayList<() -> Unit>()
+    private val errorCallbacks = CopyOnWriteArrayList<(BackgroundGeolocationError) -> Unit>()
+    private val authorizationCallbacks = CopyOnWriteArrayList<(AuthorizationStatus) -> Unit>()
+    private val foregroundCallbacks = CopyOnWriteArrayList<() -> Unit>()
+    private val backgroundCallbacks = CopyOnWriteArrayList<() -> Unit>()
+    private val abortRequestedCallbacks = CopyOnWriteArrayList<() -> Unit>()
+    private val httpAuthorizationCallbacks = CopyOnWriteArrayList<() -> Unit>()
+
+    init {
+        NitroModules.applicationContext?.currentActivity?.let { currentActivity ->
+            trackedActivities.add(System.identityHashCode(currentActivity))
+        }
+
+        mainHandler.post {
+            if (!lifecycleObserverRegistered) {
+                ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+                lifecycleObserverRegistered = true
+            }
+            if (!activityCallbacksRegistered) {
+                application.registerActivityLifecycleCallbacks(this)
+                activityCallbacksRegistered = true
+            }
+        }
+    }
 
     // ================================================================
     //  HybridNitroBackgroundGeolocationSpec — Lifecycle
@@ -62,11 +104,21 @@ class NitroBackgroundGeolocation : HybridNitroBackgroundGeolocationSpec(), Plugi
 
     override fun configure(options: ConfigureOptions): Promise<Unit> {
         return Promise.parallel {
-            headlessTaskName = options.headlessTaskName
-            val nativeConfig = ConfigMapper.toNativeConfig(options)
-            facade.configure(nativeConfig)
-            if (headlessTaskName.isNotEmpty()) {
-                facade.registerHeadlessTask(headlessTaskName)
+            val resolvedConfig = Config(facade.config)
+            ConfigMapper.applyNativeConfig(resolvedConfig, options)
+
+            headlessTaskName = ConfigMapper.resolveHeadlessTaskName(
+                HeadlessTaskRegistry.getTaskName(context).orEmpty(),
+                options.headlessTaskName
+            )
+            HeadlessTaskRegistry.setTaskName(context, headlessTaskName.ifBlank { null })
+            facade.reconfigure(resolvedConfig)
+            if (facade.isRunning) {
+                if (headlessTaskName.isNotEmpty()) {
+                    facade.registerHeadlessTask(ReactNativeHeadlessTaskRunner::class.java.name)
+                } else {
+                    facade.clearHeadlessTask()
+                }
             }
         }
     }
@@ -131,8 +183,16 @@ class NitroBackgroundGeolocation : HybridNitroBackgroundGeolocationSpec(), Plugi
     override fun getConfig(): Promise<ConfigureOptions> {
         return Promise.parallel {
             val nativeConfig = facade.config
-            ConfigMapper.toJsConfig(nativeConfig, headlessTaskName)
+            ConfigMapper.toJsConfig(nativeConfig, HeadlessTaskRegistry.getTaskName(context))
         }
+    }
+
+    override fun showAppSettings() {
+        BackgroundGeolocationFacade.showAppSettings(context)
+    }
+
+    override fun showLocationSettings() {
+        BackgroundGeolocationFacade.showLocationSettings(context)
     }
 
     // ================================================================
@@ -293,6 +353,33 @@ class NitroBackgroundGeolocation : HybridNitroBackgroundGeolocationSpec(), Plugi
     }
 
     // ================================================================
+    //  Lifecycle observer (foreground/background/destroy)
+    // ================================================================
+
+    override fun onStart(owner: LifecycleOwner) {
+        Log.d(TAG, "App entered foreground")
+        facadeDestroyed = false
+        facade.resume()
+        foregroundCallbacks.forEach { it() }
+    }
+
+    override fun onStop(owner: LifecycleOwner) {
+        Log.d(TAG, "App entered background")
+        facade.pause()
+        backgroundCallbacks.forEach { it() }
+    }
+
+    override fun dispose() {
+        try {
+            mainHandler.post {
+                unregisterObservers()
+                destroyFacade()
+            }
+        } catch (_: Throwable) {
+        }
+    }
+
+    // ================================================================
     //  PluginDelegate implementation
     // ================================================================
 
@@ -311,6 +398,7 @@ class NitroBackgroundGeolocation : HybridNitroBackgroundGeolocationSpec(), Plugi
     override fun onActivityChanged(activity: BackgroundActivity) {
         val jsActivity = ConfigMapper.toJsActivity(activity)
         activityCallbacks.forEach { it(jsActivity) }
+        fireHeadlessActivityTask(activity)
     }
 
     override fun onServiceStatusChanged(status: Int) {
@@ -365,6 +453,9 @@ class NitroBackgroundGeolocation : HybridNitroBackgroundGeolocationSpec(), Plugi
                 put("accuracy", location.accuracy)
                 put("speed", location.speed)
                 put("altitude", location.altitude)
+                if (location.hasVerticalAccuracy()) {
+                    put("altitudeAccuracy", location.verticalAccuracy)
+                }
                 put("bearing", location.bearing)
                 put("isFromMockProvider", location.isFromMockProvider)
                 put("mockLocationsEnabled", location.areMockLocationsEnabled())
@@ -381,6 +472,69 @@ class NitroBackgroundGeolocation : HybridNitroBackgroundGeolocationSpec(), Plugi
             context.startService(intent)
         } catch (e: Exception) {
             Log.e(TAG, "Failed to fire headless task", e)
+        }
+    }
+
+    private fun fireHeadlessActivityTask(activity: BackgroundActivity) {
+        if (headlessTaskName.isEmpty()) return
+        try {
+            val params = JSONObject().apply {
+                put("confidence", activity.confidence)
+                put("type", BackgroundActivity.getActivityString(activity.type))
+            }
+            val intent = HeadlessTaskService.createIntent(
+                context,
+                headlessTaskName,
+                "activity",
+                params.toString()
+            )
+            context.startService(intent)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to fire headless activity task", e)
+        }
+    }
+
+    private fun destroyFacade() {
+        if (facadeDestroyed) return
+        facadeDestroyed = true
+        Log.d(TAG, "App activity destroyed")
+        facade.destroy()
+    }
+
+    private fun unregisterObservers() {
+        if (lifecycleObserverRegistered) {
+            ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
+            lifecycleObserverRegistered = false
+        }
+        if (activityCallbacksRegistered) {
+            application.unregisterActivityLifecycleCallbacks(this)
+            activityCallbacksRegistered = false
+        }
+    }
+
+    override fun onActivityCreated(activity: android.app.Activity, savedInstanceState: Bundle?) {
+        trackedActivities.add(System.identityHashCode(activity))
+    }
+
+    override fun onActivityStarted(activity: android.app.Activity) {
+        trackedActivities.add(System.identityHashCode(activity))
+    }
+
+    override fun onActivityResumed(activity: android.app.Activity) {
+        trackedActivities.add(System.identityHashCode(activity))
+    }
+
+    override fun onActivityPaused(activity: android.app.Activity) = Unit
+
+    override fun onActivityStopped(activity: android.app.Activity) = Unit
+
+    override fun onActivitySaveInstanceState(activity: android.app.Activity, outState: Bundle) = Unit
+
+    override fun onActivityDestroyed(activity: android.app.Activity) {
+        trackedActivities.remove(System.identityHashCode(activity))
+        if (activity.isChangingConfigurations) return
+        if (trackedActivities.isEmpty()) {
+            destroyFacade()
         }
     }
 }

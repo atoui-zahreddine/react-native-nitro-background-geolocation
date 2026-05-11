@@ -10,6 +10,7 @@ public interface LocationService {
     void stopForeground();
     void configure(Config config);
     void registerHeadlessTask(String jsFunction);
+    void clearHeadlessTask();
     void startHeadlessTask();
     void stopHeadlessTask();
     void executeProviderCommand(int command, int arg);

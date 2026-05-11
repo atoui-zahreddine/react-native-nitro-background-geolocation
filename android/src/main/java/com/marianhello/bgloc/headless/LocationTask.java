@@ -23,13 +23,14 @@ public abstract class LocationTask extends Task {
         Bundle bundle = new Bundle();
         Bundle params = new Bundle();
 
+        if (mLocation.getLocationId() != null) params.putLong("id", mLocation.getLocationId());
         params.putString("provider", mLocation.getProvider());
         params.putInt("locationProvider", mLocation.getLocationProvider());
         params.putLong("time", mLocation.getTime());
         params.putDouble("latitude", mLocation.getLatitude());
         params.putDouble("longitude", mLocation.getLongitude());
         if (mLocation.hasAccuracy()) params.putFloat("accuracy", mLocation.getAccuracy());
-        if (mLocation.hasVerticalAccuracy()) params.putFloat("accuracy", mLocation.getVerticalAccuracy());
+        if (mLocation.hasVerticalAccuracy()) params.putFloat("altitudeAccuracy", mLocation.getVerticalAccuracy());
         if (mLocation.hasSpeed()) params.putFloat("speed", mLocation.getSpeed());
         if (mLocation.hasAltitude()) params.putDouble("altitude", mLocation.getAltitude());
         if (mLocation.hasBearing()) params.putFloat("bearing", mLocation.getBearing());

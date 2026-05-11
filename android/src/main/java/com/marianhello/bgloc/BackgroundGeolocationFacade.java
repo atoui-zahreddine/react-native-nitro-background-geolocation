@@ -365,6 +365,19 @@ public class BackgroundGeolocationFacade {
         }
     }
 
+    public synchronized void reconfigure(Config config) throws PluginException {
+        try
+        {
+            persistConfiguration(config);
+            logger.debug("Service reconfigured with: {}", config.toString());
+            mConfig = config;
+            mService.configure(config);
+        } catch (Exception e) {
+            logger.error("Configuration error: {}", e.getMessage());
+            throw new PluginException("Configuration error", e, PluginException.CONFIGURE_ERROR);
+        }
+    }
+
     public synchronized Config getConfig() {
         if (mConfig != null) {
             return mConfig;
@@ -446,6 +459,11 @@ public class BackgroundGeolocationFacade {
     public void registerHeadlessTask(final String taskRunnerClass) {
         logger.info("Registering headless task: {}", taskRunnerClass);
         mService.registerHeadlessTask(taskRunnerClass);
+    }
+
+    public void clearHeadlessTask() {
+        logger.info("Clearing headless task");
+        mService.clearHeadlessTask();
     }
 
     private void startBackgroundService() {

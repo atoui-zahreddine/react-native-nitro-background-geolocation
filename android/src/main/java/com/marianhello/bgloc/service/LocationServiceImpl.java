@@ -498,7 +498,18 @@ public class LocationServiceImpl extends Service implements ProviderDelegate, Lo
     }
 
     @Override
+    public synchronized void clearHeadlessTask() {
+        logger.debug("Clearing headless task");
+        mHeadlessTaskRunnerClass = null;
+        mHeadlessTaskRunner = null;
+    }
+
+    @Override
     public synchronized void startHeadlessTask() {
+        if (mHeadlessTaskRunnerClass == null &&
+            com.margelo.nitro.nitrobackgroundgeolocation.HeadlessTaskRegistry.getTaskName(this) != null) {
+            mHeadlessTaskRunnerClass = "com.margelo.nitro.nitrobackgroundgeolocation.ReactNativeHeadlessTaskRunner";
+        }
         if (mHeadlessTaskRunnerClass != null) {
             TaskRunnerFactory trf = new TaskRunnerFactory();
             try {
