@@ -18,178 +18,374 @@ public extension ConfigureOptions {
   /**
    * Create a new instance of `ConfigureOptions`.
    */
-  init(headlessTaskName: String, locationProvider: LocationProvider?, desiredAccuracy: LocationAccuracy?, stationaryRadius: Double?, debug: Bool?, distanceFilter: Double?, stopOnTerminate: Bool?, startOnBoot: Bool?, interval: Double?, fastestInterval: Double?, activitiesInterval: Double?, stopOnStillActivity: Bool?, notificationsEnabled: Bool?, startForeground: Bool?, notificationTitle: String?, notificationText: String?, notificationIconColor: String?, notificationIconLarge: String?, notificationIconSmall: String?, activityType: String?, pauseLocationUpdates: Bool?, saveBatteryOnBackground: Bool?, url: String?, syncUrl: String?, syncThreshold: Double?, httpHeaders: Dictionary<String, String>?, maxLocations: Double?, postTemplate: Dictionary<String, String>?) {
-    self.init(std.string(headlessTaskName), { () -> bridge.std__optional_LocationProvider_ in
+  init(headlessTaskName: Variant_NullType_String?, locationProvider: Variant_NullType_LocationProvider?, desiredAccuracy: Variant_NullType_LocationAccuracy?, stationaryRadius: Variant_NullType_Double?, debug: Variant_NullType_Bool?, distanceFilter: Variant_NullType_Double?, stopOnTerminate: Variant_NullType_Bool?, startOnBoot: Variant_NullType_Bool?, interval: Variant_NullType_Double?, fastestInterval: Variant_NullType_Double?, activitiesInterval: Variant_NullType_Double?, stopOnStillActivity: Variant_NullType_Bool?, notificationsEnabled: Variant_NullType_Bool?, startForeground: Variant_NullType_Bool?, notificationTitle: Variant_NullType_String?, notificationText: Variant_NullType_String?, notificationIconColor: Variant_NullType_String?, notificationIconLarge: Variant_NullType_String?, notificationIconSmall: Variant_NullType_String?, activityType: Variant_NullType_String?, pauseLocationUpdates: Variant_NullType_Bool?, saveBatteryOnBackground: Variant_NullType_Bool?, url: Variant_NullType_String?, syncUrl: Variant_NullType_String?, syncThreshold: Variant_NullType_Double?, httpHeaders: Variant_NullType_Dictionary_String__String_?, maxLocations: Variant_NullType_Double?, postTemplate: Variant_NullType_AnyMap?) {
+    self.init({ () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
+      if let __unwrappedValue = headlessTaskName {
+        return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+          }
+        }().variant)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__LocationProvider__ in
       if let __unwrappedValue = locationProvider {
-        return bridge.create_std__optional_LocationProvider_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__LocationProvider__({ () -> bridge.std__variant_nitro__NullType__LocationProvider_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__LocationProvider_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__LocationProvider_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_LocationAccuracy_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__LocationAccuracy__ in
       if let __unwrappedValue = desiredAccuracy {
-        return bridge.create_std__optional_LocationAccuracy_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__LocationAccuracy__({ () -> bridge.std__variant_nitro__NullType__LocationAccuracy_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__LocationAccuracy_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__LocationAccuracy_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_double_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__double__ in
       if let __unwrappedValue = stationaryRadius {
-        return bridge.create_std__optional_double_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__double__({ () -> bridge.std__variant_nitro__NullType__double_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_bool_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__bool__ in
       if let __unwrappedValue = debug {
-        return bridge.create_std__optional_bool_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__bool__({ () -> bridge.std__variant_nitro__NullType__bool_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_double_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__double__ in
       if let __unwrappedValue = distanceFilter {
-        return bridge.create_std__optional_double_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__double__({ () -> bridge.std__variant_nitro__NullType__double_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_bool_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__bool__ in
       if let __unwrappedValue = stopOnTerminate {
-        return bridge.create_std__optional_bool_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__bool__({ () -> bridge.std__variant_nitro__NullType__bool_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_bool_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__bool__ in
       if let __unwrappedValue = startOnBoot {
-        return bridge.create_std__optional_bool_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__bool__({ () -> bridge.std__variant_nitro__NullType__bool_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_double_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__double__ in
       if let __unwrappedValue = interval {
-        return bridge.create_std__optional_double_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__double__({ () -> bridge.std__variant_nitro__NullType__double_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_double_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__double__ in
       if let __unwrappedValue = fastestInterval {
-        return bridge.create_std__optional_double_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__double__({ () -> bridge.std__variant_nitro__NullType__double_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_double_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__double__ in
       if let __unwrappedValue = activitiesInterval {
-        return bridge.create_std__optional_double_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__double__({ () -> bridge.std__variant_nitro__NullType__double_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_bool_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__bool__ in
       if let __unwrappedValue = stopOnStillActivity {
-        return bridge.create_std__optional_bool_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__bool__({ () -> bridge.std__variant_nitro__NullType__bool_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_bool_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__bool__ in
       if let __unwrappedValue = notificationsEnabled {
-        return bridge.create_std__optional_bool_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__bool__({ () -> bridge.std__variant_nitro__NullType__bool_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_bool_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__bool__ in
       if let __unwrappedValue = startForeground {
-        return bridge.create_std__optional_bool_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__bool__({ () -> bridge.std__variant_nitro__NullType__bool_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_std__string_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
       if let __unwrappedValue = notificationTitle {
-        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_std__string_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
       if let __unwrappedValue = notificationText {
-        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_std__string_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
       if let __unwrappedValue = notificationIconColor {
-        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_std__string_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
       if let __unwrappedValue = notificationIconLarge {
-        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_std__string_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
       if let __unwrappedValue = notificationIconSmall {
-        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_std__string_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
       if let __unwrappedValue = activityType {
-        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_bool_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__bool__ in
       if let __unwrappedValue = pauseLocationUpdates {
-        return bridge.create_std__optional_bool_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__bool__({ () -> bridge.std__variant_nitro__NullType__bool_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_bool_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__bool__ in
       if let __unwrappedValue = saveBatteryOnBackground {
-        return bridge.create_std__optional_bool_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__bool__({ () -> bridge.std__variant_nitro__NullType__bool_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__bool_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_std__string_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
       if let __unwrappedValue = url {
-        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_std__string_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
       if let __unwrappedValue = syncUrl {
-        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_double_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__double__ in
       if let __unwrappedValue = syncThreshold {
-        return bridge.create_std__optional_double_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__double__({ () -> bridge.std__variant_nitro__NullType__double_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_std__unordered_map_std__string__std__string__ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__std__unordered_map_std__string__std__string___ in
       if let __unwrappedValue = httpHeaders {
-        return bridge.create_std__optional_std__unordered_map_std__string__std__string__({ () -> bridge.std__unordered_map_std__string__std__string_ in
-          var __map = bridge.create_std__unordered_map_std__string__std__string_(__unwrappedValue.count)
-          for (__k, __v) in __unwrappedValue {
-            bridge.emplace_std__unordered_map_std__string__std__string_(&__map, std.string(__k), std.string(__v))
+        return bridge.create_std__optional_std__variant_nitro__NullType__std__unordered_map_std__string__std__string___({ () -> bridge.std__variant_nitro__NullType__std__unordered_map_std__string__std__string__ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__unordered_map_std__string__std__string__(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__unordered_map_std__string__std__string__({ () -> bridge.std__unordered_map_std__string__std__string_ in
+                var __map = bridge.create_std__unordered_map_std__string__std__string_(__value.count)
+                for (__k, __v) in __value {
+                  bridge.emplace_std__unordered_map_std__string__std__string_(&__map, std.string(__k), std.string(__v))
+                }
+                return __map
+              }())
           }
-          return __map
-        }())
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_double_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__double__ in
       if let __unwrappedValue = maxLocations {
-        return bridge.create_std__optional_double_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__double__({ () -> bridge.std__variant_nitro__NullType__double_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_std__unordered_map_std__string__std__string__ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__std__shared_ptr_AnyMap___ in
       if let __unwrappedValue = postTemplate {
-        return bridge.create_std__optional_std__unordered_map_std__string__std__string__({ () -> bridge.std__unordered_map_std__string__std__string_ in
-          var __map = bridge.create_std__unordered_map_std__string__std__string_(__unwrappedValue.count)
-          for (__k, __v) in __unwrappedValue {
-            bridge.emplace_std__unordered_map_std__string__std__string_(&__map, std.string(__k), std.string(__v))
+        return bridge.create_std__optional_std__variant_nitro__NullType__std__shared_ptr_AnyMap___({ () -> bridge.std__variant_nitro__NullType__std__shared_ptr_AnyMap__ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__shared_ptr_AnyMap__(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__shared_ptr_AnyMap__(__value.cppPart)
           }
-          return __map
-        }())
+        }().variant)
       } else {
         return .init()
       }
@@ -197,297 +393,22 @@ public extension ConfigureOptions {
   }
 
   @inline(__always)
-  var headlessTaskName: String {
-    return String(self.__headlessTaskName)
-  }
-  
-  @inline(__always)
-  var locationProvider: LocationProvider? {
-    return self.__locationProvider.has_value() ? self.__locationProvider.pointee : nil
-  }
-  
-  @inline(__always)
-  var desiredAccuracy: LocationAccuracy? {
-    return self.__desiredAccuracy.has_value() ? self.__desiredAccuracy.pointee : nil
-  }
-  
-  @inline(__always)
-  var stationaryRadius: Double? {
-    return { () -> Double? in
-      if bridge.has_value_std__optional_double_(self.__stationaryRadius) {
-        let __unwrapped = bridge.get_std__optional_double_(self.__stationaryRadius)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var debug: Bool? {
-    return { () -> Bool? in
-      if bridge.has_value_std__optional_bool_(self.__debug) {
-        let __unwrapped = bridge.get_std__optional_bool_(self.__debug)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var distanceFilter: Double? {
-    return { () -> Double? in
-      if bridge.has_value_std__optional_double_(self.__distanceFilter) {
-        let __unwrapped = bridge.get_std__optional_double_(self.__distanceFilter)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var stopOnTerminate: Bool? {
-    return { () -> Bool? in
-      if bridge.has_value_std__optional_bool_(self.__stopOnTerminate) {
-        let __unwrapped = bridge.get_std__optional_bool_(self.__stopOnTerminate)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var startOnBoot: Bool? {
-    return { () -> Bool? in
-      if bridge.has_value_std__optional_bool_(self.__startOnBoot) {
-        let __unwrapped = bridge.get_std__optional_bool_(self.__startOnBoot)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var interval: Double? {
-    return { () -> Double? in
-      if bridge.has_value_std__optional_double_(self.__interval) {
-        let __unwrapped = bridge.get_std__optional_double_(self.__interval)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var fastestInterval: Double? {
-    return { () -> Double? in
-      if bridge.has_value_std__optional_double_(self.__fastestInterval) {
-        let __unwrapped = bridge.get_std__optional_double_(self.__fastestInterval)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var activitiesInterval: Double? {
-    return { () -> Double? in
-      if bridge.has_value_std__optional_double_(self.__activitiesInterval) {
-        let __unwrapped = bridge.get_std__optional_double_(self.__activitiesInterval)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var stopOnStillActivity: Bool? {
-    return { () -> Bool? in
-      if bridge.has_value_std__optional_bool_(self.__stopOnStillActivity) {
-        let __unwrapped = bridge.get_std__optional_bool_(self.__stopOnStillActivity)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var notificationsEnabled: Bool? {
-    return { () -> Bool? in
-      if bridge.has_value_std__optional_bool_(self.__notificationsEnabled) {
-        let __unwrapped = bridge.get_std__optional_bool_(self.__notificationsEnabled)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var startForeground: Bool? {
-    return { () -> Bool? in
-      if bridge.has_value_std__optional_bool_(self.__startForeground) {
-        let __unwrapped = bridge.get_std__optional_bool_(self.__startForeground)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var notificationTitle: String? {
-    return { () -> String? in
-      if bridge.has_value_std__optional_std__string_(self.__notificationTitle) {
-        let __unwrapped = bridge.get_std__optional_std__string_(self.__notificationTitle)
-        return String(__unwrapped)
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var notificationText: String? {
-    return { () -> String? in
-      if bridge.has_value_std__optional_std__string_(self.__notificationText) {
-        let __unwrapped = bridge.get_std__optional_std__string_(self.__notificationText)
-        return String(__unwrapped)
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var notificationIconColor: String? {
-    return { () -> String? in
-      if bridge.has_value_std__optional_std__string_(self.__notificationIconColor) {
-        let __unwrapped = bridge.get_std__optional_std__string_(self.__notificationIconColor)
-        return String(__unwrapped)
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var notificationIconLarge: String? {
-    return { () -> String? in
-      if bridge.has_value_std__optional_std__string_(self.__notificationIconLarge) {
-        let __unwrapped = bridge.get_std__optional_std__string_(self.__notificationIconLarge)
-        return String(__unwrapped)
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var notificationIconSmall: String? {
-    return { () -> String? in
-      if bridge.has_value_std__optional_std__string_(self.__notificationIconSmall) {
-        let __unwrapped = bridge.get_std__optional_std__string_(self.__notificationIconSmall)
-        return String(__unwrapped)
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var activityType: String? {
-    return { () -> String? in
-      if bridge.has_value_std__optional_std__string_(self.__activityType) {
-        let __unwrapped = bridge.get_std__optional_std__string_(self.__activityType)
-        return String(__unwrapped)
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var pauseLocationUpdates: Bool? {
-    return { () -> Bool? in
-      if bridge.has_value_std__optional_bool_(self.__pauseLocationUpdates) {
-        let __unwrapped = bridge.get_std__optional_bool_(self.__pauseLocationUpdates)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var saveBatteryOnBackground: Bool? {
-    return { () -> Bool? in
-      if bridge.has_value_std__optional_bool_(self.__saveBatteryOnBackground) {
-        let __unwrapped = bridge.get_std__optional_bool_(self.__saveBatteryOnBackground)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var url: String? {
-    return { () -> String? in
-      if bridge.has_value_std__optional_std__string_(self.__url) {
-        let __unwrapped = bridge.get_std__optional_std__string_(self.__url)
-        return String(__unwrapped)
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var syncUrl: String? {
-    return { () -> String? in
-      if bridge.has_value_std__optional_std__string_(self.__syncUrl) {
-        let __unwrapped = bridge.get_std__optional_std__string_(self.__syncUrl)
-        return String(__unwrapped)
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var syncThreshold: Double? {
-    return { () -> Double? in
-      if bridge.has_value_std__optional_double_(self.__syncThreshold) {
-        let __unwrapped = bridge.get_std__optional_double_(self.__syncThreshold)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var httpHeaders: Dictionary<String, String>? {
-    return { () -> Dictionary<String, String>? in
-      if bridge.has_value_std__optional_std__unordered_map_std__string__std__string__(self.__httpHeaders) {
-        let __unwrapped = bridge.get_std__optional_std__unordered_map_std__string__std__string__(self.__httpHeaders)
-        return { () -> Dictionary<String, String> in
-          var __dictionary = Dictionary<String, String>(minimumCapacity: __unwrapped.size())
-          let __keys = bridge.get_std__unordered_map_std__string__std__string__keys(__unwrapped)
-          for __key in __keys {
-            let __value = bridge.get_std__unordered_map_std__string__std__string__value(__unwrapped, __key)
-            __dictionary[String(__key)] = String(__value)
+  var headlessTaskName: Variant_NullType_String? {
+    return { () -> Variant_NullType_String? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(self.__headlessTaskName) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(self.__headlessTaskName)
+        return { () -> Variant_NullType_String in
+          let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(String(__actual))
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
           }
-          return __dictionary
         }()
       } else {
         return nil
@@ -496,11 +417,23 @@ public extension ConfigureOptions {
   }
   
   @inline(__always)
-  var maxLocations: Double? {
-    return { () -> Double? in
-      if bridge.has_value_std__optional_double_(self.__maxLocations) {
-        let __unwrapped = bridge.get_std__optional_double_(self.__maxLocations)
-        return __unwrapped
+  var locationProvider: Variant_NullType_LocationProvider? {
+    return { () -> Variant_NullType_LocationProvider? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__LocationProvider__(self.__locationProvider) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__LocationProvider__(self.__locationProvider)
+        return { () -> Variant_NullType_LocationProvider in
+          let __variant = bridge.std__variant_nitro__NullType__LocationProvider_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
       } else {
         return nil
       }
@@ -508,18 +441,630 @@ public extension ConfigureOptions {
   }
   
   @inline(__always)
-  var postTemplate: Dictionary<String, String>? {
-    return { () -> Dictionary<String, String>? in
-      if bridge.has_value_std__optional_std__unordered_map_std__string__std__string__(self.__postTemplate) {
-        let __unwrapped = bridge.get_std__optional_std__unordered_map_std__string__std__string__(self.__postTemplate)
-        return { () -> Dictionary<String, String> in
-          var __dictionary = Dictionary<String, String>(minimumCapacity: __unwrapped.size())
-          let __keys = bridge.get_std__unordered_map_std__string__std__string__keys(__unwrapped)
-          for __key in __keys {
-            let __value = bridge.get_std__unordered_map_std__string__std__string__value(__unwrapped, __key)
-            __dictionary[String(__key)] = String(__value)
+  var desiredAccuracy: Variant_NullType_LocationAccuracy? {
+    return { () -> Variant_NullType_LocationAccuracy? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__LocationAccuracy__(self.__desiredAccuracy) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__LocationAccuracy__(self.__desiredAccuracy)
+        return { () -> Variant_NullType_LocationAccuracy in
+          let __variant = bridge.std__variant_nitro__NullType__LocationAccuracy_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
           }
-          return __dictionary
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var stationaryRadius: Variant_NullType_Double? {
+    return { () -> Variant_NullType_Double? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__double__(self.__stationaryRadius) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__double__(self.__stationaryRadius)
+        return { () -> Variant_NullType_Double in
+          let __variant = bridge.std__variant_nitro__NullType__double_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var debug: Variant_NullType_Bool? {
+    return { () -> Variant_NullType_Bool? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__bool__(self.__debug) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__bool__(self.__debug)
+        return { () -> Variant_NullType_Bool in
+          let __variant = bridge.std__variant_nitro__NullType__bool_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var distanceFilter: Variant_NullType_Double? {
+    return { () -> Variant_NullType_Double? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__double__(self.__distanceFilter) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__double__(self.__distanceFilter)
+        return { () -> Variant_NullType_Double in
+          let __variant = bridge.std__variant_nitro__NullType__double_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var stopOnTerminate: Variant_NullType_Bool? {
+    return { () -> Variant_NullType_Bool? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__bool__(self.__stopOnTerminate) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__bool__(self.__stopOnTerminate)
+        return { () -> Variant_NullType_Bool in
+          let __variant = bridge.std__variant_nitro__NullType__bool_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var startOnBoot: Variant_NullType_Bool? {
+    return { () -> Variant_NullType_Bool? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__bool__(self.__startOnBoot) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__bool__(self.__startOnBoot)
+        return { () -> Variant_NullType_Bool in
+          let __variant = bridge.std__variant_nitro__NullType__bool_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var interval: Variant_NullType_Double? {
+    return { () -> Variant_NullType_Double? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__double__(self.__interval) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__double__(self.__interval)
+        return { () -> Variant_NullType_Double in
+          let __variant = bridge.std__variant_nitro__NullType__double_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var fastestInterval: Variant_NullType_Double? {
+    return { () -> Variant_NullType_Double? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__double__(self.__fastestInterval) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__double__(self.__fastestInterval)
+        return { () -> Variant_NullType_Double in
+          let __variant = bridge.std__variant_nitro__NullType__double_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var activitiesInterval: Variant_NullType_Double? {
+    return { () -> Variant_NullType_Double? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__double__(self.__activitiesInterval) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__double__(self.__activitiesInterval)
+        return { () -> Variant_NullType_Double in
+          let __variant = bridge.std__variant_nitro__NullType__double_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var stopOnStillActivity: Variant_NullType_Bool? {
+    return { () -> Variant_NullType_Bool? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__bool__(self.__stopOnStillActivity) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__bool__(self.__stopOnStillActivity)
+        return { () -> Variant_NullType_Bool in
+          let __variant = bridge.std__variant_nitro__NullType__bool_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var notificationsEnabled: Variant_NullType_Bool? {
+    return { () -> Variant_NullType_Bool? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__bool__(self.__notificationsEnabled) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__bool__(self.__notificationsEnabled)
+        return { () -> Variant_NullType_Bool in
+          let __variant = bridge.std__variant_nitro__NullType__bool_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var startForeground: Variant_NullType_Bool? {
+    return { () -> Variant_NullType_Bool? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__bool__(self.__startForeground) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__bool__(self.__startForeground)
+        return { () -> Variant_NullType_Bool in
+          let __variant = bridge.std__variant_nitro__NullType__bool_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var notificationTitle: Variant_NullType_String? {
+    return { () -> Variant_NullType_String? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(self.__notificationTitle) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(self.__notificationTitle)
+        return { () -> Variant_NullType_String in
+          let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(String(__actual))
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var notificationText: Variant_NullType_String? {
+    return { () -> Variant_NullType_String? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(self.__notificationText) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(self.__notificationText)
+        return { () -> Variant_NullType_String in
+          let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(String(__actual))
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var notificationIconColor: Variant_NullType_String? {
+    return { () -> Variant_NullType_String? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(self.__notificationIconColor) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(self.__notificationIconColor)
+        return { () -> Variant_NullType_String in
+          let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(String(__actual))
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var notificationIconLarge: Variant_NullType_String? {
+    return { () -> Variant_NullType_String? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(self.__notificationIconLarge) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(self.__notificationIconLarge)
+        return { () -> Variant_NullType_String in
+          let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(String(__actual))
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var notificationIconSmall: Variant_NullType_String? {
+    return { () -> Variant_NullType_String? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(self.__notificationIconSmall) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(self.__notificationIconSmall)
+        return { () -> Variant_NullType_String in
+          let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(String(__actual))
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var activityType: Variant_NullType_String? {
+    return { () -> Variant_NullType_String? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(self.__activityType) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(self.__activityType)
+        return { () -> Variant_NullType_String in
+          let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(String(__actual))
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var pauseLocationUpdates: Variant_NullType_Bool? {
+    return { () -> Variant_NullType_Bool? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__bool__(self.__pauseLocationUpdates) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__bool__(self.__pauseLocationUpdates)
+        return { () -> Variant_NullType_Bool in
+          let __variant = bridge.std__variant_nitro__NullType__bool_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var saveBatteryOnBackground: Variant_NullType_Bool? {
+    return { () -> Variant_NullType_Bool? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__bool__(self.__saveBatteryOnBackground) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__bool__(self.__saveBatteryOnBackground)
+        return { () -> Variant_NullType_Bool in
+          let __variant = bridge.std__variant_nitro__NullType__bool_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var url: Variant_NullType_String? {
+    return { () -> Variant_NullType_String? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(self.__url) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(self.__url)
+        return { () -> Variant_NullType_String in
+          let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(String(__actual))
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var syncUrl: Variant_NullType_String? {
+    return { () -> Variant_NullType_String? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(self.__syncUrl) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(self.__syncUrl)
+        return { () -> Variant_NullType_String in
+          let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(String(__actual))
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var syncThreshold: Variant_NullType_Double? {
+    return { () -> Variant_NullType_Double? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__double__(self.__syncThreshold) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__double__(self.__syncThreshold)
+        return { () -> Variant_NullType_Double in
+          let __variant = bridge.std__variant_nitro__NullType__double_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var httpHeaders: Variant_NullType_Dictionary_String__String_? {
+    return { () -> Variant_NullType_Dictionary_String__String_? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__std__unordered_map_std__string__std__string___(self.__httpHeaders) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__unordered_map_std__string__std__string___(self.__httpHeaders)
+        return { () -> Variant_NullType_Dictionary_String__String_ in
+          let __variant = bridge.std__variant_nitro__NullType__std__unordered_map_std__string__std__string__(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second({ () -> Dictionary<String, String> in
+                var __dictionary = Dictionary<String, String>(minimumCapacity: __actual.size())
+                let __keys = bridge.get_std__unordered_map_std__string__std__string__keys(__actual)
+                for __key in __keys {
+                  let __value = bridge.get_std__unordered_map_std__string__std__string__value(__actual, __key)
+                  __dictionary[String(__key)] = String(__value)
+                }
+                return __dictionary
+              }())
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var maxLocations: Variant_NullType_Double? {
+    return { () -> Variant_NullType_Double? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__double__(self.__maxLocations) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__double__(self.__maxLocations)
+        return { () -> Variant_NullType_Double in
+          let __variant = bridge.std__variant_nitro__NullType__double_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var postTemplate: Variant_NullType_AnyMap? {
+    return { () -> Variant_NullType_AnyMap? in
+      if bridge.has_value_std__optional_std__variant_nitro__NullType__std__shared_ptr_AnyMap___(self.__postTemplate) {
+        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__shared_ptr_AnyMap___(self.__postTemplate)
+        return { () -> Variant_NullType_AnyMap in
+          let __variant = bridge.std__variant_nitro__NullType__std__shared_ptr_AnyMap__(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(NullType.null)
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(AnyMap(withCppPart: __actual))
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
         }()
       } else {
         return nil

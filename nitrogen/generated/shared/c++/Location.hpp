@@ -48,13 +48,14 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
     double accuracy     SWIFT_PRIVATE;
     double speed     SWIFT_PRIVATE;
     double altitude     SWIFT_PRIVATE;
+    double altitudeAccuracy     SWIFT_PRIVATE;
     double bearing     SWIFT_PRIVATE;
     bool isFromMockProvider     SWIFT_PRIVATE;
     bool mockLocationsEnabled     SWIFT_PRIVATE;
 
   public:
     Location() = default;
-    explicit Location(double id, std::string provider, double locationProvider, double time, double latitude, double longitude, double accuracy, double speed, double altitude, double bearing, bool isFromMockProvider, bool mockLocationsEnabled): id(id), provider(provider), locationProvider(locationProvider), time(time), latitude(latitude), longitude(longitude), accuracy(accuracy), speed(speed), altitude(altitude), bearing(bearing), isFromMockProvider(isFromMockProvider), mockLocationsEnabled(mockLocationsEnabled) {}
+    explicit Location(double id, std::string provider, double locationProvider, double time, double latitude, double longitude, double accuracy, double speed, double altitude, double altitudeAccuracy, double bearing, bool isFromMockProvider, bool mockLocationsEnabled): id(id), provider(provider), locationProvider(locationProvider), time(time), latitude(latitude), longitude(longitude), accuracy(accuracy), speed(speed), altitude(altitude), altitudeAccuracy(altitudeAccuracy), bearing(bearing), isFromMockProvider(isFromMockProvider), mockLocationsEnabled(mockLocationsEnabled) {}
 
   public:
     friend bool operator==(const Location& lhs, const Location& rhs) = default;
@@ -79,6 +80,7 @@ namespace margelo::nitro {
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "accuracy"))),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "speed"))),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "altitude"))),
+        JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "altitudeAccuracy"))),
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "bearing"))),
         JSIConverter<bool>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "isFromMockProvider"))),
         JSIConverter<bool>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "mockLocationsEnabled")))
@@ -95,6 +97,7 @@ namespace margelo::nitro {
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "accuracy"), JSIConverter<double>::toJSI(runtime, arg.accuracy));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "speed"), JSIConverter<double>::toJSI(runtime, arg.speed));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "altitude"), JSIConverter<double>::toJSI(runtime, arg.altitude));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "altitudeAccuracy"), JSIConverter<double>::toJSI(runtime, arg.altitudeAccuracy));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "bearing"), JSIConverter<double>::toJSI(runtime, arg.bearing));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "isFromMockProvider"), JSIConverter<bool>::toJSI(runtime, arg.isFromMockProvider));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "mockLocationsEnabled"), JSIConverter<bool>::toJSI(runtime, arg.mockLocationsEnabled));
@@ -117,6 +120,7 @@ namespace margelo::nitro {
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "accuracy")))) return false;
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "speed")))) return false;
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "altitude")))) return false;
+      if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "altitudeAccuracy")))) return false;
       if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "bearing")))) return false;
       if (!JSIConverter<bool>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "isFromMockProvider")))) return false;
       if (!JSIConverter<bool>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "mockLocationsEnabled")))) return false;

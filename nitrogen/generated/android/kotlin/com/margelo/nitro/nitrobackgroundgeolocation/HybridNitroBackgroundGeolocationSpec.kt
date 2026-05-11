@@ -59,6 +59,14 @@ abstract class HybridNitroBackgroundGeolocationSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun showAppSettings(): Unit
+  
+  @DoNotStrip
+  @Keep
+  abstract fun showLocationSettings(): Unit
+  
+  @DoNotStrip
+  @Keep
   abstract fun getLocations(): Promise<Array<Location>>
   
   @DoNotStrip

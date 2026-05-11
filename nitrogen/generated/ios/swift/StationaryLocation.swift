@@ -18,8 +18,8 @@ public extension StationaryLocation {
   /**
    * Create a new instance of `StationaryLocation`.
    */
-  init(id: Double, provider: String, locationProvider: Double, time: Double, latitude: Double, longitude: Double, accuracy: Double, speed: Double, altitude: Double, bearing: Double, isFromMockProvider: Bool, mockLocationsEnabled: Bool, radius: Double) {
-    self.init(id, std.string(provider), locationProvider, time, latitude, longitude, accuracy, speed, altitude, bearing, isFromMockProvider, mockLocationsEnabled, radius)
+  init(id: Double, provider: String, locationProvider: Double, time: Double, latitude: Double, longitude: Double, accuracy: Double, speed: Double, altitude: Double, altitudeAccuracy: Double, bearing: Double, isFromMockProvider: Bool, mockLocationsEnabled: Bool, radius: Double) {
+    self.init(id, std.string(provider), locationProvider, time, latitude, longitude, accuracy, speed, altitude, altitudeAccuracy, bearing, isFromMockProvider, mockLocationsEnabled, radius)
   }
 
   @inline(__always)
@@ -65,6 +65,11 @@ public extension StationaryLocation {
   @inline(__always)
   var altitude: Double {
     return self.__altitude
+  }
+  
+  @inline(__always)
+  var altitudeAccuracy: Double {
+    return self.__altitudeAccuracy
   }
   
   @inline(__always)

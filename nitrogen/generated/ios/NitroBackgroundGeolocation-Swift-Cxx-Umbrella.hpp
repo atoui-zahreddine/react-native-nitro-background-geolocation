@@ -49,6 +49,8 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct StationaryLocation
 #include "LogLevel.hpp"
 #include "ServiceStatus.hpp"
 #include "StationaryLocation.hpp"
+#include <NitroModules/AnyMap.hpp>
+#include <NitroModules/Null.hpp>
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/Result.hpp>
 #include <exception>
@@ -57,6 +59,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct StationaryLocation
 #include <optional>
 #include <string>
 #include <unordered_map>
+#include <variant>
 #include <vector>
 
 // C++ helpers for Swift

@@ -59,6 +59,8 @@ const BackgroundGeolocation: OwnMethods = {
   // Status
   checkStatus: forward('checkStatus'),
   getConfig: forward('getConfig'),
+  showAppSettings: forward('showAppSettings'),
+  showLocationSettings: forward('showLocationSettings'),
 
   // Storage
   getLocations: forward('getLocations'),

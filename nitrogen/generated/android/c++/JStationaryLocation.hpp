@@ -49,6 +49,8 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
       double speed = this->getFieldValue(fieldSpeed);
       static const auto fieldAltitude = clazz->getField<double>("altitude");
       double altitude = this->getFieldValue(fieldAltitude);
+      static const auto fieldAltitudeAccuracy = clazz->getField<double>("altitudeAccuracy");
+      double altitudeAccuracy = this->getFieldValue(fieldAltitudeAccuracy);
       static const auto fieldBearing = clazz->getField<double>("bearing");
       double bearing = this->getFieldValue(fieldBearing);
       static const auto fieldIsFromMockProvider = clazz->getField<jboolean>("isFromMockProvider");
@@ -67,6 +69,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
         accuracy,
         speed,
         altitude,
+        altitudeAccuracy,
         bearing,
         static_cast<bool>(isFromMockProvider),
         static_cast<bool>(mockLocationsEnabled),
@@ -80,7 +83,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
      */
     [[maybe_unused]]
     static jni::local_ref<JStationaryLocation::javaobject> fromCpp(const StationaryLocation& value) {
-      using JSignature = JStationaryLocation(double, jni::alias_ref<jni::JString>, double, double, double, double, double, double, double, double, jboolean, jboolean, double);
+      using JSignature = JStationaryLocation(double, jni::alias_ref<jni::JString>, double, double, double, double, double, double, double, double, double, jboolean, jboolean, double);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
@@ -94,6 +97,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
         value.accuracy,
         value.speed,
         value.altitude,
+        value.altitudeAccuracy,
         value.bearing,
         value.isFromMockProvider,
         value.mockLocationsEnabled,

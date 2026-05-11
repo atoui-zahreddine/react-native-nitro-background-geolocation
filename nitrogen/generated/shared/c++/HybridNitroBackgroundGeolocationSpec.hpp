@@ -87,6 +87,8 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
       virtual std::shared_ptr<Promise<std::optional<StationaryLocation>>> getStationaryLocation() = 0;
       virtual std::shared_ptr<Promise<ServiceStatus>> checkStatus() = 0;
       virtual std::shared_ptr<Promise<ConfigureOptions>> getConfig() = 0;
+      virtual void showAppSettings() = 0;
+      virtual void showLocationSettings() = 0;
       virtual std::shared_ptr<Promise<std::vector<Location>>> getLocations() = 0;
       virtual std::shared_ptr<Promise<std::vector<Location>>> getValidLocations() = 0;
       virtual std::shared_ptr<Promise<std::vector<Location>>> getValidLocationsAndDelete() = 0;

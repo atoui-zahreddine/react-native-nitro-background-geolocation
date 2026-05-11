@@ -33,11 +33,14 @@ namespace margelo::nitro::nitrobackgroundgeolocation { enum class LocationProvid
 // Forward declaration of `LocationAccuracy` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { enum class LocationAccuracy; }
 
+#include <NitroModules/Null.hpp>
 #include <string>
-#include "LocationProvider.hpp"
+#include <variant>
 #include <optional>
+#include "LocationProvider.hpp"
 #include "LocationAccuracy.hpp"
 #include <unordered_map>
+#include <NitroModules/AnyMap.hpp>
 
 namespace margelo::nitro::nitrobackgroundgeolocation {
 
@@ -46,38 +49,38 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
    */
   struct ConfigureOptions final {
   public:
-    std::string headlessTaskName     SWIFT_PRIVATE;
-    std::optional<LocationProvider> locationProvider     SWIFT_PRIVATE;
-    std::optional<LocationAccuracy> desiredAccuracy     SWIFT_PRIVATE;
-    std::optional<double> stationaryRadius     SWIFT_PRIVATE;
-    std::optional<bool> debug     SWIFT_PRIVATE;
-    std::optional<double> distanceFilter     SWIFT_PRIVATE;
-    std::optional<bool> stopOnTerminate     SWIFT_PRIVATE;
-    std::optional<bool> startOnBoot     SWIFT_PRIVATE;
-    std::optional<double> interval     SWIFT_PRIVATE;
-    std::optional<double> fastestInterval     SWIFT_PRIVATE;
-    std::optional<double> activitiesInterval     SWIFT_PRIVATE;
-    std::optional<bool> stopOnStillActivity     SWIFT_PRIVATE;
-    std::optional<bool> notificationsEnabled     SWIFT_PRIVATE;
-    std::optional<bool> startForeground     SWIFT_PRIVATE;
-    std::optional<std::string> notificationTitle     SWIFT_PRIVATE;
-    std::optional<std::string> notificationText     SWIFT_PRIVATE;
-    std::optional<std::string> notificationIconColor     SWIFT_PRIVATE;
-    std::optional<std::string> notificationIconLarge     SWIFT_PRIVATE;
-    std::optional<std::string> notificationIconSmall     SWIFT_PRIVATE;
-    std::optional<std::string> activityType     SWIFT_PRIVATE;
-    std::optional<bool> pauseLocationUpdates     SWIFT_PRIVATE;
-    std::optional<bool> saveBatteryOnBackground     SWIFT_PRIVATE;
-    std::optional<std::string> url     SWIFT_PRIVATE;
-    std::optional<std::string> syncUrl     SWIFT_PRIVATE;
-    std::optional<double> syncThreshold     SWIFT_PRIVATE;
-    std::optional<std::unordered_map<std::string, std::string>> httpHeaders     SWIFT_PRIVATE;
-    std::optional<double> maxLocations     SWIFT_PRIVATE;
-    std::optional<std::unordered_map<std::string, std::string>> postTemplate     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, std::string>> headlessTaskName     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, LocationProvider>> locationProvider     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, LocationAccuracy>> desiredAccuracy     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, double>> stationaryRadius     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, bool>> debug     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, double>> distanceFilter     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, bool>> stopOnTerminate     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, bool>> startOnBoot     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, double>> interval     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, double>> fastestInterval     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, double>> activitiesInterval     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, bool>> stopOnStillActivity     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, bool>> notificationsEnabled     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, bool>> startForeground     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, std::string>> notificationTitle     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, std::string>> notificationText     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, std::string>> notificationIconColor     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, std::string>> notificationIconLarge     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, std::string>> notificationIconSmall     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, std::string>> activityType     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, bool>> pauseLocationUpdates     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, bool>> saveBatteryOnBackground     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, std::string>> url     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, std::string>> syncUrl     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, double>> syncThreshold     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, std::unordered_map<std::string, std::string>>> httpHeaders     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, double>> maxLocations     SWIFT_PRIVATE;
+    std::optional<std::variant<nitro::NullType, std::shared_ptr<AnyMap>>> postTemplate     SWIFT_PRIVATE;
 
   public:
     ConfigureOptions() = default;
-    explicit ConfigureOptions(std::string headlessTaskName, std::optional<LocationProvider> locationProvider, std::optional<LocationAccuracy> desiredAccuracy, std::optional<double> stationaryRadius, std::optional<bool> debug, std::optional<double> distanceFilter, std::optional<bool> stopOnTerminate, std::optional<bool> startOnBoot, std::optional<double> interval, std::optional<double> fastestInterval, std::optional<double> activitiesInterval, std::optional<bool> stopOnStillActivity, std::optional<bool> notificationsEnabled, std::optional<bool> startForeground, std::optional<std::string> notificationTitle, std::optional<std::string> notificationText, std::optional<std::string> notificationIconColor, std::optional<std::string> notificationIconLarge, std::optional<std::string> notificationIconSmall, std::optional<std::string> activityType, std::optional<bool> pauseLocationUpdates, std::optional<bool> saveBatteryOnBackground, std::optional<std::string> url, std::optional<std::string> syncUrl, std::optional<double> syncThreshold, std::optional<std::unordered_map<std::string, std::string>> httpHeaders, std::optional<double> maxLocations, std::optional<std::unordered_map<std::string, std::string>> postTemplate): headlessTaskName(headlessTaskName), locationProvider(locationProvider), desiredAccuracy(desiredAccuracy), stationaryRadius(stationaryRadius), debug(debug), distanceFilter(distanceFilter), stopOnTerminate(stopOnTerminate), startOnBoot(startOnBoot), interval(interval), fastestInterval(fastestInterval), activitiesInterval(activitiesInterval), stopOnStillActivity(stopOnStillActivity), notificationsEnabled(notificationsEnabled), startForeground(startForeground), notificationTitle(notificationTitle), notificationText(notificationText), notificationIconColor(notificationIconColor), notificationIconLarge(notificationIconLarge), notificationIconSmall(notificationIconSmall), activityType(activityType), pauseLocationUpdates(pauseLocationUpdates), saveBatteryOnBackground(saveBatteryOnBackground), url(url), syncUrl(syncUrl), syncThreshold(syncThreshold), httpHeaders(httpHeaders), maxLocations(maxLocations), postTemplate(postTemplate) {}
+    explicit ConfigureOptions(std::optional<std::variant<nitro::NullType, std::string>> headlessTaskName, std::optional<std::variant<nitro::NullType, LocationProvider>> locationProvider, std::optional<std::variant<nitro::NullType, LocationAccuracy>> desiredAccuracy, std::optional<std::variant<nitro::NullType, double>> stationaryRadius, std::optional<std::variant<nitro::NullType, bool>> debug, std::optional<std::variant<nitro::NullType, double>> distanceFilter, std::optional<std::variant<nitro::NullType, bool>> stopOnTerminate, std::optional<std::variant<nitro::NullType, bool>> startOnBoot, std::optional<std::variant<nitro::NullType, double>> interval, std::optional<std::variant<nitro::NullType, double>> fastestInterval, std::optional<std::variant<nitro::NullType, double>> activitiesInterval, std::optional<std::variant<nitro::NullType, bool>> stopOnStillActivity, std::optional<std::variant<nitro::NullType, bool>> notificationsEnabled, std::optional<std::variant<nitro::NullType, bool>> startForeground, std::optional<std::variant<nitro::NullType, std::string>> notificationTitle, std::optional<std::variant<nitro::NullType, std::string>> notificationText, std::optional<std::variant<nitro::NullType, std::string>> notificationIconColor, std::optional<std::variant<nitro::NullType, std::string>> notificationIconLarge, std::optional<std::variant<nitro::NullType, std::string>> notificationIconSmall, std::optional<std::variant<nitro::NullType, std::string>> activityType, std::optional<std::variant<nitro::NullType, bool>> pauseLocationUpdates, std::optional<std::variant<nitro::NullType, bool>> saveBatteryOnBackground, std::optional<std::variant<nitro::NullType, std::string>> url, std::optional<std::variant<nitro::NullType, std::string>> syncUrl, std::optional<std::variant<nitro::NullType, double>> syncThreshold, std::optional<std::variant<nitro::NullType, std::unordered_map<std::string, std::string>>> httpHeaders, std::optional<std::variant<nitro::NullType, double>> maxLocations, std::optional<std::variant<nitro::NullType, std::shared_ptr<AnyMap>>> postTemplate): headlessTaskName(headlessTaskName), locationProvider(locationProvider), desiredAccuracy(desiredAccuracy), stationaryRadius(stationaryRadius), debug(debug), distanceFilter(distanceFilter), stopOnTerminate(stopOnTerminate), startOnBoot(startOnBoot), interval(interval), fastestInterval(fastestInterval), activitiesInterval(activitiesInterval), stopOnStillActivity(stopOnStillActivity), notificationsEnabled(notificationsEnabled), startForeground(startForeground), notificationTitle(notificationTitle), notificationText(notificationText), notificationIconColor(notificationIconColor), notificationIconLarge(notificationIconLarge), notificationIconSmall(notificationIconSmall), activityType(activityType), pauseLocationUpdates(pauseLocationUpdates), saveBatteryOnBackground(saveBatteryOnBackground), url(url), syncUrl(syncUrl), syncThreshold(syncThreshold), httpHeaders(httpHeaders), maxLocations(maxLocations), postTemplate(postTemplate) {}
 
   public:
     friend bool operator==(const ConfigureOptions& lhs, const ConfigureOptions& rhs) = default;
@@ -93,66 +96,66 @@ namespace margelo::nitro {
     static inline margelo::nitro::nitrobackgroundgeolocation::ConfigureOptions fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::nitrobackgroundgeolocation::ConfigureOptions(
-        JSIConverter<std::string>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "headlessTaskName"))),
-        JSIConverter<std::optional<margelo::nitro::nitrobackgroundgeolocation::LocationProvider>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "locationProvider"))),
-        JSIConverter<std::optional<margelo::nitro::nitrobackgroundgeolocation::LocationAccuracy>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "desiredAccuracy"))),
-        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stationaryRadius"))),
-        JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "debug"))),
-        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "distanceFilter"))),
-        JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stopOnTerminate"))),
-        JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "startOnBoot"))),
-        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "interval"))),
-        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "fastestInterval"))),
-        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "activitiesInterval"))),
-        JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stopOnStillActivity"))),
-        JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationsEnabled"))),
-        JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "startForeground"))),
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationTitle"))),
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationText"))),
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationIconColor"))),
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationIconLarge"))),
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationIconSmall"))),
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "activityType"))),
-        JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "pauseLocationUpdates"))),
-        JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "saveBatteryOnBackground"))),
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "url"))),
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "syncUrl"))),
-        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "syncThreshold"))),
-        JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "httpHeaders"))),
-        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "maxLocations"))),
-        JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "postTemplate")))
+        JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "headlessTaskName"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, margelo::nitro::nitrobackgroundgeolocation::LocationProvider>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "locationProvider"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, margelo::nitro::nitrobackgroundgeolocation::LocationAccuracy>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "desiredAccuracy"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stationaryRadius"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "debug"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "distanceFilter"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stopOnTerminate"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "startOnBoot"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "interval"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "fastestInterval"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "activitiesInterval"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stopOnStillActivity"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationsEnabled"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "startForeground"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationTitle"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationText"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationIconColor"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationIconLarge"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationIconSmall"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "activityType"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "pauseLocationUpdates"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "saveBatteryOnBackground"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "url"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "syncUrl"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "syncThreshold"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, std::unordered_map<std::string, std::string>>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "httpHeaders"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "maxLocations"))),
+        JSIConverter<std::optional<std::variant<nitro::NullType, std::shared_ptr<AnyMap>>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "postTemplate")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::nitrobackgroundgeolocation::ConfigureOptions& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "headlessTaskName"), JSIConverter<std::string>::toJSI(runtime, arg.headlessTaskName));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "locationProvider"), JSIConverter<std::optional<margelo::nitro::nitrobackgroundgeolocation::LocationProvider>>::toJSI(runtime, arg.locationProvider));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "desiredAccuracy"), JSIConverter<std::optional<margelo::nitro::nitrobackgroundgeolocation::LocationAccuracy>>::toJSI(runtime, arg.desiredAccuracy));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "stationaryRadius"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.stationaryRadius));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "debug"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.debug));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "distanceFilter"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.distanceFilter));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "stopOnTerminate"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.stopOnTerminate));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "startOnBoot"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.startOnBoot));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "interval"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.interval));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "fastestInterval"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.fastestInterval));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "activitiesInterval"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.activitiesInterval));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "stopOnStillActivity"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.stopOnStillActivity));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "notificationsEnabled"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.notificationsEnabled));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "startForeground"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.startForeground));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "notificationTitle"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.notificationTitle));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "notificationText"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.notificationText));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "notificationIconColor"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.notificationIconColor));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "notificationIconLarge"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.notificationIconLarge));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "notificationIconSmall"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.notificationIconSmall));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "activityType"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.activityType));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "pauseLocationUpdates"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.pauseLocationUpdates));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "saveBatteryOnBackground"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.saveBatteryOnBackground));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "url"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.url));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "syncUrl"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.syncUrl));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "syncThreshold"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.syncThreshold));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "httpHeaders"), JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::toJSI(runtime, arg.httpHeaders));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "maxLocations"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.maxLocations));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "postTemplate"), JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::toJSI(runtime, arg.postTemplate));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "headlessTaskName"), JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::toJSI(runtime, arg.headlessTaskName));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "locationProvider"), JSIConverter<std::optional<std::variant<nitro::NullType, margelo::nitro::nitrobackgroundgeolocation::LocationProvider>>>::toJSI(runtime, arg.locationProvider));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "desiredAccuracy"), JSIConverter<std::optional<std::variant<nitro::NullType, margelo::nitro::nitrobackgroundgeolocation::LocationAccuracy>>>::toJSI(runtime, arg.desiredAccuracy));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "stationaryRadius"), JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::toJSI(runtime, arg.stationaryRadius));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "debug"), JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::toJSI(runtime, arg.debug));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "distanceFilter"), JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::toJSI(runtime, arg.distanceFilter));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "stopOnTerminate"), JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::toJSI(runtime, arg.stopOnTerminate));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "startOnBoot"), JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::toJSI(runtime, arg.startOnBoot));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "interval"), JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::toJSI(runtime, arg.interval));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "fastestInterval"), JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::toJSI(runtime, arg.fastestInterval));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "activitiesInterval"), JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::toJSI(runtime, arg.activitiesInterval));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "stopOnStillActivity"), JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::toJSI(runtime, arg.stopOnStillActivity));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "notificationsEnabled"), JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::toJSI(runtime, arg.notificationsEnabled));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "startForeground"), JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::toJSI(runtime, arg.startForeground));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "notificationTitle"), JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::toJSI(runtime, arg.notificationTitle));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "notificationText"), JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::toJSI(runtime, arg.notificationText));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "notificationIconColor"), JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::toJSI(runtime, arg.notificationIconColor));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "notificationIconLarge"), JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::toJSI(runtime, arg.notificationIconLarge));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "notificationIconSmall"), JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::toJSI(runtime, arg.notificationIconSmall));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "activityType"), JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::toJSI(runtime, arg.activityType));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "pauseLocationUpdates"), JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::toJSI(runtime, arg.pauseLocationUpdates));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "saveBatteryOnBackground"), JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::toJSI(runtime, arg.saveBatteryOnBackground));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "url"), JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::toJSI(runtime, arg.url));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "syncUrl"), JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::toJSI(runtime, arg.syncUrl));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "syncThreshold"), JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::toJSI(runtime, arg.syncThreshold));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "httpHeaders"), JSIConverter<std::optional<std::variant<nitro::NullType, std::unordered_map<std::string, std::string>>>>::toJSI(runtime, arg.httpHeaders));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "maxLocations"), JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::toJSI(runtime, arg.maxLocations));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "postTemplate"), JSIConverter<std::optional<std::variant<nitro::NullType, std::shared_ptr<AnyMap>>>>::toJSI(runtime, arg.postTemplate));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -163,34 +166,34 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
-      if (!JSIConverter<std::string>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "headlessTaskName")))) return false;
-      if (!JSIConverter<std::optional<margelo::nitro::nitrobackgroundgeolocation::LocationProvider>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "locationProvider")))) return false;
-      if (!JSIConverter<std::optional<margelo::nitro::nitrobackgroundgeolocation::LocationAccuracy>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "desiredAccuracy")))) return false;
-      if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stationaryRadius")))) return false;
-      if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "debug")))) return false;
-      if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "distanceFilter")))) return false;
-      if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stopOnTerminate")))) return false;
-      if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "startOnBoot")))) return false;
-      if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "interval")))) return false;
-      if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "fastestInterval")))) return false;
-      if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "activitiesInterval")))) return false;
-      if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stopOnStillActivity")))) return false;
-      if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationsEnabled")))) return false;
-      if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "startForeground")))) return false;
-      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationTitle")))) return false;
-      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationText")))) return false;
-      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationIconColor")))) return false;
-      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationIconLarge")))) return false;
-      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationIconSmall")))) return false;
-      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "activityType")))) return false;
-      if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "pauseLocationUpdates")))) return false;
-      if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "saveBatteryOnBackground")))) return false;
-      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "url")))) return false;
-      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "syncUrl")))) return false;
-      if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "syncThreshold")))) return false;
-      if (!JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "httpHeaders")))) return false;
-      if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "maxLocations")))) return false;
-      if (!JSIConverter<std::optional<std::unordered_map<std::string, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "postTemplate")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "headlessTaskName")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, margelo::nitro::nitrobackgroundgeolocation::LocationProvider>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "locationProvider")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, margelo::nitro::nitrobackgroundgeolocation::LocationAccuracy>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "desiredAccuracy")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stationaryRadius")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "debug")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "distanceFilter")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stopOnTerminate")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "startOnBoot")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "interval")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "fastestInterval")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "activitiesInterval")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stopOnStillActivity")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationsEnabled")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "startForeground")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationTitle")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationText")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationIconColor")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationIconLarge")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "notificationIconSmall")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "activityType")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "pauseLocationUpdates")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, bool>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "saveBatteryOnBackground")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "url")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "syncUrl")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "syncThreshold")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, std::unordered_map<std::string, std::string>>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "httpHeaders")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "maxLocations")))) return false;
+      if (!JSIConverter<std::optional<std::variant<nitro::NullType, std::shared_ptr<AnyMap>>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "postTemplate")))) return false;
       return true;
     }
   };

@@ -47,6 +47,9 @@ data class Location(
   val altitude: Double,
   @DoNotStrip
   @Keep
+  val altitudeAccuracy: Double,
+  @DoNotStrip
+  @Keep
   val bearing: Double,
   @DoNotStrip
   @Keep
@@ -69,6 +72,7 @@ data class Location(
       && Objects.deepEquals(this.accuracy, other.accuracy)
       && Objects.deepEquals(this.speed, other.speed)
       && Objects.deepEquals(this.altitude, other.altitude)
+      && Objects.deepEquals(this.altitudeAccuracy, other.altitudeAccuracy)
       && Objects.deepEquals(this.bearing, other.bearing)
       && Objects.deepEquals(this.isFromMockProvider, other.isFromMockProvider)
       && Objects.deepEquals(this.mockLocationsEnabled, other.mockLocationsEnabled)
@@ -85,6 +89,7 @@ data class Location(
       accuracy,
       speed,
       altitude,
+      altitudeAccuracy,
       bearing,
       isFromMockProvider,
       mockLocationsEnabled
@@ -99,8 +104,8 @@ data class Location(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(id: Double, provider: String, locationProvider: Double, time: Double, latitude: Double, longitude: Double, accuracy: Double, speed: Double, altitude: Double, bearing: Double, isFromMockProvider: Boolean, mockLocationsEnabled: Boolean): Location {
-      return Location(id, provider, locationProvider, time, latitude, longitude, accuracy, speed, altitude, bearing, isFromMockProvider, mockLocationsEnabled)
+    private fun fromCpp(id: Double, provider: String, locationProvider: Double, time: Double, latitude: Double, longitude: Double, accuracy: Double, speed: Double, altitude: Double, altitudeAccuracy: Double, bearing: Double, isFromMockProvider: Boolean, mockLocationsEnabled: Boolean): Location {
+      return Location(id, provider, locationProvider, time, latitude, longitude, accuracy, speed, altitude, altitudeAccuracy, bearing, isFromMockProvider, mockLocationsEnabled)
     }
   }
 }

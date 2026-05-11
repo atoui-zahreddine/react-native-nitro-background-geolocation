@@ -10,7 +10,8 @@ package com.margelo.nitro.nitrobackgroundgeolocation
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
 import java.util.Objects
-
+import com.margelo.nitro.core.NullType
+import com.margelo.nitro.core.AnyMap
 
 /**
  * Represents the JavaScript object/struct "ConfigureOptions".
@@ -20,88 +21,88 @@ import java.util.Objects
 data class ConfigureOptions(
   @DoNotStrip
   @Keep
-  val headlessTaskName: String,
+  val headlessTaskName: Variant_NullType_String?,
   @DoNotStrip
   @Keep
-  val locationProvider: LocationProvider?,
+  val locationProvider: Variant_NullType_LocationProvider?,
   @DoNotStrip
   @Keep
-  val desiredAccuracy: LocationAccuracy?,
+  val desiredAccuracy: Variant_NullType_LocationAccuracy?,
   @DoNotStrip
   @Keep
-  val stationaryRadius: Double?,
+  val stationaryRadius: Variant_NullType_Double?,
   @DoNotStrip
   @Keep
-  val debug: Boolean?,
+  val debug: Variant_NullType_Boolean?,
   @DoNotStrip
   @Keep
-  val distanceFilter: Double?,
+  val distanceFilter: Variant_NullType_Double?,
   @DoNotStrip
   @Keep
-  val stopOnTerminate: Boolean?,
+  val stopOnTerminate: Variant_NullType_Boolean?,
   @DoNotStrip
   @Keep
-  val startOnBoot: Boolean?,
+  val startOnBoot: Variant_NullType_Boolean?,
   @DoNotStrip
   @Keep
-  val interval: Double?,
+  val interval: Variant_NullType_Double?,
   @DoNotStrip
   @Keep
-  val fastestInterval: Double?,
+  val fastestInterval: Variant_NullType_Double?,
   @DoNotStrip
   @Keep
-  val activitiesInterval: Double?,
+  val activitiesInterval: Variant_NullType_Double?,
   @DoNotStrip
   @Keep
-  val stopOnStillActivity: Boolean?,
+  val stopOnStillActivity: Variant_NullType_Boolean?,
   @DoNotStrip
   @Keep
-  val notificationsEnabled: Boolean?,
+  val notificationsEnabled: Variant_NullType_Boolean?,
   @DoNotStrip
   @Keep
-  val startForeground: Boolean?,
+  val startForeground: Variant_NullType_Boolean?,
   @DoNotStrip
   @Keep
-  val notificationTitle: String?,
+  val notificationTitle: Variant_NullType_String?,
   @DoNotStrip
   @Keep
-  val notificationText: String?,
+  val notificationText: Variant_NullType_String?,
   @DoNotStrip
   @Keep
-  val notificationIconColor: String?,
+  val notificationIconColor: Variant_NullType_String?,
   @DoNotStrip
   @Keep
-  val notificationIconLarge: String?,
+  val notificationIconLarge: Variant_NullType_String?,
   @DoNotStrip
   @Keep
-  val notificationIconSmall: String?,
+  val notificationIconSmall: Variant_NullType_String?,
   @DoNotStrip
   @Keep
-  val activityType: String?,
+  val activityType: Variant_NullType_String?,
   @DoNotStrip
   @Keep
-  val pauseLocationUpdates: Boolean?,
+  val pauseLocationUpdates: Variant_NullType_Boolean?,
   @DoNotStrip
   @Keep
-  val saveBatteryOnBackground: Boolean?,
+  val saveBatteryOnBackground: Variant_NullType_Boolean?,
   @DoNotStrip
   @Keep
-  val url: String?,
+  val url: Variant_NullType_String?,
   @DoNotStrip
   @Keep
-  val syncUrl: String?,
+  val syncUrl: Variant_NullType_String?,
   @DoNotStrip
   @Keep
-  val syncThreshold: Double?,
+  val syncThreshold: Variant_NullType_Double?,
   @DoNotStrip
   @Keep
-  val httpHeaders: Map<String, String>?,
+  val httpHeaders: Variant_NullType_Map_String__String_?,
   @DoNotStrip
   @Keep
-  val maxLocations: Double?,
+  val maxLocations: Variant_NullType_Double?,
   @DoNotStrip
   @Keep
-  val postTemplate: Map<String, String>?
+  val postTemplate: Variant_NullType_AnyMap?
 ) {
   /* primary constructor */
 
@@ -179,7 +180,7 @@ data class ConfigureOptions(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(headlessTaskName: String, locationProvider: LocationProvider?, desiredAccuracy: LocationAccuracy?, stationaryRadius: Double?, debug: Boolean?, distanceFilter: Double?, stopOnTerminate: Boolean?, startOnBoot: Boolean?, interval: Double?, fastestInterval: Double?, activitiesInterval: Double?, stopOnStillActivity: Boolean?, notificationsEnabled: Boolean?, startForeground: Boolean?, notificationTitle: String?, notificationText: String?, notificationIconColor: String?, notificationIconLarge: String?, notificationIconSmall: String?, activityType: String?, pauseLocationUpdates: Boolean?, saveBatteryOnBackground: Boolean?, url: String?, syncUrl: String?, syncThreshold: Double?, httpHeaders: Map<String, String>?, maxLocations: Double?, postTemplate: Map<String, String>?): ConfigureOptions {
+    private fun fromCpp(headlessTaskName: Variant_NullType_String?, locationProvider: Variant_NullType_LocationProvider?, desiredAccuracy: Variant_NullType_LocationAccuracy?, stationaryRadius: Variant_NullType_Double?, debug: Variant_NullType_Boolean?, distanceFilter: Variant_NullType_Double?, stopOnTerminate: Variant_NullType_Boolean?, startOnBoot: Variant_NullType_Boolean?, interval: Variant_NullType_Double?, fastestInterval: Variant_NullType_Double?, activitiesInterval: Variant_NullType_Double?, stopOnStillActivity: Variant_NullType_Boolean?, notificationsEnabled: Variant_NullType_Boolean?, startForeground: Variant_NullType_Boolean?, notificationTitle: Variant_NullType_String?, notificationText: Variant_NullType_String?, notificationIconColor: Variant_NullType_String?, notificationIconLarge: Variant_NullType_String?, notificationIconSmall: Variant_NullType_String?, activityType: Variant_NullType_String?, pauseLocationUpdates: Variant_NullType_Boolean?, saveBatteryOnBackground: Variant_NullType_Boolean?, url: Variant_NullType_String?, syncUrl: Variant_NullType_String?, syncThreshold: Variant_NullType_Double?, httpHeaders: Variant_NullType_Map_String__String_?, maxLocations: Variant_NullType_Double?, postTemplate: Variant_NullType_AnyMap?): ConfigureOptions {
       return ConfigureOptions(headlessTaskName, locationProvider, desiredAccuracy, stationaryRadius, debug, distanceFilter, stopOnTerminate, startOnBoot, interval, fastestInterval, activitiesInterval, stopOnStillActivity, notificationsEnabled, startForeground, notificationTitle, notificationText, notificationIconColor, notificationIconLarge, notificationIconSmall, activityType, pauseLocationUpdates, saveBatteryOnBackground, url, syncUrl, syncThreshold, httpHeaders, maxLocations, postTemplate)
     }
   }

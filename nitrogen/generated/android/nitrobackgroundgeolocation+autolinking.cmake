@@ -36,6 +36,13 @@ target_sources(
   ../nitrogen/generated/shared/c++/HybridNitroBackgroundGeolocationSpec.cpp
   # Android-specific Nitrogen C++ sources
   ../nitrogen/generated/android/c++/JHybridNitroBackgroundGeolocationSpec.cpp
+  ../nitrogen/generated/android/c++/JVariant_NullType_String.cpp
+  ../nitrogen/generated/android/c++/JVariant_NullType_LocationProvider.cpp
+  ../nitrogen/generated/android/c++/JVariant_NullType_LocationAccuracy.cpp
+  ../nitrogen/generated/android/c++/JVariant_NullType_Double.cpp
+  ../nitrogen/generated/android/c++/JVariant_NullType_Boolean.cpp
+  ../nitrogen/generated/android/c++/JVariant_NullType_Map_String__String_.cpp
+  ../nitrogen/generated/android/c++/JVariant_NullType_AnyMap.cpp
 )
 
 # From node_modules/react-native/ReactAndroid/cmake-utils/folly-flags.cmake

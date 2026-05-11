@@ -21,6 +21,8 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
       prototype.registerHybridMethod("getStationaryLocation", &HybridNitroBackgroundGeolocationSpec::getStationaryLocation);
       prototype.registerHybridMethod("checkStatus", &HybridNitroBackgroundGeolocationSpec::checkStatus);
       prototype.registerHybridMethod("getConfig", &HybridNitroBackgroundGeolocationSpec::getConfig);
+      prototype.registerHybridMethod("showAppSettings", &HybridNitroBackgroundGeolocationSpec::showAppSettings);
+      prototype.registerHybridMethod("showLocationSettings", &HybridNitroBackgroundGeolocationSpec::showLocationSettings);
       prototype.registerHybridMethod("getLocations", &HybridNitroBackgroundGeolocationSpec::getLocations);
       prototype.registerHybridMethod("getValidLocations", &HybridNitroBackgroundGeolocationSpec::getValidLocations);
       prototype.registerHybridMethod("getValidLocationsAndDelete", &HybridNitroBackgroundGeolocationSpec::getValidLocationsAndDelete);

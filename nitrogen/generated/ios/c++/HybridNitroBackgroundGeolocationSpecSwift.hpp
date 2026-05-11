@@ -39,11 +39,14 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct BackgroundGeolocat
 
 #include <NitroModules/Promise.hpp>
 #include "ConfigureOptions.hpp"
+#include <NitroModules/Null.hpp>
 #include <string>
-#include "LocationProvider.hpp"
+#include <variant>
 #include <optional>
+#include "LocationProvider.hpp"
 #include "LocationAccuracy.hpp"
 #include <unordered_map>
+#include <NitroModules/AnyMap.hpp>
 #include "Location.hpp"
 #include "LocationOptions.hpp"
 #include "StationaryLocation.hpp"
@@ -161,6 +164,18 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
       }
       auto __value = std::move(__result.value());
       return __value;
+    }
+    inline void showAppSettings() override {
+      auto __result = _swiftPart.showAppSettings();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+    }
+    inline void showLocationSettings() override {
+      auto __result = _swiftPart.showLocationSettings();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
     }
     inline std::shared_ptr<Promise<std::vector<Location>>> getLocations() override {
       auto __result = _swiftPart.getLocations();

@@ -47,11 +47,23 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct BackgroundGeolocat
 #include "JAuthorizationStatus.hpp"
 #include "ConfigureOptions.hpp"
 #include "JConfigureOptions.hpp"
+#include <NitroModules/Null.hpp>
+#include <variant>
+#include "JVariant_NullType_String.hpp"
+#include <NitroModules/JNull.hpp>
 #include "LocationProvider.hpp"
+#include "JVariant_NullType_LocationProvider.hpp"
 #include "JLocationProvider.hpp"
 #include "LocationAccuracy.hpp"
+#include "JVariant_NullType_LocationAccuracy.hpp"
 #include "JLocationAccuracy.hpp"
+#include "JVariant_NullType_Double.hpp"
+#include "JVariant_NullType_Boolean.hpp"
 #include <unordered_map>
+#include "JVariant_NullType_Map_String__String_.hpp"
+#include <NitroModules/AnyMap.hpp>
+#include "JVariant_NullType_AnyMap.hpp"
+#include <NitroModules/JAnyMap.hpp>
 #include <vector>
 #include "LogEntry.hpp"
 #include "JLogEntry.hpp"
@@ -213,6 +225,14 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
       });
       return __promise;
     }();
+  }
+  void JHybridNitroBackgroundGeolocationSpec::showAppSettings() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void()>("showAppSettings");
+    method(_javaPart);
+  }
+  void JHybridNitroBackgroundGeolocationSpec::showLocationSettings() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void()>("showLocationSettings");
+    method(_javaPart);
   }
   std::shared_ptr<Promise<std::vector<Location>>> JHybridNitroBackgroundGeolocationSpec::getLocations() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("getLocations");

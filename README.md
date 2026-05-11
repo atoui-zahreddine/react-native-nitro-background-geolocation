@@ -22,20 +22,20 @@ Add the following permissions to your `android/app/src/main/AndroidManifest.xml`
 ```xml
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
 <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+<uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 <uses-permission android:name="android.permission.WAKE_LOCK" />
 ```
 
-> **Note:** On Android 10+ you must also request `ACCESS_BACKGROUND_LOCATION` at runtime, separately from foreground location permissions.
+> **Note:** `ACCESS_BACKGROUND_LOCATION` is **not** required. The plugin uses a foreground service with a persistent notification, which keeps location access active even when the app is in the background or killed.
 
 ## Quick Start
 
@@ -78,34 +78,47 @@ await BackgroundGeolocation.stop();
 unsubscribe();
 ```
 
-## Headless Tasks
+## Receiving Location Updates
 
-When the app is killed or in the background, the native service can invoke a headless JS task. Set the `headlessTaskName` in your configuration to match the registered task name.
+There are two ways to receive location updates, and both fire simultaneously:
 
-### Bare React Native (AppRegistry)
+### 1. Event Callbacks (`onLocation`)
+
+Callbacks registered via `onLocation` fire whenever the app process is alive (foreground or background). They deliver typed `Location` objects directly via JSI — no serialization overhead.
+
+```typescript
+const unsubscribe = BackgroundGeolocation.onLocation((location) => {
+  console.log('Location:', location.latitude, location.longitude);
+});
+```
+
+### 2. Headless Tasks
+
+Headless tasks fire on every location, stationary, and activity event regardless of app state — including when the app is killed. The native service starts a lightweight JS context to execute the task. The data arrives as a serialized object with `event` and `params` fields.
+
+The `event` field is one of: `"location"`, `"stationary"`, or `"activity"`.
+
+Register the headless task in your entry file **before** `registerRootComponent`:
+
+#### Bare React Native
 
 ```typescript
 // index.js
 import { AppRegistry } from 'react-native';
 
-AppRegistry.registerHeadlessTask('BackgroundLocationTask', () => async (taskData) => {
-  console.log('Headless location event:', taskData);
-  // Process location data here
+AppRegistry.registerHeadlessTask('BackgroundLocationTask', () => async ({ event, params }) => {
+  console.log('Location event:', event, params);
 });
 ```
 
-### Expo (expo-task-manager)
+#### Expo
 
 ```typescript
-// taskManager.ts
-import * as TaskManager from 'expo-task-manager';
+// index.js
+import { AppRegistry } from 'react-native';
 
-TaskManager.defineTask('BackgroundLocationTask', ({ data, error }) => {
-  if (error) {
-    console.error(error);
-    return;
-  }
-  console.log('Headless location event:', data);
+AppRegistry.registerHeadlessTask('BackgroundLocationTask', () => async ({ event, params }) => {
+  console.log('Location event:', event, params);
 });
 ```
 
@@ -118,13 +131,25 @@ await BackgroundGeolocation.configure({
 });
 ```
 
+### Which to use?
+
+| | `onLocation` | Headless Task |
+|---|---|---|
+| App in foreground | Fires | Fires |
+| App in background | Fires | Fires |
+| App killed | Does not fire | Fires |
+| Data format | Typed `Location` object | `{ event: string, params: string }` |
+| Use case | UI updates, in-app logic | Persisting data, server sync |
+
+You can use both at the same time. For example, use `onLocation` to update the UI and a headless task to sync locations to your server.
+
 ## API Reference
 
 ### Lifecycle
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `configure` | `(options: ConfigureOptions) => Promise<void>` | Configure the plugin with the given options. Must be called before `start`. |
+| `configure` | `(options: ConfigureOptions) => Promise<void>` | Configure the plugin with the given options. Must be called before `start`. Omitted fields stay unchanged; pass `null` to reset a field to its native default. |
 | `start` | `() => Promise<void>` | Start background geolocation tracking. |
 | `stop` | `() => Promise<void>` | Stop background geolocation tracking. |
 
@@ -141,6 +166,13 @@ await BackgroundGeolocation.configure({
 |--------|-----------|-------------|
 | `checkStatus` | `() => Promise<ServiceStatus>` | Check if the service is running, location services are enabled, and authorization status. |
 | `getConfig` | `() => Promise<ConfigureOptions>` | Get the current configuration. |
+
+### Settings
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `showAppSettings` | `() => void` | Open the app's Android system settings page. **Android only.** |
+| `showLocationSettings` | `() => void` | Open the device's Android location settings page. **Android only.** |
 
 ### Storage
 
@@ -172,13 +204,13 @@ All event methods return a disposer function (`() => void`) that removes the lis
 |--------|-------------------|-------------|
 | `onLocation` | `(location: Location) => void` | Fired on each location update. |
 | `onStationary` | `(location: StationaryLocation) => void` | Fired when the device becomes stationary. |
-| `onActivity` | `(activity: Activity) => void` | Fired when detected activity changes (walking, driving, etc.). |
+| `onActivity` | `(activity: Activity) => void` | Fired when detected activity changes (walking, driving, etc.). **Android only.** |
 | `onStart` | `() => void` | Fired when tracking starts. |
 | `onStop` | `() => void` | Fired when tracking stops. |
 | `onError` | `(error: BackgroundGeolocationError) => void` | Fired on errors. |
 | `onAuthorization` | `(status: AuthorizationStatus) => void` | Fired when authorization status changes. |
-| `onForeground` | `() => void` | Fired when the app enters the foreground. |
-| `onBackground` | `() => void` | Fired when the app enters the background. |
+| `onForeground` | `() => void` | Fired when the app enters the foreground. **Android only.** |
+| `onBackground` | `() => void` | Fired when the app enters the background. **Android only.** |
 | `onAbortRequested` | `() => void` | Fired when an abort is requested. |
 | `onHttpAuthorization` | `() => void` | Fired on HTTP authorization events. |
 
@@ -194,9 +226,9 @@ All event methods return a disposer function (`() => void`) that removes the lis
 
 | Value | Code | Description |
 |-------|------|-------------|
-| `DISTANCE_FILTER` | `0` | Location updates based on distance moved. |
-| `ACTIVITY` | `1` | Location updates based on detected activity. |
-| `RAW` | `2` | Raw location updates at the configured interval. |
+| `DISTANCE_FILTER` | `0` | Classic background provider. Uses stationary detection and an elastic distance filter for good battery and data usage. |
+| `ACTIVITY` | `1` | Activity-aware provider. Uses fused location + activity recognition and works best when you want tighter control over update intervals. |
+| `RAW` | `2` | Raw sensor/device locations with minimal provider-side processing. |
 
 ### LocationAccuracy
 
@@ -213,7 +245,7 @@ All event methods return a disposer function (`() => void`) that removes the lis
 |-------|------|-------------|
 | `NOT_AUTHORIZED` | `0` | Location access not authorized. |
 | `AUTHORIZED` | `1` | Full location access authorized. |
-| `AUTHORIZED_FOREGROUND` | `2` | Foreground-only location access. |
+| `AUTHORIZED_FOREGROUND` | `2` | Foreground-only location access. Reserved for platforms that expose a distinct foreground-only state. |
 
 ### LogLevel
 
@@ -240,38 +272,42 @@ All event methods return a disposer function (`() => void`) that removes the lis
 | `BACKGROUND` | `0` |
 | `FOREGROUND` | `1` |
 
+`ServiceMode` comes from the Cordova plugin's iOS `switchMode()` concept. It is currently kept for parity in the type surface, but the Nitro API does not actively use it.
+
 ## Configuration Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `headlessTaskName` | `string` | **required** | Name of the registered headless task. |
-| `locationProvider` | `LocationProvider` | `DISTANCE_FILTER` | Location provider to use. |
-| `desiredAccuracy` | `LocationAccuracy` | `HIGH` | Desired accuracy level. |
-| `stationaryRadius` | `number` | `50` | Radius in meters to trigger stationary detection. |
-| `debug` | `boolean` | `false` | Enable debug sounds and notifications. |
-| `distanceFilter` | `number` | `500` | Minimum distance (meters) between location updates. |
-| `stopOnTerminate` | `boolean` | `true` | Stop tracking when the app is terminated. |
-| `startOnBoot` | `boolean` | `false` | Start tracking on device boot. |
-| `interval` | `number` | `60000` | Location update interval in milliseconds. |
-| `fastestInterval` | `number` | `120000` | Fastest location update interval in milliseconds. |
-| `activitiesInterval` | `number` | `10000` | Activity recognition interval in milliseconds. |
-| `stopOnStillActivity` | `boolean` | `true` | Stop updates when the device is still. |
-| `notificationsEnabled` | `boolean` | `true` | Show foreground service notification. |
-| `startForeground` | `boolean` | `true` | Run as a foreground service. |
-| `notificationTitle` | `string` | `''` | Notification title. |
-| `notificationText` | `string` | `''` | Notification text. |
-| `notificationIconColor` | `string` | `''` | Notification icon color (hex). |
-| `notificationIconLarge` | `string` | `''` | Large notification icon resource name. |
-| `notificationIconSmall` | `string` | `''` | Small notification icon resource name. |
-| `activityType` | `string` | `''` | iOS activity type hint. |
-| `pauseLocationUpdates` | `boolean` | `false` | Allow the system to pause location updates. |
-| `saveBatteryOnBackground` | `boolean` | `false` | Reduce accuracy in the background to save battery. |
-| `url` | `string` | `''` | URL for HTTP location posting. |
-| `syncUrl` | `string` | `''` | URL for batch sync of stored locations. |
-| `syncThreshold` | `number` | `100` | Number of locations to accumulate before sync. |
-| `httpHeaders` | `Record<string, string>` | `{}` | HTTP headers for location posting. |
-| `maxLocations` | `number` | `10000` | Maximum number of locations to store. |
-| `postTemplate` | `Record<string, string>` | `{}` | Custom POST body template for location posting. |
+`configure()` keeps omitted fields unchanged. Pass `null` for a supported option when you want Cordova-style "reset to default" behavior.
+
+| Option | Type | Default | Platform | Description |
+|--------|------|---------|----------|-------------|
+| `headlessTaskName` | `string \| null` | `undefined` | Android | Name of the registered headless task. Required only when using headless delivery. |
+| `locationProvider` | `LocationProvider \| null` | `DISTANCE_FILTER` | all | Location provider to use. `DISTANCE_FILTER` is the classic battery-friendly background provider, `ACTIVITY` is activity-aware, and `RAW` returns less-processed sensor fixes. |
+| `desiredAccuracy` | `LocationAccuracy \| null` | `MEDIUM` | all | Desired accuracy level. Lower accuracy generally reduces power drain. |
+| `stationaryRadius` | `number \| null` | `50` | all | Radius in meters to trigger stationary detection. |
+| `debug` | `boolean \| null` | `false` | all | Enable debug sounds and notifications. |
+| `distanceFilter` | `number \| null` | `500` | all | Minimum distance (meters) between location updates. |
+| `stopOnTerminate` | `boolean \| null` | `true` | all | Stop tracking when the app is terminated. |
+| `startOnBoot` | `boolean \| null` | `false` | Android | Start tracking on device boot. |
+| `interval` | `number \| null` | `600000` | Android | Minimum time interval between location updates in milliseconds. |
+| `fastestInterval` | `number \| null` | `120000` | Android | Fastest location update interval in milliseconds. |
+| `activitiesInterval` | `number \| null` | `10000` | Android | Activity recognition interval in milliseconds. |
+| `stopOnStillActivity` | `boolean \| null` | `true` | Android | Deprecated upstream Android option that stops updates when STILL is detected. |
+| `notificationsEnabled` | `boolean \| null` | `true` | Android | Show foreground service notification. |
+| `startForeground` | `boolean \| null` | `true` | Android | Run as a foreground service. |
+| `notificationTitle` | `string \| null` | `"Background tracking"` | Android | Notification title. |
+| `notificationText` | `string \| null` | `"ENABLED"` | Android | Notification text. |
+| `notificationIconColor` | `string \| null` | `''` | Android | Notification icon color (hex). |
+| `notificationIconLarge` | `string \| null` | `''` | Android | Large notification icon resource name. |
+| `notificationIconSmall` | `string \| null` | `''` | Android | Small notification icon resource name. |
+| `activityType` | `string \| null` | platform default | iOS | iOS activity type hint. |
+| `pauseLocationUpdates` | `boolean \| null` | platform default | iOS | Allow the system to pause location updates. |
+| `saveBatteryOnBackground` | `boolean \| null` | platform default | iOS | Reduce accuracy in the background to save battery. |
+| `url` | `string \| null` | `''` | all | URL for HTTP location posting. |
+| `syncUrl` | `string \| null` | `''` | all | URL for batch sync of stored locations. |
+| `syncThreshold` | `number \| null` | `100` | all | Number of failed locations to batch together before sync. |
+| `httpHeaders` | `Record<string, string> \| null` | `undefined` | all | Optional HTTP headers for location posting. |
+| `maxLocations` | `number \| null` | `10000` | all | Maximum number of locations to store. |
+| `postTemplate` | `AnyMap \| null` | `undefined` | all | Custom POST body template for location posting. Supports object or array shapes and nested JSON values. |
 
 ## Platform Support
 
