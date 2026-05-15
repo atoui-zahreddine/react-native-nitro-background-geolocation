@@ -91,7 +91,7 @@ abstract class HybridNitroBackgroundGeolocationSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun getLogEntries(limit: Double, fromId: Double, minLevel: LogLevel): Promise<Array<LogEntry>>
+  abstract fun getLogEntries(limit: Double, fromId: Double, minLevel: NativeLogLevel): Promise<Array<LogEntry>>
   
   abstract fun onLocation(callback: (location: Location) -> Unit): () -> Unit
   

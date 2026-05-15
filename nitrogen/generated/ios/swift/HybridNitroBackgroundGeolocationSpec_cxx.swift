@@ -420,7 +420,7 @@ open class HybridNitroBackgroundGeolocationSpec_cxx {
   @inline(__always)
   public final func getLogEntries(limit: Double, fromId: Double, minLevel: Int32) -> bridge.Result_std__shared_ptr_Promise_std__vector_LogEntry____ {
     do {
-      let __result = try self.__implementation.getLogEntries(limit: limit, fromId: fromId, minLevel: margelo.nitro.nitrobackgroundgeolocation.LogLevel(rawValue: minLevel)!)
+      let __result = try self.__implementation.getLogEntries(limit: limit, fromId: fromId, minLevel: margelo.nitro.nitrobackgroundgeolocation.NativeLogLevel(rawValue: minLevel)!)
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__vector_LogEntry___ in
         let __promise = bridge.create_std__shared_ptr_Promise_std__vector_LogEntry___()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__vector_LogEntry___(__promise)

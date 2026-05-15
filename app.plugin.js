@@ -7,9 +7,34 @@ try {
   );
 }
 const { withStringsXml } = configPlugins;
+const { withInfoPlist } = configPlugins;
+
+function withIosBackgroundGeolocation(expoConfig) {
+  return withInfoPlist(expoConfig, (modConfig) => {
+    const infoPlist = modConfig.modResults;
+    const backgroundModes = Array.isArray(infoPlist.UIBackgroundModes)
+      ? infoPlist.UIBackgroundModes
+      : [];
+
+    if (!backgroundModes.includes('location')) {
+      backgroundModes.push('location');
+    }
+
+    infoPlist.UIBackgroundModes = backgroundModes;
+    infoPlist.NSLocationWhenInUseUsageDescription ??=
+      'This app uses your location while tracking is active.';
+    infoPlist.NSLocationAlwaysAndWhenInUseUsageDescription ??=
+      'This app uses your location in the background to continue tracking.';
+    infoPlist.NSLocationAlwaysUsageDescription ??=
+      'This app uses your location in the background to continue tracking.';
+
+    modConfig.modResults = infoPlist;
+    return modConfig;
+  });
+}
 
 function withBackgroundGeolocation(expoConfig) {
-  return withStringsXml(expoConfig, (modConfig) => {
+  const withAndroidStrings = withStringsXml(expoConfig, (modConfig) => {
     const strings = modConfig.modResults.resources.string || [];
     const appId = modConfig.android?.package || 'com.unknown';
 
@@ -32,6 +57,8 @@ function withBackgroundGeolocation(expoConfig) {
     modConfig.modResults.resources.string = strings;
     return modConfig;
   });
+
+  return withIosBackgroundGeolocation(withAndroidStrings);
 }
 
 module.exports = withBackgroundGeolocation;

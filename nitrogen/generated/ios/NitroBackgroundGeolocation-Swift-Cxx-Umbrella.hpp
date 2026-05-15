@@ -28,8 +28,8 @@ namespace margelo::nitro::nitrobackgroundgeolocation { enum class LocationProvid
 namespace margelo::nitro::nitrobackgroundgeolocation { struct Location; }
 // Forward declaration of `LogEntry` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct LogEntry; }
-// Forward declaration of `LogLevel` to properly resolve imports.
-namespace margelo::nitro::nitrobackgroundgeolocation { enum class LogLevel; }
+// Forward declaration of `NativeLogLevel` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { enum class NativeLogLevel; }
 // Forward declaration of `ServiceStatus` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct ServiceStatus; }
 // Forward declaration of `StationaryLocation` to properly resolve imports.
@@ -46,7 +46,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct StationaryLocation
 #include "LocationOptions.hpp"
 #include "LocationProvider.hpp"
 #include "LogEntry.hpp"
-#include "LogLevel.hpp"
+#include "NativeLogLevel.hpp"
 #include "ServiceStatus.hpp"
 #include "StationaryLocation.hpp"
 #include <NitroModules/AnyMap.hpp>

@@ -54,7 +54,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
         case LogLevel::WARN:
           static const auto fieldWARN = clazz->getStaticField<JLogLevel>("WARN");
           return clazz->getStaticFieldValue(fieldWARN);
-        case LogLevel::ERROR:
+         case LogLevel::ERROR_:
           static const auto fieldERROR = clazz->getStaticField<JLogLevel>("ERROR");
           return clazz->getStaticFieldValue(fieldERROR);
         default:

@@ -14,10 +14,10 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/atoui-zahreddine/react-native-nitro-background-geolocation.git", :tag => "#{s.version}" }
 
   s.source_files = [
-    "ios/**/*.{swift}",
-    "ios/**/*.{m,mm}",
+    "ios/**/*.{swift,h,m,mm}",
     "cpp/**/*.{hpp,cpp}",
   ]
+  s.public_header_files = "ios/common/BackgroundGeolocation/**/*.h"
 
   s.dependency 'React-jsi'
   s.dependency 'React-callinvoker'

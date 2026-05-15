@@ -30,8 +30,8 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct ServiceStatus; }
 namespace margelo::nitro::nitrobackgroundgeolocation { enum class AuthorizationStatus; }
 // Forward declaration of `LogEntry` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct LogEntry; }
-// Forward declaration of `LogLevel` to properly resolve imports.
-namespace margelo::nitro::nitrobackgroundgeolocation { enum class LogLevel; }
+// Forward declaration of `NativeLogLevel` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { enum class NativeLogLevel; }
 // Forward declaration of `Activity` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct Activity; }
 // Forward declaration of `BackgroundGeolocationError` to properly resolve imports.
@@ -54,7 +54,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct BackgroundGeolocat
 #include "AuthorizationStatus.hpp"
 #include <vector>
 #include "LogEntry.hpp"
-#include "LogLevel.hpp"
+#include "NativeLogLevel.hpp"
 #include <functional>
 #include "Activity.hpp"
 #include "BackgroundGeolocationError.hpp"
@@ -225,7 +225,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<std::vector<LogEntry>>> getLogEntries(double limit, double fromId, LogLevel minLevel) override {
+    inline std::shared_ptr<Promise<std::vector<LogEntry>>> getLogEntries(double limit, double fromId, NativeLogLevel minLevel) override {
       auto __result = _swiftPart.getLogEntries(std::forward<decltype(limit)>(limit), std::forward<decltype(fromId)>(fromId), static_cast<int>(minLevel));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());

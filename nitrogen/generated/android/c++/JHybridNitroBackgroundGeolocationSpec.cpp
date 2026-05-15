@@ -25,8 +25,8 @@ namespace margelo::nitro::nitrobackgroundgeolocation { enum class LocationAccura
 namespace margelo::nitro::nitrobackgroundgeolocation { struct LogEntry; }
 // Forward declaration of `LocationOptions` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct LocationOptions; }
-// Forward declaration of `LogLevel` to properly resolve imports.
-namespace margelo::nitro::nitrobackgroundgeolocation { enum class LogLevel; }
+// Forward declaration of `NativeLogLevel` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { enum class NativeLogLevel; }
 // Forward declaration of `Activity` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct Activity; }
 // Forward declaration of `BackgroundGeolocationError` to properly resolve imports.
@@ -72,8 +72,8 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct BackgroundGeolocat
 #include <NitroModules/JNICallable.hpp>
 #include "LocationOptions.hpp"
 #include "JLocationOptions.hpp"
-#include "LogLevel.hpp"
-#include "JLogLevel.hpp"
+#include "NativeLogLevel.hpp"
+#include "JNativeLogLevel.hpp"
 #include "JFunc_void_Location.hpp"
 #include "JFunc_void_StationaryLocation.hpp"
 #include "Activity.hpp"
@@ -354,9 +354,9 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<std::vector<LogEntry>>> JHybridNitroBackgroundGeolocationSpec::getLogEntries(double limit, double fromId, LogLevel minLevel) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(double /* limit */, double /* fromId */, jni::alias_ref<JLogLevel> /* minLevel */)>("getLogEntries");
-    auto __result = method(_javaPart, limit, fromId, JLogLevel::fromCpp(minLevel));
+  std::shared_ptr<Promise<std::vector<LogEntry>>> JHybridNitroBackgroundGeolocationSpec::getLogEntries(double limit, double fromId, NativeLogLevel minLevel) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(double /* limit */, double /* fromId */, jni::alias_ref<JNativeLogLevel> /* minLevel */)>("getLogEntries");
+    auto __result = method(_javaPart, limit, fromId, JNativeLogLevel::fromCpp(minLevel));
     return [&]() {
       auto __promise = Promise<std::vector<LogEntry>>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {

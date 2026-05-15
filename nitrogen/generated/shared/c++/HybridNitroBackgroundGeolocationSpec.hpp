@@ -25,8 +25,8 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct StationaryLocation
 namespace margelo::nitro::nitrobackgroundgeolocation { struct ServiceStatus; }
 // Forward declaration of `LogEntry` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct LogEntry; }
-// Forward declaration of `LogLevel` to properly resolve imports.
-namespace margelo::nitro::nitrobackgroundgeolocation { enum class LogLevel; }
+// Forward declaration of `NativeLogLevel` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { enum class NativeLogLevel; }
 // Forward declaration of `Activity` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct Activity; }
 // Forward declaration of `BackgroundGeolocationError` to properly resolve imports.
@@ -43,7 +43,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation { enum class AuthorizationS
 #include "ServiceStatus.hpp"
 #include <vector>
 #include "LogEntry.hpp"
-#include "LogLevel.hpp"
+#include "NativeLogLevel.hpp"
 #include <functional>
 #include "Activity.hpp"
 #include "BackgroundGeolocationError.hpp"
@@ -95,7 +95,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
       virtual std::shared_ptr<Promise<void>> deleteLocation(double locationId) = 0;
       virtual std::shared_ptr<Promise<void>> deleteAllLocations() = 0;
       virtual std::shared_ptr<Promise<void>> forceSync() = 0;
-      virtual std::shared_ptr<Promise<std::vector<LogEntry>>> getLogEntries(double limit, double fromId, LogLevel minLevel) = 0;
+      virtual std::shared_ptr<Promise<std::vector<LogEntry>>> getLogEntries(double limit, double fromId, NativeLogLevel minLevel) = 0;
       virtual std::function<void()> onLocation(const std::function<void(const Location& /* location */)>& callback) = 0;
       virtual std::function<void()> onStationary(const std::function<void(const StationaryLocation& /* location */)>& callback) = 0;
       virtual std::function<void()> onActivity(const std::function<void(const Activity& /* activity */)>& callback) = 0;

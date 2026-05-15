@@ -91,17 +91,17 @@ export enum LocationAccuracy {
  * Minimum log severity for log retrieval.
  * Use this to filter native log records from most verbose (`TRACE`) to least verbose (`ERROR`).
  */
-export enum LogLevel {
+export enum NativeLogLevel {
   /** Most verbose diagnostic logging. */
-  TRACE = 0,
+  TraceValue = 0,
   /** Debug-level logging for development and investigation. */
-  DEBUG = 1,
+  DebugValue = 1,
   /** General informational logging. */
-  INFO = 2,
+  InfoValue = 2,
   /** Warning-level logging for recoverable problems. */
-  WARN = 3,
+  WarnValue = 3,
   /** Error-level logging for failures. */
-  ERROR = 4,
+  ErrorValue = 4,
 }
 
 /**
@@ -601,7 +601,7 @@ export interface NitroBackgroundGeolocation extends HybridObject<{
   getLogEntries(
     limit: number,
     fromId: number,
-    minLevel: LogLevel
+    minLevel: NativeLogLevel
   ): Promise<LogEntry[]>;
 
   // Events — each returns a disposer function

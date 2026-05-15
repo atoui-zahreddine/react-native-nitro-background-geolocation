@@ -28,7 +28,7 @@ public protocol HybridNitroBackgroundGeolocationSpec_protocol: HybridObject {
   func deleteLocation(locationId: Double) throws -> Promise<Void>
   func deleteAllLocations() throws -> Promise<Void>
   func forceSync() throws -> Promise<Void>
-  func getLogEntries(limit: Double, fromId: Double, minLevel: LogLevel) throws -> Promise<[LogEntry]>
+  func getLogEntries(limit: Double, fromId: Double, minLevel: NativeLogLevel) throws -> Promise<[LogEntry]>
   func onLocation(callback: @escaping (_ location: Location) -> Void) throws -> () -> Void
   func onStationary(callback: @escaping (_ location: StationaryLocation) -> Void) throws -> () -> Void
   func onActivity(callback: @escaping (_ activity: Activity) -> Void) throws -> () -> Void

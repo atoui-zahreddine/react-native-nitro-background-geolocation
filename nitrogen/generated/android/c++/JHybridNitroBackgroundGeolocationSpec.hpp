@@ -69,7 +69,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
     std::shared_ptr<Promise<void>> deleteLocation(double locationId) override;
     std::shared_ptr<Promise<void>> deleteAllLocations() override;
     std::shared_ptr<Promise<void>> forceSync() override;
-    std::shared_ptr<Promise<std::vector<LogEntry>>> getLogEntries(double limit, double fromId, LogLevel minLevel) override;
+    std::shared_ptr<Promise<std::vector<LogEntry>>> getLogEntries(double limit, double fromId, NativeLogLevel minLevel) override;
     std::function<void()> onLocation(const std::function<void(const Location& /* location */)>& callback) override;
     std::function<void()> onStationary(const std::function<void(const StationaryLocation& /* location */)>& callback) override;
     std::function<void()> onActivity(const std::function<void(const Activity& /* activity */)>& callback) override;

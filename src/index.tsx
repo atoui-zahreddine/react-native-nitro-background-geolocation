@@ -7,12 +7,11 @@ export {
   ServiceMode,
   AuthorizationStatus,
   LocationAccuracy,
-  LogLevel,
   LocationErrorCode,
 } from './NitroBackgroundGeolocation.nitro';
 
-// Re-export all types
 export type {
+  NativeLogLevel,
   ConfigureOptions,
   Location,
   StationaryLocation,
