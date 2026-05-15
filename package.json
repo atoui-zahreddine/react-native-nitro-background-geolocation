@@ -51,7 +51,7 @@
     "url": "git+https://github.com/atoui-zahreddine/react-native-nitro-background-geolocation.git"
   },
   "author": "Zahreddine Atoui <at.zahreddine@gmail.com> (https://github.com/atoui-zahreddine)",
-  "license": "MIT",
+  "license": "(MIT AND Apache-2.0)",
   "bugs": {
     "url": "https://github.com/atoui-zahreddine/react-native-nitro-background-geolocation/issues"
   },

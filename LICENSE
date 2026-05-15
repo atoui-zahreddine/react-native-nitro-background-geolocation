@@ -1,6 +1,7 @@
 MIT License
 
 Copyright (c) 2026 Zahreddine Atoui
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -18,3 +19,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+This project includes code from the following Apache-2.0 licensed projects.
+The native Android and iOS geolocation service code retains its original
+Apache-2.0 license. See the NOTICE file for full attribution details and
+LICENSE-APACHE for the Apache License text.

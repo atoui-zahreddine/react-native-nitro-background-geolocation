@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/react-native-nitro-background-geolocation.svg)](https://www.npmjs.com/package/react-native-nitro-background-geolocation)
 [![license](https://img.shields.io/npm/l/react-native-nitro-background-geolocation.svg)](https://github.com/atoui-zahreddine/react-native-nitro-background-geolocation/blob/main/LICENSE)
 
-A React Native background geolocation module built with [Nitro Modules](https://nitro.margelo.com/) (JSI bridge). Based on [cordova-background-geolocation-plugin](https://github.com/nicstrong/cordova-background-geolocation-plugin).
+A React Native background geolocation module built with [Nitro Modules](https://nitro.margelo.com/) (JSI bridge). Based on [cordova-background-geolocation-plugin](https://github.com/HaylLtd/cordova-background-geolocation-plugin).
 
 **React Native New Architecture only.** This module uses Nitro Modules and does not support the legacy bridge.
 
@@ -318,8 +318,12 @@ All event methods return a disposer function (`() => void`) that removes the lis
 
 ## Credits
 
-Built on top of [cordova-background-geolocation-plugin](https://github.com/nicstrong/cordova-background-geolocation-plugin) by Nic Strong, adapted for React Native New Architecture via Nitro Modules.
+The native geolocation service code is derived from [cordova-background-geolocation-plugin](https://github.com/HaylLtd/cordova-background-geolocation-plugin) by HAYL Ltd, which is itself a fork of [@mauron85/cordova-plugin-background-geolocation](https://github.com/mauron85/cordova-plugin-background-geolocation) by Marian Hello, originally based on [cordova-plugin-background-geolocation](https://github.com/christocracy/cordova-plugin-background-geolocation) by Christopher Scott. The Nitro Modules bridge layer is original work by Zahreddine Atoui.
 
 ## License
 
-MIT
+The Nitro bridge layer (TypeScript/Kotlin/Swift) is licensed under the [MIT License](LICENSE).
+
+The native geolocation service code (derived from the Cordova plugin) is licensed under the [Apache License 2.0](LICENSE-APACHE).
+
+See [NOTICE](NOTICE) for full attribution.
