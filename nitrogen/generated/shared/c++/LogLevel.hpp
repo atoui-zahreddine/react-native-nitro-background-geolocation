@@ -20,6 +20,10 @@
 
 namespace margelo::nitro::nitrobackgroundgeolocation {
 
+#ifdef DEBUG
+#undef DEBUG
+#endif
+
 #ifdef ERROR
 #undef ERROR
 #endif
