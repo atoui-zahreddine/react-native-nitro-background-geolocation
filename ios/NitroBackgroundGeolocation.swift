@@ -59,9 +59,8 @@ final class NitroBackgroundGeolocation: HybridNitroBackgroundGeolocationSpec {
         }
     }
 
-    private let facade = MAURBackgroundGeolocationFacade()
+    private let facade = MAURBackgroundGeolocationFacade.sharedInstance()!
     private lazy var delegateProxy = DelegateProxy(owner: self)
-    private var observers: [NSObjectProtocol] = []
 
     private var locationCallbacks: [UUID: (Location) -> Void] = [:]
     private var stationaryCallbacks: [UUID: (StationaryLocation) -> Void] = [:]
@@ -79,11 +78,10 @@ final class NitroBackgroundGeolocation: HybridNitroBackgroundGeolocationSpec {
         super.init()
 
         facade.delegate = delegateProxy
-        registerLifecycleObservers()
     }
 
     deinit {
-        observers.forEach(NotificationCenter.default.removeObserver)
+        facade.delegate = nil
     }
 
     func configure(options: ConfigureOptions) throws -> Promise<Void> {
@@ -339,21 +337,6 @@ final class NitroBackgroundGeolocation: HybridNitroBackgroundGeolocationSpec {
         backgroundCallbacks.removeAll()
         abortRequestedCallbacks.removeAll()
         httpAuthorizationCallbacks.removeAll()
-    }
-
-    private func registerLifecycleObservers() {
-        let center = NotificationCenter.default
-        observers.append(center.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] _ in
-            self?.facade.switch(.backgroundMode)
-            self?.backgroundCallbacks.values.forEach { $0() }
-        })
-        observers.append(center.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
-            self?.facade.switch(.foregroundMode)
-            self?.foregroundCallbacks.values.forEach { $0() }
-        })
-        observers.append(center.addObserver(forName: UIApplication.willTerminateNotification, object: nil, queue: .main) { [weak self] _ in
-            self?.facade.onAppTerminate()
-        })
     }
 
     private func registerCallback<T>(_ callback: T, storage: ReferenceWritableKeyPath<NitroBackgroundGeolocation, [UUID: T]>) -> () -> Void {

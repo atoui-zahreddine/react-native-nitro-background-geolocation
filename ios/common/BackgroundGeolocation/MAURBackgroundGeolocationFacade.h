@@ -20,6 +20,8 @@
 
 @property (weak, nonatomic) id<MAURProviderDelegate> delegate;
 
++ (instancetype)sharedInstance;
+
 - (BOOL) configure:(MAURConfig*)config error:(NSError * __autoreleasing *)outError;
 - (BOOL) start:(NSError * __autoreleasing *)outError;
 - (BOOL) stop:(NSError * __autoreleasing *)outError;
