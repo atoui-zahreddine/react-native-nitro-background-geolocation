@@ -92,11 +92,13 @@ const unsubscribe = BackgroundGeolocation.onLocation((location) => {
 });
 ```
 
-### 2. Headless Tasks
+### 2. Headless Tasks (Android only)
 
 Headless tasks fire on every location, stationary, and activity event regardless of app state — including when the app is killed. The native service starts a lightweight JS context to execute the task. The data arrives as a serialized object with `event` and `params` fields.
 
 The `event` field is one of: `"location"`, `"stationary"`, or `"activity"`.
+
+> **iOS note:** Headless JS execution is not supported on iOS. When `stopOnTerminate: false` is set on iOS, native location monitoring may continue after app termination and persisted data becomes available when the app is relaunched by a location event. Use `getLocations()` or `getValidLocations()` after relaunch to retrieve locations recorded while the app was terminated.
 
 Register the headless task in your entry file **before** `registerRootComponent`:
 
@@ -133,7 +135,7 @@ await BackgroundGeolocation.configure({
 
 ### Which to use?
 
-| | `onLocation` | Headless Task |
+| | `onLocation` | Headless Task (Android) |
 |---|---|---|
 | App in foreground | Fires | Fires |
 | App in background | Fires | Fires |
@@ -171,8 +173,8 @@ You can use both at the same time. For example, use `onLocation` to update the U
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `showAppSettings` | `() => void` | Open the app's Android system settings page. **Android only.** |
-| `showLocationSettings` | `() => void` | Open the device's Android location settings page. **Android only.** |
+| `showAppSettings` | `() => void` | Open the app's system settings page. |
+| `showLocationSettings` | `() => void` | Open the device's location settings page. |
 
 ### Storage
 
@@ -286,7 +288,7 @@ All event methods return a disposer function (`() => void`) that removes the lis
 | `stationaryRadius` | `number \| null` | `50` | all | Radius in meters to trigger stationary detection. |
 | `debug` | `boolean \| null` | `false` | all | Enable debug sounds and notifications. |
 | `distanceFilter` | `number \| null` | `500` | all | Minimum distance (meters) between location updates. |
-| `stopOnTerminate` | `boolean \| null` | `true` | all | Stop tracking when the app is terminated. |
+| `stopOnTerminate` | `boolean \| null` | `true` | all | Stop tracking when the app is terminated. On Android, the service is destroyed. On iOS, `false` enables native continuation: the OS may relaunch the app on significant location changes, and persisted locations can be retrieved via `getLocations()` after relaunch. |
 | `startOnBoot` | `boolean \| null` | `false` | Android | Start tracking on device boot. |
 | `interval` | `number \| null` | `600000` | Android | Minimum time interval between location updates in milliseconds. |
 | `fastestInterval` | `number \| null` | `120000` | Android | Fastest location update interval in milliseconds. |
@@ -314,7 +316,7 @@ All event methods return a disposer function (`() => void`) that removes the lis
 | Platform | Status |
 |----------|--------|
 | Android | Supported |
-| iOS | Coming Soon |
+| iOS | Supported |
 
 ## Credits
 

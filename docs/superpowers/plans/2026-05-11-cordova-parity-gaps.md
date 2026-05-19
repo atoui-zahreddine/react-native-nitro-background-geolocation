@@ -6,6 +6,18 @@
 
 **Architecture:** The Nitro module wraps `BackgroundGeolocationFacade` (Java) via a Kotlin `HybridObject`. The facade communicates with the location service via `LocalBroadcastManager` and a `PluginDelegate` interface. The gaps fall into four areas: (1) missing lifecycle management (`pause`/`resume`/`destroy`), (2) broken Cordova-native headless task registration, (3) missing API methods (`showAppSettings`, `showLocationSettings`), and (4) a missing `altitudeAccuracy` field on the Location type.
 
+## iOS Direction
+
+The task list below is Android-focused, but the current iOS parity direction has also been resolved and should guide any follow-up implementation work:
+
+- First iOS milestone targets **Cordova parity**, not new iOS behavior design.
+- `headlessTaskName` and headless JS delivery stay **Android-only** for the first milestone.
+- iOS `stopOnTerminate: false` keeps **Cordova-style native continuation** semantics: native monitoring may continue, persisted data may appear after location-triggered relaunch, and killed-state JS replay is out of scope.
+- The concrete missing iOS parity behavior is the Cordova `onFinishLaunching` location-relaunch path: when launched with `UIApplicationLaunchOptionsLocationKey` and `stopOnTerminate == false`, the library should restart tracking and switch to background mode.
+- The iOS parity fix should stay **internal to the library**, not require host AppDelegate changes and not depend on Expo `TaskManager`.
+- The preferred implementation shape is: minimal Objective-C bootstrap shim for host-agnostic startup, Swift-owned coordinator logic, one shared native owner around the existing facade, and bridge attachment as an opportunistic JS delegate rather than the source of native truth.
+- Public docs should continue to describe iOS killed-state behavior as native continuation plus persisted state, not killed-state JS execution.
+
 **Tech Stack:** Kotlin, TypeScript (Nitro `.nitro.ts` spec), React Native, Nitro Modules, `ProcessLifecycleOwner` (AndroidX Lifecycle)
 
 **Important build notes:**
