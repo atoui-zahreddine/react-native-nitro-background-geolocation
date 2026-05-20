@@ -23,6 +23,7 @@ const sidebars: SidebarsConfig = {
       label: 'Architecture',
       items: ['architecture/decisions'],
     },
+    'credits',
   ],
 };
 
