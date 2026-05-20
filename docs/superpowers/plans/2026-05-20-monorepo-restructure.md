@@ -1,5 +1,7 @@
 # Monorepo Restructure Implementation Plan
 
+> **Status: ✅ Completed** — branch `chore/monorepo-restructure`. All structural and CI tasks landed. Native builds (Tasks 8 + 9) and the push/PR step (Task 14.4) were deferred to manual / CI verification by request.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Restructure the flat repo into a Yarn-workspaces monorepo with `packages/` (library) and `apps/` (example app + new Docusaurus docs site), following the Nitro Modules layout.

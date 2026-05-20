@@ -1,6 +1,6 @@
 # First-Party Headless Task Registration — API Sketch
 
-> **Status:** sketch only — not yet a full implementation plan. See [ADR 0004](../../adr/0004-first-party-headless-task-registration.md) for the decision rationale.
+> **Status: ✅ Implemented** — landed in commit `fa00b3a feat(headless): replace user-managed headlessTaskName with first-party API` on branch `chore/monorepo-restructure`. See [ADR 0004](../../adr/0004-first-party-headless-task-registration.md) for the decision rationale.
 
 ## TypeScript API surface
 
