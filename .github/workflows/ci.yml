@@ -3,9 +3,35 @@ on:
   push:
     branches:
       - main
+    paths:
+      - ".github/actions/setup/**"
+      - ".github/workflows/ci.yml"
+      - ".nvmrc"
+      - ".yarnrc.yml"
+      - "babel.config.js"
+      - "eslint.config.mjs"
+      - "package.json"
+      - "tsconfig.json"
+      - "turbo.json"
+      - "yarn.lock"
+      - "apps/example/**"
+      - "packages/react-native-nitro-background-geolocation/**"
   pull_request:
     branches:
       - main
+    paths:
+      - ".github/actions/setup/**"
+      - ".github/workflows/ci.yml"
+      - ".nvmrc"
+      - ".yarnrc.yml"
+      - "babel.config.js"
+      - "eslint.config.mjs"
+      - "package.json"
+      - "tsconfig.json"
+      - "turbo.json"
+      - "yarn.lock"
+      - "apps/example/**"
+      - "packages/react-native-nitro-background-geolocation/**"
   merge_group:
     types:
       - checks_requested
