@@ -253,7 +253,8 @@ class NitroBackgroundGeolocation :
                 NativeLogLevel.ERRORVALUE -> "ERROR"
             }
             val entries = facade.getLogEntries(limit.toInt(), fromId.toInt(), levelName)
-            entries.map { ConfigMapper.toJsLogEntry(it) }.toTypedArray()
+                ?: emptyList()
+            entries.mapNotNull { it?.let(ConfigMapper::toJsLogEntry) }.toTypedArray()
         }
     }
 

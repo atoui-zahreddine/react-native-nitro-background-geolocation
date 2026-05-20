@@ -95,3 +95,38 @@ await BackgroundGeolocation.stop();
 ```
 
 See [Configuration](./configuration) for the full list of options.
+
+## Method contract
+
+`configure()` is **required before `start()`** — `start()` uses the configured provider, URL, intervals, and notification text.
+
+Most other methods do **not** require `configure()` first. They read native/persisted state, which is useful after app relaunch (especially with `stopOnTerminate: false` — see [Platform Quirks](./platform-quirks#ios-native-continuation)).
+
+| Method | Needs `configure()` first? |
+|---|---|
+| `getLocations`, `getValidLocations`, `getValidLocationsAndDelete` | No — reads from local storage |
+| `getLogEntries`, `checkStatus`, `getConfig` | No |
+| `getCurrentLocation`, `getStationaryLocation` | No |
+| `deleteLocation`, `deleteAllLocations` | No |
+| `start`, `forceSync` | **Yes** |
+| All `onX(...)` event subscriptions | No |
+| `removeAllListeners`, `stop` | No |
+
+### Relaunch flow example
+
+After the app is relaunched (manually or by an OS location event), you can drain any locations recorded while it was inactive **before** reconfiguring:
+
+```ts
+import BackgroundGeolocation from 'react-native-nitro-background-geolocation';
+
+// 1. Drain anything captured while the app was inactive
+const pending = await BackgroundGeolocation.getValidLocationsAndDelete();
+if (pending.length > 0) {
+  await sendToYourServer(pending);
+}
+
+// 2. Resume tracking
+await BackgroundGeolocation.configure({ /* ... */ });
+await BackgroundGeolocation.start();
+```
+
