@@ -246,11 +246,11 @@ class NitroBackgroundGeolocation :
     override fun getLogEntries(limit: Double, fromId: Double, minLevel: NativeLogLevel): Promise<Array<LogEntry>> {
         return Promise.parallel {
             val levelName = when (minLevel) {
-                NativeLogLevel.TraceValue -> "TRACE"
-                NativeLogLevel.DebugValue -> "DEBUG"
-                NativeLogLevel.InfoValue -> "INFO"
-                NativeLogLevel.WarnValue -> "WARN"
-                NativeLogLevel.ErrorValue -> "ERROR"
+                NativeLogLevel.TRACEVALUE -> "TRACE"
+                NativeLogLevel.DEBUGVALUE -> "DEBUG"
+                NativeLogLevel.INFOVALUE -> "INFO"
+                NativeLogLevel.WARNVALUE -> "WARN"
+                NativeLogLevel.ERRORVALUE -> "ERROR"
             }
             val entries = facade.getLogEntries(limit.toInt(), fromId.toInt(), levelName)
             entries.map { ConfigMapper.toJsLogEntry(it) }.toTypedArray()
