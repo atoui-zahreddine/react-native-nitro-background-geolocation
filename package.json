@@ -17,7 +17,13 @@
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
     "build:android": "turbo run build:android",
-    "build:ios": "turbo run build:ios"
+    "build:ios": "turbo run build:ios",
+    "start": "yarn example start",
+    "ios": "yarn example ios",
+    "android": "yarn example android",
+    "prebuild": "yarn example expo prebuild",
+    "docs:start": "yarn docs start",
+    "docs:build": "yarn docs build"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^20.5.0",
