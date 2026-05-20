@@ -1,25 +1,45 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [".nvmrc", ".yarnrc.yml"],
+  "globalDependencies": [".nvmrc", ".yarnrc.yml", "tsconfig.json"],
   "globalEnv": ["NODE_ENV"],
   "tasks": {
+    "prepare": {
+      "inputs": [
+        "package.json",
+        "src/**",
+        "nitrogen/**",
+        "nitro.json",
+        "tsconfig.json",
+        "tsconfig.build.json"
+      ],
+      "outputs": ["lib/**", "nitrogen/generated/**"]
+    },
+    "typecheck": {
+      "dependsOn": ["^prepare"],
+      "inputs": ["src/**", "tsconfig.json", "package.json"],
+      "outputs": []
+    },
+    "lint": {
+      "inputs": ["src/**", "*.{js,ts,tsx}", "package.json"],
+      "outputs": []
+    },
+    "clean": {
+      "cache": false
+    },
     "build:android": {
+      "dependsOn": ["^prepare"],
       "env": ["ANDROID_HOME", "ORG_GRADLE_PROJECT_newArchEnabled"],
       "inputs": [
         "package.json",
-        "android",
-        "!android/build",
-        "src/*.ts",
-        "src/*.tsx",
-        "example/package.json",
-        "example/android",
-        "!example/android/.gradle",
-        "!example/android/build",
-        "!example/android/app/build"
+        "android/**",
+        "!android/.gradle/**",
+        "!android/build/**",
+        "!android/app/build/**"
       ],
       "outputs": []
     },
     "build:ios": {
+      "dependsOn": ["^prepare"],
       "env": [
         "RCT_NEW_ARCH_ENABLED",
         "RCT_REMOVE_LEGACY_ARCH",
@@ -28,16 +48,16 @@
       ],
       "inputs": [
         "package.json",
-        "*.podspec",
-        "ios",
-        "src/*.ts",
-        "src/*.tsx",
-        "example/package.json",
-        "example/ios",
-        "!example/ios/build",
-        "!example/ios/Pods"
+        "ios/**",
+        "!ios/build/**",
+        "!ios/Pods/**"
       ],
       "outputs": []
+    },
+    "build:web": {
+      "dependsOn": ["^prepare"],
+      "inputs": ["package.json", "src/**", "app.json"],
+      "outputs": ["dist/**"]
     }
   }
 }

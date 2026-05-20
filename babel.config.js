@@ -1,12 +1,6 @@
+// Root babel config — used only by ESLint's @babel/eslint-parser when
+// linting files across the monorepo. Workspaces have their own babel
+// configs for actual build/runtime.
 module.exports = {
-  overrides: [
-    {
-      exclude: /\/node_modules\//,
-      presets: ['module:react-native-builder-bob/babel-preset'],
-    },
-    {
-      include: /\/node_modules\//,
-      presets: ['module:@react-native/babel-preset'],
-    },
-  ],
+  presets: [],
 };

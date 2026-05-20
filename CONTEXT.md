@@ -20,6 +20,20 @@
 | **Sync Threshold** | Number of pending locations that triggers an automatic sync batch. |
 | **Post Template** | A customizable JSON template controlling the shape of HTTP POST bodies sent during sync. |
 
+## Repository Structure
+
+**Monorepo**:
+A multi-workspace repository managed by Yarn workspaces and Turborepo, containing the library, example app, and documentation site.
+_Avoid_: single-package repo, flat repo
+
+**Package**:
+A publishable npm library workspace living under `packages/`. Currently only `react-native-nitro-background-geolocation`.
+_Avoid_: module (ambiguous with Nitro Modules)
+
+**App**:
+A non-publishable workspace under `apps/` — the example React Native app or the Docusaurus docs site.
+_Avoid_: project, demo
+
 ## Design Principles
 
 - **Functional parity with cordova-background-geolocation-plugin** — every capability is available, but the API is not a 1:1 copy.

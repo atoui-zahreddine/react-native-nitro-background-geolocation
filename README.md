@@ -44,7 +44,6 @@ import BackgroundGeolocation from 'react-native-nitro-background-geolocation';
 
 // Configure
 await BackgroundGeolocation.configure({
-  headlessTaskName: 'BackgroundLocationTask',
   locationProvider: LocationProvider.DISTANCE_FILTER,
   desiredAccuracy: LocationAccuracy.HIGH,
   distanceFilter: 10,
@@ -92,55 +91,48 @@ const unsubscribe = BackgroundGeolocation.onLocation((location) => {
 });
 ```
 
-### 2. Headless Tasks (Android only)
+### 2. Headless Handler (Android only)
 
-Headless tasks fire on every location, stationary, and activity event regardless of app state — including when the app is killed. The native service starts a lightweight JS context to execute the task. The data arrives as a serialized object with `event` and `params` fields.
-
-The `event` field is one of: `"location"`, `"stationary"`, or `"activity"`.
+`registerHeadlessHandler` fires on every location, stationary, and activity event regardless of app state — including when the app is killed. The native service starts a lightweight JS context to execute the handler, which receives a typed `HeadlessEvent` discriminated union.
 
 > **iOS note:** Headless JS execution is not supported on iOS. When `stopOnTerminate: false` is set on iOS, native location monitoring may continue after app termination and persisted data becomes available when the app is relaunched by a location event. Use `getLocations()` or `getValidLocations()` after relaunch to retrieve locations recorded while the app was terminated.
 
-Register the headless task in your entry file **before** `registerRootComponent`:
-
-#### Bare React Native
+Register the handler in your entry file **before** `registerRootComponent` (or `AppRegistry.registerComponent`):
 
 ```typescript
 // index.js
-import { AppRegistry } from 'react-native';
+import { registerRootComponent } from 'expo';
+import { registerHeadlessHandler } from 'react-native-nitro-background-geolocation';
 
-AppRegistry.registerHeadlessTask('BackgroundLocationTask', () => async ({ event, params }) => {
-  console.log('Location event:', event, params);
+import App from './src/App';
+
+registerHeadlessHandler(async (event) => {
+  switch (event.event) {
+    case 'location':
+      console.log('Location:', event.location.latitude, event.location.longitude);
+      break;
+    case 'stationary':
+      console.log('Stationary:', event.location.radius);
+      break;
+    case 'activity':
+      console.log('Activity:', event.activity.type, event.activity.confidence);
+      break;
+  }
 });
+
+registerRootComponent(App);
 ```
 
-#### Expo
-
-```typescript
-// index.js
-import { AppRegistry } from 'react-native';
-
-AppRegistry.registerHeadlessTask('BackgroundLocationTask', () => async ({ event, params }) => {
-  console.log('Location event:', event, params);
-});
-```
-
-Then configure with the matching task name:
-
-```typescript
-await BackgroundGeolocation.configure({
-  headlessTaskName: 'BackgroundLocationTask',
-  // ...other options
-});
-```
+No `headlessTaskName` option needed — the library owns the task name internally.
 
 ### Which to use?
 
-| | `onLocation` | Headless Task (Android) |
+| | `onLocation` | Headless Handler (Android) |
 |---|---|---|
 | App in foreground | Fires | Fires |
 | App in background | Fires | Fires |
 | App killed | Does not fire | Fires |
-| Data format | Typed `Location` object | `{ event: string, params: string }` |
+| Data format | Typed `Location` object | Typed `HeadlessEvent` discriminated union |
 | Use case | UI updates, in-app logic | Persisting data, server sync |
 
 You can use both at the same time. For example, use `onLocation` to update the UI and a headless task to sync locations to your server.
@@ -282,7 +274,6 @@ All event methods return a disposer function (`() => void`) that removes the lis
 
 | Option | Type | Default | Platform | Description |
 |--------|------|---------|----------|-------------|
-| `headlessTaskName` | `string \| null` | `undefined` | Android | Name of the registered headless task. Required only when using headless delivery. |
 | `locationProvider` | `LocationProvider \| null` | `DISTANCE_FILTER` | all | Location provider to use. `DISTANCE_FILTER` is the classic battery-friendly background provider, `ACTIVITY` is activity-aware, and `RAW` returns less-processed sensor fixes. |
 | `desiredAccuracy` | `LocationAccuracy \| null` | `MEDIUM` | all | Desired accuracy level. Lower accuracy generally reduces power drain. |
 | `stationaryRadius` | `number \| null` | `50` | all | Radius in meters to trigger stationary detection. |
