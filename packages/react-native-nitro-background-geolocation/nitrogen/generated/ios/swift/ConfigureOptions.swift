@@ -18,21 +18,8 @@ public extension ConfigureOptions {
   /**
    * Create a new instance of `ConfigureOptions`.
    */
-  init(headlessTaskName: Variant_NullType_String?, locationProvider: Variant_NullType_LocationProvider?, desiredAccuracy: Variant_NullType_LocationAccuracy?, stationaryRadius: Variant_NullType_Double?, debug: Variant_NullType_Bool?, distanceFilter: Variant_NullType_Double?, stopOnTerminate: Variant_NullType_Bool?, startOnBoot: Variant_NullType_Bool?, interval: Variant_NullType_Double?, fastestInterval: Variant_NullType_Double?, activitiesInterval: Variant_NullType_Double?, stopOnStillActivity: Variant_NullType_Bool?, notificationsEnabled: Variant_NullType_Bool?, startForeground: Variant_NullType_Bool?, notificationTitle: Variant_NullType_String?, notificationText: Variant_NullType_String?, notificationIconColor: Variant_NullType_String?, notificationIconLarge: Variant_NullType_String?, notificationIconSmall: Variant_NullType_String?, activityType: Variant_NullType_String?, pauseLocationUpdates: Variant_NullType_Bool?, saveBatteryOnBackground: Variant_NullType_Bool?, url: Variant_NullType_String?, syncUrl: Variant_NullType_String?, syncThreshold: Variant_NullType_Double?, httpHeaders: Variant_NullType_Dictionary_String__String_?, maxLocations: Variant_NullType_Double?, postTemplate: Variant_NullType_AnyMap?) {
-    self.init({ () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
-      if let __unwrappedValue = headlessTaskName {
-        return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
-          switch __unwrappedValue {
-            case .first(let __value):
-              return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
-            case .second(let __value):
-              return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
-          }
-        }().variant)
-      } else {
-        return .init()
-      }
-    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__LocationProvider__ in
+  init(locationProvider: Variant_NullType_LocationProvider?, desiredAccuracy: Variant_NullType_LocationAccuracy?, stationaryRadius: Variant_NullType_Double?, debug: Variant_NullType_Bool?, distanceFilter: Variant_NullType_Double?, stopOnTerminate: Variant_NullType_Bool?, startOnBoot: Variant_NullType_Bool?, interval: Variant_NullType_Double?, fastestInterval: Variant_NullType_Double?, activitiesInterval: Variant_NullType_Double?, stopOnStillActivity: Variant_NullType_Bool?, notificationsEnabled: Variant_NullType_Bool?, startForeground: Variant_NullType_Bool?, notificationTitle: Variant_NullType_String?, notificationText: Variant_NullType_String?, notificationIconColor: Variant_NullType_String?, notificationIconLarge: Variant_NullType_String?, notificationIconSmall: Variant_NullType_String?, activityType: Variant_NullType_String?, pauseLocationUpdates: Variant_NullType_Bool?, saveBatteryOnBackground: Variant_NullType_Bool?, url: Variant_NullType_String?, syncUrl: Variant_NullType_String?, syncThreshold: Variant_NullType_Double?, httpHeaders: Variant_NullType_Dictionary_String__String_?, maxLocations: Variant_NullType_Double?, postTemplate: Variant_NullType_AnyMap?) {
+    self.init({ () -> bridge.std__optional_std__variant_nitro__NullType__LocationProvider__ in
       if let __unwrappedValue = locationProvider {
         return bridge.create_std__optional_std__variant_nitro__NullType__LocationProvider__({ () -> bridge.std__variant_nitro__NullType__LocationProvider_ in
           switch __unwrappedValue {
@@ -392,30 +379,6 @@ public extension ConfigureOptions {
     }())
   }
 
-  @inline(__always)
-  var headlessTaskName: Variant_NullType_String? {
-    return { () -> Variant_NullType_String? in
-      if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(self.__headlessTaskName) {
-        let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(self.__headlessTaskName)
-        return { () -> Variant_NullType_String in
-          let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
-          switch __variant.index() {
-            case 0:
-              let __actual = __variant.get_0()
-              return .first(NullType.null)
-            case 1:
-              let __actual = __variant.get_1()
-              return .second(String(__actual))
-            default:
-              fatalError("Variant can never have index \(__variant.index())!")
-          }
-        }()
-      } else {
-        return nil
-      }
-    }()
-  }
-  
   @inline(__always)
   var locationProvider: Variant_NullType_LocationProvider? {
     return { () -> Variant_NullType_LocationProvider? in

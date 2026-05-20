@@ -39,6 +39,13 @@ class NitroBackgroundGeolocation :
 
     companion object {
         private const val TAG = "NitroBGGeo"
+
+        /**
+         * Library-owned headless task name. Must match `HEADLESS_TASK_NAME`
+         * in the TypeScript headless module. Users do not interact with
+         * this string — the JS-side `registerHeadlessHandler` API hides it.
+         */
+        const val LIB_TASK_NAME = "__rn-nitro-bg-geo-headless__"
     }
 
     private val context
@@ -63,9 +70,6 @@ class NitroBackgroundGeolocation :
     private var lifecycleObserverRegistered = false
     private var activityCallbacksRegistered = false
     private var facadeDestroyed = false
-
-    /** Name of the JS headless task registered via configure(). */
-    private var headlessTaskName: String = ""
 
     // ---- Callback lists ----
 
@@ -107,18 +111,13 @@ class NitroBackgroundGeolocation :
             val resolvedConfig = Config(facade.config)
             ConfigMapper.applyNativeConfig(resolvedConfig, options)
 
-            headlessTaskName = ConfigMapper.resolveHeadlessTaskName(
-                HeadlessTaskRegistry.getTaskName(context).orEmpty(),
-                options.headlessTaskName
-            )
-            HeadlessTaskRegistry.setTaskName(context, headlessTaskName.ifBlank { null })
+            // The library always owns the headless task name. The JS side
+            // may or may not have a handler registered against it; if no
+            // handler is bound, the headless runner is a safe no-op.
+            HeadlessTaskRegistry.setTaskName(context, LIB_TASK_NAME)
             facade.reconfigure(resolvedConfig)
             if (facade.isRunning) {
-                if (headlessTaskName.isNotEmpty()) {
-                    facade.registerHeadlessTask(ReactNativeHeadlessTaskRunner::class.java.name)
-                } else {
-                    facade.clearHeadlessTask()
-                }
+                facade.registerHeadlessTask(ReactNativeHeadlessTaskRunner::class.java.name)
             }
         }
     }
@@ -183,7 +182,7 @@ class NitroBackgroundGeolocation :
     override fun getConfig(): Promise<ConfigureOptions> {
         return Promise.parallel {
             val nativeConfig = facade.config
-            ConfigMapper.toJsConfig(nativeConfig, HeadlessTaskRegistry.getTaskName(context))
+            ConfigMapper.toJsConfig(nativeConfig)
         }
     }
 
@@ -442,7 +441,6 @@ class NitroBackgroundGeolocation :
     // ================================================================
 
     private fun fireHeadlessTask(eventName: String, location: BackgroundLocation) {
-        if (headlessTaskName.isEmpty()) return
         try {
             val params = JSONObject().apply {
                 put("id", location.locationId)
@@ -466,7 +464,7 @@ class NitroBackgroundGeolocation :
             }
             val intent = HeadlessTaskService.createIntent(
                 context,
-                headlessTaskName,
+                LIB_TASK_NAME,
                 eventName,
                 params.toString()
             )
@@ -477,7 +475,6 @@ class NitroBackgroundGeolocation :
     }
 
     private fun fireHeadlessActivityTask(activity: BackgroundActivity) {
-        if (headlessTaskName.isEmpty()) return
         try {
             val params = JSONObject().apply {
                 put("confidence", activity.confidence)
@@ -485,7 +482,7 @@ class NitroBackgroundGeolocation :
             }
             val intent = HeadlessTaskService.createIntent(
                 context,
-                headlessTaskName,
+                LIB_TASK_NAME,
                 "activity",
                 params.toString()
             )

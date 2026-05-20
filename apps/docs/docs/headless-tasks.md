@@ -4,80 +4,90 @@ sidebar_position: 6
 
 # Headless Tasks
 
-Headless tasks run when the app process has been killed but background tracking continues. The native service spins up a lightweight JS context to execute the registered task with each location, stationary, or activity event.
+Headless tasks run when the app process has been killed but background tracking continues. The native service spins up a lightweight JS context to execute the registered handler on each location, stationary, or activity event.
 
-> **Platform:** Android only in the first milestone. iOS does not support killed-state JS execution — see [Native Continuation](./platform-quirks#ios-native-continuation) for the iOS pattern.
+> **Platform:** Android only. iOS does not support killed-state JS execution — see [Native Continuation](./platform-quirks#ios-native-continuation) for the iOS pattern.
 
 ## How it works
 
-When the app is killed but `stopOnTerminate: false` is set:
+When the app is killed but `stopOnTerminate: false` is set and you've called `registerHeadlessHandler`:
 
 1. The Android service keeps tracking.
-2. On each event, the service spins up a JS context.
-3. It invokes the headless task you registered under `headlessTaskName`.
-4. The task receives `{ event, params }` where `event` is `"location"`, `"stationary"`, or `"activity"` and `params` is the serialized payload.
+2. On each event, the service starts a fresh JS context.
+3. It invokes your handler with a typed `HeadlessEvent` payload.
 
 ## Registration
 
-Register the task in your entry file **before** `registerRootComponent` (Expo) or before `AppRegistry.registerComponent` (bare RN).
-
-### Bare React Native
+Call `registerHeadlessHandler` **at module load** in your entry file — top-level, before `registerRootComponent` (Expo) or `AppRegistry.registerComponent` (bare RN). The native service re-runs your entry file in a fresh JS context per event; if registration is gated behind a React effect or any async work, it arrives too late.
 
 ```ts
 // index.js
-import { AppRegistry } from 'react-native';
+import { registerRootComponent } from 'expo';
+import { registerHeadlessHandler } from 'react-native-nitro-background-geolocation';
 
-AppRegistry.registerHeadlessTask(
-  'BackgroundLocationTask',
-  () => async ({ event, params }) => {
-    console.log('Headless event:', event, params);
-    // Persist or POST as needed
+import App from './src/App';
+
+registerHeadlessHandler(async (event) => {
+  switch (event.event) {
+    case 'location':
+      console.log('Location:', event.location.latitude, event.location.longitude);
+      break;
+    case 'stationary':
+      console.log('Stationary:', event.location.radius);
+      break;
+    case 'activity':
+      console.log('Activity:', event.activity.type);
+      break;
   }
-);
+});
+
+registerRootComponent(App);
 ```
 
-### Expo (with expo-task-manager)
+The handler receives a typed discriminated union — narrow on `event.event` to access the correct payload.
 
 ```ts
-// index.js or App.tsx — must run at module load
-import { AppRegistry } from 'react-native';
-
-AppRegistry.registerHeadlessTask(
-  'BackgroundLocationTask',
-  () => async ({ event, params }) => {
-    console.log('Headless event:', event, params);
-  }
-);
+type HeadlessEvent =
+  | { event: 'location'; location: Location }
+  | { event: 'stationary'; location: StationaryLocation }
+  | { event: 'activity'; activity: Activity };
 ```
 
-The library does not depend on `expo-task-manager` — you can also use `TaskManager.defineTask` if you prefer the Expo API.
+## Configuration
 
-## Configure with the task name
+Nothing extra to set. As long as `stopOnTerminate: false` is configured, the library wires up the rest:
 
 ```ts
 await BackgroundGeolocation.configure({
-  headlessTaskName: 'BackgroundLocationTask',
   stopOnTerminate: false,
   startOnBoot: true,
+  // ... other options
 });
 ```
 
-The name must match what you passed to `registerHeadlessTask`.
+> The library owns the headless task name internally — you do not pass a `headlessTaskName` option. The library registers `AppRegistry.registerHeadlessTask` against its own internal name when you call `registerHeadlessHandler`.
 
-## Headless vs onLocation
+## Calling `registerHeadlessHandler` more than once
 
-Both fire simultaneously when the app is alive. The headless task additionally fires when the app is killed.
+The latest call replaces the previous handler. There is one active handler at a time.
 
-| | `onLocation` | Headless Task |
+## Headless handler vs onLocation
+
+Both fire simultaneously when the app is alive. The headless handler additionally fires when the app is killed.
+
+| | `onLocation` | Headless handler |
 |---|---|---|
 | App foreground | Fires | Fires |
 | App background | Fires | Fires |
 | App killed | Does not fire | Fires (Android only) |
-| Data | Typed `Location` object | `{ event, params }` |
 | Use case | UI updates, in-app logic | Background persistence, server sync |
 
 ## Constraints
 
-- Each headless task invocation runs in a short-lived JS context. Don't rely on module-level state surviving between events.
-- Long-running async work may be killed by the OS. Keep tasks fast (sub-second).
-- If you need to post to a server, the plugin's built-in [HTTP posting](./http-posting) is usually a better fit — no JS round-trip required.
+- The headless handler runs in a fresh, short-lived JS context. Module-level state from your running app is **not** available.
+- Long-running async work may be killed by the OS. Keep handlers fast (sub-second).
+- If you only need to POST to a server, the plugin's built-in [HTTP posting](./http-posting) is usually a better fit — no JS round-trip required.
+
+## Without a handler
+
+`stopOnTerminate: false` is a valid configuration without `registerHeadlessHandler`. The native service keeps running and persisting locations; on the next app launch, drain them via `getLocations()` or `getValidLocationsAndDelete()`. This matches the iOS [Native Continuation](./platform-quirks#ios-native-continuation) pattern.

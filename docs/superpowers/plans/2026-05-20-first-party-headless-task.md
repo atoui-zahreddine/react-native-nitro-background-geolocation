@@ -134,11 +134,11 @@ await BackgroundGeolocation.configure({
 });
 ```
 
-## Open questions
+## Resolved decisions
 
-- Should `registerHeadlessHandler` allow multiple handlers (CopyOnWriteArrayList-style), or single-handler-with-replace? Recommendation: **single handler** — killed-state contexts are short-lived and dispatching to multiple async handlers complicates error handling and lifetime.
-- What happens if `registerHeadlessHandler` is called *not* at module-load (e.g. inside a useEffect)? Native code will start a fresh JS context that re-runs `index.js` — if the registration is gated behind a React effect, it won't be set up in time. Recommendation: **log a warning in dev** when called outside the synchronous module-load phase (detectable via a "have we seen `runApplication` yet" flag).
-- Should we keep `headlessTaskName` as an internal escape hatch for power users? Recommendation: **no** — escape hatches with no users are dead code. If a real need surfaces we can add it back.
+- **Single handler with replace semantics.** Calling `registerHeadlessHandler` twice replaces the previous handler. Multi-handler dispatch complicates error handling and lifetime for no real benefit.
+- **Dev-mode warning on late registration.** When `__DEV__` is true and `registerHeadlessHandler` is called after the first `AppRegistry.runApplication`, emit `console.warn`. Production builds skip the check.
+- **No `headlessTaskName` escape hatch.** The field is removed from `ConfigureOptions` entirely. If a real need surfaces, we re-add as an internal option.
 
 ## Out of scope
 

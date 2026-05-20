@@ -444,7 +444,6 @@ final class NitroBackgroundGeolocation: HybridNitroBackgroundGeolocationSpec {
     private static func makeNativeConfig(from options: ConfigureOptions) throws -> MAURConfig {
         let dictionary = NSMutableDictionary()
 
-        applyString(options.headlessTaskName, key: "headlessTaskName", into: dictionary)
         applyLocationProvider(options.locationProvider, key: "locationProvider", into: dictionary)
         applyLocationAccuracy(options.desiredAccuracy, key: "desiredAccuracy", into: dictionary)
         applyDouble(options.stationaryRadius, key: "stationaryRadius", into: dictionary)
@@ -468,7 +467,6 @@ final class NitroBackgroundGeolocation: HybridNitroBackgroundGeolocationSpec {
     private static func makeConfigureOptions(from config: MAURConfig) throws -> ConfigureOptions {
         let dictionary = config.toDictionary() as? [String: Any] ?? [:]
         return ConfigureOptions(
-            headlessTaskName: nil,
             locationProvider: locationProviderVariant(dictionary["locationProvider"]),
             desiredAccuracy: locationAccuracyVariant(dictionary["desiredAccuracy"]),
             stationaryRadius: doubleVariant(dictionary["stationaryRadius"]),

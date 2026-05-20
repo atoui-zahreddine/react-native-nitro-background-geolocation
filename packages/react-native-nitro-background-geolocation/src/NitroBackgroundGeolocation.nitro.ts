@@ -139,14 +139,6 @@ export type NullableLocationAccuracy = LocationAccuracy | null;
  */
 export interface ConfigureOptions {
   /**
-   * Name of the registered headless task.
-   * Required only when using headless task delivery.
-   *
-   * - **Default:** `undefined`
-   * - **Platform:** Android
-   */
-  headlessTaskName?: NullableString;
-  /**
    * Which native provider strategy should be used.
    *
    * - **Default:** `LocationProvider.DISTANCE_FILTER`

@@ -1,6 +1,12 @@
 import { NitroModules } from 'react-native-nitro-modules';
 import type { NitroBackgroundGeolocation } from './NitroBackgroundGeolocation.nitro';
 
+export {
+  registerHeadlessHandler,
+  type HeadlessEvent,
+  type HeadlessHandler,
+} from './headless';
+
 // Re-export all enums
 export {
   LocationProvider,

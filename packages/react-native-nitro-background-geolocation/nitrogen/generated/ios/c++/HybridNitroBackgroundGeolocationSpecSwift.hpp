@@ -40,11 +40,11 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct BackgroundGeolocat
 #include <NitroModules/Promise.hpp>
 #include "ConfigureOptions.hpp"
 #include <NitroModules/Null.hpp>
-#include <string>
+#include "LocationProvider.hpp"
 #include <variant>
 #include <optional>
-#include "LocationProvider.hpp"
 #include "LocationAccuracy.hpp"
+#include <string>
 #include <unordered_map>
 #include <NitroModules/AnyMap.hpp>
 #include "Location.hpp"

@@ -21,9 +21,6 @@ import com.margelo.nitro.core.AnyMap
 data class ConfigureOptions(
   @DoNotStrip
   @Keep
-  val headlessTaskName: Variant_NullType_String?,
-  @DoNotStrip
-  @Keep
   val locationProvider: Variant_NullType_LocationProvider?,
   @DoNotStrip
   @Keep
@@ -109,8 +106,7 @@ data class ConfigureOptions(
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other !is ConfigureOptions) return false
-    return Objects.deepEquals(this.headlessTaskName, other.headlessTaskName)
-      && Objects.deepEquals(this.locationProvider, other.locationProvider)
+    return Objects.deepEquals(this.locationProvider, other.locationProvider)
       && Objects.deepEquals(this.desiredAccuracy, other.desiredAccuracy)
       && Objects.deepEquals(this.stationaryRadius, other.stationaryRadius)
       && Objects.deepEquals(this.debug, other.debug)
@@ -141,7 +137,6 @@ data class ConfigureOptions(
 
   override fun hashCode(): Int {
     return arrayOf(
-      headlessTaskName,
       locationProvider,
       desiredAccuracy,
       stationaryRadius,
@@ -180,8 +175,8 @@ data class ConfigureOptions(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(headlessTaskName: Variant_NullType_String?, locationProvider: Variant_NullType_LocationProvider?, desiredAccuracy: Variant_NullType_LocationAccuracy?, stationaryRadius: Variant_NullType_Double?, debug: Variant_NullType_Boolean?, distanceFilter: Variant_NullType_Double?, stopOnTerminate: Variant_NullType_Boolean?, startOnBoot: Variant_NullType_Boolean?, interval: Variant_NullType_Double?, fastestInterval: Variant_NullType_Double?, activitiesInterval: Variant_NullType_Double?, stopOnStillActivity: Variant_NullType_Boolean?, notificationsEnabled: Variant_NullType_Boolean?, startForeground: Variant_NullType_Boolean?, notificationTitle: Variant_NullType_String?, notificationText: Variant_NullType_String?, notificationIconColor: Variant_NullType_String?, notificationIconLarge: Variant_NullType_String?, notificationIconSmall: Variant_NullType_String?, activityType: Variant_NullType_String?, pauseLocationUpdates: Variant_NullType_Boolean?, saveBatteryOnBackground: Variant_NullType_Boolean?, url: Variant_NullType_String?, syncUrl: Variant_NullType_String?, syncThreshold: Variant_NullType_Double?, httpHeaders: Variant_NullType_Map_String__String_?, maxLocations: Variant_NullType_Double?, postTemplate: Variant_NullType_AnyMap?): ConfigureOptions {
-      return ConfigureOptions(headlessTaskName, locationProvider, desiredAccuracy, stationaryRadius, debug, distanceFilter, stopOnTerminate, startOnBoot, interval, fastestInterval, activitiesInterval, stopOnStillActivity, notificationsEnabled, startForeground, notificationTitle, notificationText, notificationIconColor, notificationIconLarge, notificationIconSmall, activityType, pauseLocationUpdates, saveBatteryOnBackground, url, syncUrl, syncThreshold, httpHeaders, maxLocations, postTemplate)
+    private fun fromCpp(locationProvider: Variant_NullType_LocationProvider?, desiredAccuracy: Variant_NullType_LocationAccuracy?, stationaryRadius: Variant_NullType_Double?, debug: Variant_NullType_Boolean?, distanceFilter: Variant_NullType_Double?, stopOnTerminate: Variant_NullType_Boolean?, startOnBoot: Variant_NullType_Boolean?, interval: Variant_NullType_Double?, fastestInterval: Variant_NullType_Double?, activitiesInterval: Variant_NullType_Double?, stopOnStillActivity: Variant_NullType_Boolean?, notificationsEnabled: Variant_NullType_Boolean?, startForeground: Variant_NullType_Boolean?, notificationTitle: Variant_NullType_String?, notificationText: Variant_NullType_String?, notificationIconColor: Variant_NullType_String?, notificationIconLarge: Variant_NullType_String?, notificationIconSmall: Variant_NullType_String?, activityType: Variant_NullType_String?, pauseLocationUpdates: Variant_NullType_Boolean?, saveBatteryOnBackground: Variant_NullType_Boolean?, url: Variant_NullType_String?, syncUrl: Variant_NullType_String?, syncThreshold: Variant_NullType_Double?, httpHeaders: Variant_NullType_Map_String__String_?, maxLocations: Variant_NullType_Double?, postTemplate: Variant_NullType_AnyMap?): ConfigureOptions {
+      return ConfigureOptions(locationProvider, desiredAccuracy, stationaryRadius, debug, distanceFilter, stopOnTerminate, startOnBoot, interval, fastestInterval, activitiesInterval, stopOnStillActivity, notificationsEnabled, startForeground, notificationTitle, notificationText, notificationIconColor, notificationIconLarge, notificationIconSmall, activityType, pauseLocationUpdates, saveBatteryOnBackground, url, syncUrl, syncThreshold, httpHeaders, maxLocations, postTemplate)
     }
   }
 }

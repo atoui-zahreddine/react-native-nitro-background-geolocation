@@ -34,11 +34,11 @@ namespace margelo::nitro::nitrobackgroundgeolocation { enum class LocationProvid
 namespace margelo::nitro::nitrobackgroundgeolocation { enum class LocationAccuracy; }
 
 #include <NitroModules/Null.hpp>
-#include <string>
+#include "LocationProvider.hpp"
 #include <variant>
 #include <optional>
-#include "LocationProvider.hpp"
 #include "LocationAccuracy.hpp"
+#include <string>
 #include <unordered_map>
 #include <NitroModules/AnyMap.hpp>
 
@@ -49,7 +49,6 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
    */
   struct ConfigureOptions final {
   public:
-    std::optional<std::variant<nitro::NullType, std::string>> headlessTaskName     SWIFT_PRIVATE;
     std::optional<std::variant<nitro::NullType, LocationProvider>> locationProvider     SWIFT_PRIVATE;
     std::optional<std::variant<nitro::NullType, LocationAccuracy>> desiredAccuracy     SWIFT_PRIVATE;
     std::optional<std::variant<nitro::NullType, double>> stationaryRadius     SWIFT_PRIVATE;
@@ -80,7 +79,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
 
   public:
     ConfigureOptions() = default;
-    explicit ConfigureOptions(std::optional<std::variant<nitro::NullType, std::string>> headlessTaskName, std::optional<std::variant<nitro::NullType, LocationProvider>> locationProvider, std::optional<std::variant<nitro::NullType, LocationAccuracy>> desiredAccuracy, std::optional<std::variant<nitro::NullType, double>> stationaryRadius, std::optional<std::variant<nitro::NullType, bool>> debug, std::optional<std::variant<nitro::NullType, double>> distanceFilter, std::optional<std::variant<nitro::NullType, bool>> stopOnTerminate, std::optional<std::variant<nitro::NullType, bool>> startOnBoot, std::optional<std::variant<nitro::NullType, double>> interval, std::optional<std::variant<nitro::NullType, double>> fastestInterval, std::optional<std::variant<nitro::NullType, double>> activitiesInterval, std::optional<std::variant<nitro::NullType, bool>> stopOnStillActivity, std::optional<std::variant<nitro::NullType, bool>> notificationsEnabled, std::optional<std::variant<nitro::NullType, bool>> startForeground, std::optional<std::variant<nitro::NullType, std::string>> notificationTitle, std::optional<std::variant<nitro::NullType, std::string>> notificationText, std::optional<std::variant<nitro::NullType, std::string>> notificationIconColor, std::optional<std::variant<nitro::NullType, std::string>> notificationIconLarge, std::optional<std::variant<nitro::NullType, std::string>> notificationIconSmall, std::optional<std::variant<nitro::NullType, std::string>> activityType, std::optional<std::variant<nitro::NullType, bool>> pauseLocationUpdates, std::optional<std::variant<nitro::NullType, bool>> saveBatteryOnBackground, std::optional<std::variant<nitro::NullType, std::string>> url, std::optional<std::variant<nitro::NullType, std::string>> syncUrl, std::optional<std::variant<nitro::NullType, double>> syncThreshold, std::optional<std::variant<nitro::NullType, std::unordered_map<std::string, std::string>>> httpHeaders, std::optional<std::variant<nitro::NullType, double>> maxLocations, std::optional<std::variant<nitro::NullType, std::shared_ptr<AnyMap>>> postTemplate): headlessTaskName(headlessTaskName), locationProvider(locationProvider), desiredAccuracy(desiredAccuracy), stationaryRadius(stationaryRadius), debug(debug), distanceFilter(distanceFilter), stopOnTerminate(stopOnTerminate), startOnBoot(startOnBoot), interval(interval), fastestInterval(fastestInterval), activitiesInterval(activitiesInterval), stopOnStillActivity(stopOnStillActivity), notificationsEnabled(notificationsEnabled), startForeground(startForeground), notificationTitle(notificationTitle), notificationText(notificationText), notificationIconColor(notificationIconColor), notificationIconLarge(notificationIconLarge), notificationIconSmall(notificationIconSmall), activityType(activityType), pauseLocationUpdates(pauseLocationUpdates), saveBatteryOnBackground(saveBatteryOnBackground), url(url), syncUrl(syncUrl), syncThreshold(syncThreshold), httpHeaders(httpHeaders), maxLocations(maxLocations), postTemplate(postTemplate) {}
+    explicit ConfigureOptions(std::optional<std::variant<nitro::NullType, LocationProvider>> locationProvider, std::optional<std::variant<nitro::NullType, LocationAccuracy>> desiredAccuracy, std::optional<std::variant<nitro::NullType, double>> stationaryRadius, std::optional<std::variant<nitro::NullType, bool>> debug, std::optional<std::variant<nitro::NullType, double>> distanceFilter, std::optional<std::variant<nitro::NullType, bool>> stopOnTerminate, std::optional<std::variant<nitro::NullType, bool>> startOnBoot, std::optional<std::variant<nitro::NullType, double>> interval, std::optional<std::variant<nitro::NullType, double>> fastestInterval, std::optional<std::variant<nitro::NullType, double>> activitiesInterval, std::optional<std::variant<nitro::NullType, bool>> stopOnStillActivity, std::optional<std::variant<nitro::NullType, bool>> notificationsEnabled, std::optional<std::variant<nitro::NullType, bool>> startForeground, std::optional<std::variant<nitro::NullType, std::string>> notificationTitle, std::optional<std::variant<nitro::NullType, std::string>> notificationText, std::optional<std::variant<nitro::NullType, std::string>> notificationIconColor, std::optional<std::variant<nitro::NullType, std::string>> notificationIconLarge, std::optional<std::variant<nitro::NullType, std::string>> notificationIconSmall, std::optional<std::variant<nitro::NullType, std::string>> activityType, std::optional<std::variant<nitro::NullType, bool>> pauseLocationUpdates, std::optional<std::variant<nitro::NullType, bool>> saveBatteryOnBackground, std::optional<std::variant<nitro::NullType, std::string>> url, std::optional<std::variant<nitro::NullType, std::string>> syncUrl, std::optional<std::variant<nitro::NullType, double>> syncThreshold, std::optional<std::variant<nitro::NullType, std::unordered_map<std::string, std::string>>> httpHeaders, std::optional<std::variant<nitro::NullType, double>> maxLocations, std::optional<std::variant<nitro::NullType, std::shared_ptr<AnyMap>>> postTemplate): locationProvider(locationProvider), desiredAccuracy(desiredAccuracy), stationaryRadius(stationaryRadius), debug(debug), distanceFilter(distanceFilter), stopOnTerminate(stopOnTerminate), startOnBoot(startOnBoot), interval(interval), fastestInterval(fastestInterval), activitiesInterval(activitiesInterval), stopOnStillActivity(stopOnStillActivity), notificationsEnabled(notificationsEnabled), startForeground(startForeground), notificationTitle(notificationTitle), notificationText(notificationText), notificationIconColor(notificationIconColor), notificationIconLarge(notificationIconLarge), notificationIconSmall(notificationIconSmall), activityType(activityType), pauseLocationUpdates(pauseLocationUpdates), saveBatteryOnBackground(saveBatteryOnBackground), url(url), syncUrl(syncUrl), syncThreshold(syncThreshold), httpHeaders(httpHeaders), maxLocations(maxLocations), postTemplate(postTemplate) {}
 
   public:
     friend bool operator==(const ConfigureOptions& lhs, const ConfigureOptions& rhs) = default;
@@ -96,7 +95,6 @@ namespace margelo::nitro {
     static inline margelo::nitro::nitrobackgroundgeolocation::ConfigureOptions fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::nitrobackgroundgeolocation::ConfigureOptions(
-        JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "headlessTaskName"))),
         JSIConverter<std::optional<std::variant<nitro::NullType, margelo::nitro::nitrobackgroundgeolocation::LocationProvider>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "locationProvider"))),
         JSIConverter<std::optional<std::variant<nitro::NullType, margelo::nitro::nitrobackgroundgeolocation::LocationAccuracy>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "desiredAccuracy"))),
         JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stationaryRadius"))),
@@ -128,7 +126,6 @@ namespace margelo::nitro {
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::nitrobackgroundgeolocation::ConfigureOptions& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "headlessTaskName"), JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::toJSI(runtime, arg.headlessTaskName));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "locationProvider"), JSIConverter<std::optional<std::variant<nitro::NullType, margelo::nitro::nitrobackgroundgeolocation::LocationProvider>>>::toJSI(runtime, arg.locationProvider));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "desiredAccuracy"), JSIConverter<std::optional<std::variant<nitro::NullType, margelo::nitro::nitrobackgroundgeolocation::LocationAccuracy>>>::toJSI(runtime, arg.desiredAccuracy));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "stationaryRadius"), JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::toJSI(runtime, arg.stationaryRadius));
@@ -166,7 +163,6 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
-      if (!JSIConverter<std::optional<std::variant<nitro::NullType, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "headlessTaskName")))) return false;
       if (!JSIConverter<std::optional<std::variant<nitro::NullType, margelo::nitro::nitrobackgroundgeolocation::LocationProvider>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "locationProvider")))) return false;
       if (!JSIConverter<std::optional<std::variant<nitro::NullType, margelo::nitro::nitrobackgroundgeolocation::LocationAccuracy>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "desiredAccuracy")))) return false;
       if (!JSIConverter<std::optional<std::variant<nitro::NullType, double>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stationaryRadius")))) return false;

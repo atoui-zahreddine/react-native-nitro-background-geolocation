@@ -96,23 +96,11 @@ object ConfigMapper {
         })
     }
 
-    fun resolveHeadlessTaskName(currentValue: String, option: Variant_NullType_String?): String {
-        return when (option) {
-            null -> currentValue
-            is Variant_NullType_String.First -> ""
-            is Variant_NullType_String.Second -> option.value
-        }
-    }
-
     /**
      * Convert a Java [Config] back to a Nitrogen [ConfigureOptions].
-     *
-     * [headlessTaskName] must be supplied externally because it is not persisted
-     * in the native Config.
      */
-    fun toJsConfig(config: Config, headlessTaskName: String?): ConfigureOptions {
+    fun toJsConfig(config: Config): ConfigureOptions {
         return ConfigureOptions(
-            headlessTaskName = headlessTaskName?.let { Variant_NullType_String.Second(it) },
             locationProvider = config.locationProvider?.let { Variant_NullType_LocationProvider.Second(intToLocationProvider(it)) },
             desiredAccuracy = config.desiredAccuracy?.let { Variant_NullType_LocationAccuracy.Second(intToLocationAccuracy(it)) },
             stationaryRadius = config.stationaryRadius?.toDouble()?.let { Variant_NullType_Double.Second(it) },

@@ -24,7 +24,6 @@ await BackgroundGeolocation.configure({
 
 | Option | Type | Default | Platform | Description |
 |--------|------|---------|----------|-------------|
-| `headlessTaskName` | `string \| null` | `undefined` | Android | Name of the registered headless task. Required only when using headless delivery. |
 | `locationProvider` | `LocationProvider \| null` | `DISTANCE_FILTER` | all | Location provider to use. See [Providers](./providers/distance-filter). |
 | `desiredAccuracy` | `LocationAccuracy \| null` | `MEDIUM` | all | Desired accuracy level. Lower accuracy generally reduces power drain. |
 | `stationaryRadius` | `number \| null` | `50` | all | Radius in meters to trigger stationary detection. |

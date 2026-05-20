@@ -49,8 +49,6 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
     [[nodiscard]]
     ConfigureOptions toCpp() const {
       static const auto clazz = javaClassStatic();
-      static const auto fieldHeadlessTaskName = clazz->getField<JVariant_NullType_String>("headlessTaskName");
-      jni::local_ref<JVariant_NullType_String> headlessTaskName = this->getFieldValue(fieldHeadlessTaskName);
       static const auto fieldLocationProvider = clazz->getField<JVariant_NullType_LocationProvider>("locationProvider");
       jni::local_ref<JVariant_NullType_LocationProvider> locationProvider = this->getFieldValue(fieldLocationProvider);
       static const auto fieldDesiredAccuracy = clazz->getField<JVariant_NullType_LocationAccuracy>("desiredAccuracy");
@@ -106,7 +104,6 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
       static const auto fieldPostTemplate = clazz->getField<JVariant_NullType_AnyMap>("postTemplate");
       jni::local_ref<JVariant_NullType_AnyMap> postTemplate = this->getFieldValue(fieldPostTemplate);
       return ConfigureOptions(
-        headlessTaskName != nullptr ? std::make_optional(headlessTaskName->toCpp()) : std::nullopt,
         locationProvider != nullptr ? std::make_optional(locationProvider->toCpp()) : std::nullopt,
         desiredAccuracy != nullptr ? std::make_optional(desiredAccuracy->toCpp()) : std::nullopt,
         stationaryRadius != nullptr ? std::make_optional(stationaryRadius->toCpp()) : std::nullopt,
@@ -143,12 +140,11 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
      */
     [[maybe_unused]]
     static jni::local_ref<JConfigureOptions::javaobject> fromCpp(const ConfigureOptions& value) {
-      using JSignature = JConfigureOptions(jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_LocationProvider>, jni::alias_ref<JVariant_NullType_LocationAccuracy>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Map_String__String_>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_AnyMap>);
+      using JSignature = JConfigureOptions(jni::alias_ref<JVariant_NullType_LocationProvider>, jni::alias_ref<JVariant_NullType_LocationAccuracy>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Map_String__String_>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_AnyMap>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
-        value.headlessTaskName.has_value() ? JVariant_NullType_String::fromCpp(value.headlessTaskName.value()) : nullptr,
         value.locationProvider.has_value() ? JVariant_NullType_LocationProvider::fromCpp(value.locationProvider.value()) : nullptr,
         value.desiredAccuracy.has_value() ? JVariant_NullType_LocationAccuracy::fromCpp(value.desiredAccuracy.value()) : nullptr,
         value.stationaryRadius.has_value() ? JVariant_NullType_Double::fromCpp(value.stationaryRadius.value()) : nullptr,
