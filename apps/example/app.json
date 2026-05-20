@@ -38,7 +38,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "../app.plugin.js"
+      "../../packages/react-native-nitro-background-geolocation/app.plugin.js"
     ]
   }
 }

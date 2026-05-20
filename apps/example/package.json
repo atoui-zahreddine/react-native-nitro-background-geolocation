@@ -18,13 +18,13 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-native": "0.83.6",
+    "react-native-nitro-background-geolocation": "*",
     "react-native-nitro-modules": "^0.35.6",
     "react-native-web": "~0.21.0"
   },
   "private": true,
   "devDependencies": {
     "expo-dev-client": "~55.0.32",
-    "react-native-builder-bob": "^0.41.0",
-    "react-native-monorepo-config": "^0.3.3"
+    "react-native-builder-bob": "^0.41.0"
   }
 }
