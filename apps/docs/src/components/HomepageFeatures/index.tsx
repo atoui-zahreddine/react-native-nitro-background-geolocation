@@ -5,48 +5,63 @@ import styles from './styles.module.css';
 
 type FeatureItem = {
   title: string;
-  Svg: React.ComponentType<React.ComponentProps<'svg'>>;
+  emoji: string;
   description: ReactNode;
 };
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: 'Tracks in the background',
+    emoji: '📍',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Keep recording location in the foreground, background, and after the app
+        is killed. Three providers — distance-filter, activity-based, and raw —
+        let you trade fidelity for battery.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: 'Powered by Nitro Modules',
+    emoji: '⚡',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Built on the JSI bridge from{' '}
+        <a
+          href="https://nitro.margelo.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Nitro Modules
+        </a>
+        . React Native's new architecture, typed enums, and Promise-based I/O —
+        no legacy bridge, no untyped event names.
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: 'Sync without writing JS',
+    emoji: '🔄',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Configure a server URL and the native side batches, retries, and POSTs
+        recorded locations. A typed{' '}
+        <a href="/react-native-nitro-background-geolocation/docs/headless-tasks">
+          headless handler
+        </a>{' '}
+        is available on Android when you need killed-state JS too.
       </>
     ),
   },
 ];
 
-function Feature({ title, Svg, description }: FeatureItem) {
+function Feature({ title, emoji, description }: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        <div className={styles.featureEmoji} role="img" aria-label={title}>
+          {emoji}
+        </div>
       </div>
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>
