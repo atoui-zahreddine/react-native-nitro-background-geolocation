@@ -24,6 +24,16 @@ export default defineConfig([
     },
   },
   {
-    ignores: ['node_modules/', 'lib/'],
+    ignores: [
+      '**/node_modules/',
+      '**/lib/',
+      '**/build/',
+      '**/dist/',
+      '**/.expo/',
+      '**/nitrogen/generated/',
+      'cordova-background-geolocation-plugin/',
+      'apps/docs/.docusaurus/',
+      'apps/docs/build/',
+    ],
   },
 ]);
