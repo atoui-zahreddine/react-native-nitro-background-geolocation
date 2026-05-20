@@ -72,12 +72,6 @@ Running "NitroBackgroundGeolocationExample" with {"fabric":true,"initialProps":{
 
 Note the `"fabric":true` and `"concurrentRoot":true` properties.
 
-To run the example app on Web:
-
-```sh
-yarn example web
-```
-
 Make sure your code passes TypeScript:
 
 ```sh
@@ -96,7 +90,6 @@ To fix formatting errors, run the following:
 yarn lint --fix
 ```
 
-
 ### Commit message convention
 
 We follow the [conventional commits specification](https://www.conventionalcommits.org/en) for our commit messages:
@@ -110,7 +103,6 @@ We follow the [conventional commits specification](https://www.conventionalcommi
 
 Our pre-commit hooks verify that your commit message matches this format when committing.
 
-
 ### Scripts
 
 The `package.json` file contains various scripts for common tasks:
@@ -121,9 +113,7 @@ The `package.json` file contains various scripts for common tasks:
     - `yarn example start`: start the Metro server for the example app.
 - `yarn example android`: run the example app on Android.
 - `yarn example ios`: run the example app on iOS.
-  - `yarn example web`: run the example app on Web.
-- `yarn example build:web`: build the example app for Web.
-  
+
 ### Sending a pull request
 
 > **Working on your first pull request?** You can learn how from this _free_ series: [How to Contribute to an Open Source Project on GitHub](https://app.egghead.io/playlists/how-to-contribute-to-an-open-source-project-on-github).

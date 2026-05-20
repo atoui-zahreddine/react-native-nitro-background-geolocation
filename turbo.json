@@ -46,18 +46,8 @@
         "RCT_USE_RN_DEP",
         "RCT_USE_PREBUILT_RNCORE"
       ],
-      "inputs": [
-        "package.json",
-        "ios/**",
-        "!ios/build/**",
-        "!ios/Pods/**"
-      ],
+      "inputs": ["package.json", "ios/**", "!ios/build/**", "!ios/Pods/**"],
       "outputs": []
-    },
-    "build:web": {
-      "dependsOn": ["^prepare"],
-      "inputs": ["package.json", "src/**", "app.json"],
-      "outputs": ["dist/**"]
     }
   }
 }
