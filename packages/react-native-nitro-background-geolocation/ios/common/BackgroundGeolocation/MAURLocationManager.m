@@ -48,9 +48,13 @@ static BOOL MAURShouldIgnoreLocationManagerError(NSError *error)
     if (self != nil) {
         locationManager = [[CLLocationManager alloc] init];
 
-        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {
-            locationManager.allowsBackgroundLocationUpdates = YES;
-        }
+        // Note: allowsBackgroundLocationUpdates is NOT set here. Setting it in
+        // init (before Always-authorization is granted and before any location
+        // session starts) trips CoreLocation's internal assertion:
+        //   "Invalid parameter not satisfying: !stayUp || CLClientIsBackgroundable(...)"
+        // It is enabled in -start: instead, once we have confirmed the
+        // authorization state allows backgrounding.
+        // See upstream issue HaylLtd/cordova-background-geolocation-plugin#211.
 
         locationManager.delegate = self;
         locationManager.desiredAccuracy = kCLLocationAccuracyBest;
@@ -102,7 +106,14 @@ static BOOL MAURShouldIgnoreLocationManagerError(NSError *error)
         }
 #endif
     }
-    
+
+    // Enable background delivery only now, once the authorization state has
+    // been verified above. This requires Always-authorization to be valid
+    // (CLClientIsBackgroundable), which is exactly what the assertion checks.
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {
+        locationManager.allowsBackgroundLocationUpdates = YES;
+    }
+
     [locationManager startUpdatingLocation];
     return YES;
 }
