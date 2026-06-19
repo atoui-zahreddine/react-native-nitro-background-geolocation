@@ -229,6 +229,15 @@ public class DistanceFilterLocationProvider extends AbstractLocationProvider imp
                         Build.VERSION.SDK_INT > 30) {
                     provider = LocationManager.GPS_PROVIDER;
                 }
+                // getBestProvider(criteria, true) only considers enabled providers and may
+                // return null when none satisfy the criteria (e.g. all location sources off,
+                // or only the passive provider available). Falling back to the always-present
+                // passive provider avoids an NPE inside requestLocationUpdates.
+                // See upstream PR HaylLtd/cordova-background-geolocation-plugin#203.
+                if (provider == null) {
+                    logger.warn("No enabled provider matched criteria, falling back to passive provider");
+                    provider = LocationManager.PASSIVE_PROVIDER;
+                }
                 logger.info("Requesting location updates from provider {}", provider);
                 locationManager.requestLocationUpdates(provider, mConfig.getInterval(), scaledDistanceFilter, this);
             }
