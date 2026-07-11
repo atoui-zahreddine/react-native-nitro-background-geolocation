@@ -6,25 +6,38 @@
     "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "prebuild": "expo prebuild",
     "build:ios": "xcodebuild ONLY_ACTIVE_ARCH=YES -workspace ios/NitroBackgroundGeolocationExample.xcworkspace -UseNewBuildSystem=YES -scheme NitroBackgroundGeolocationExample -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build -quiet",
     "build:android": "cd android && ./gradlew assembleDebug -DtestBuildType=debug -Dorg.gradle.jvmargs=-Xmx4g",
     "typecheck": "tsc",
+    "test": "vitest run",
     "lint": "eslint \"**/*.{js,ts,tsx}\""
   },
   "dependencies": {
     "@expo/metro-runtime": "~55.0.11",
+    "@expo/vector-icons": "^15.0.2",
+    "@maplibre/maplibre-react-native": "^11.3.6",
+    "@react-native-async-storage/async-storage": "2.2.0",
     "expo": "~55.0.23",
+    "expo-constants": "~55.0.16",
+    "expo-file-system": "~55.0.23",
+    "expo-font": "~55.0.8",
+    "expo-linking": "~55.0.16",
+    "expo-router": "~55.0.16",
     "expo-status-bar": "~55.0.6",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-native": "0.83.6",
     "react-native-nitro-background-geolocation": "*",
     "react-native-nitro-modules": "^0.35.6",
+    "react-native-safe-area-context": "~5.6.2",
+    "react-native-screens": "~4.23.0",
     "react-native-web": "~0.21.0"
   },
   "private": true,
   "devDependencies": {
     "expo-dev-client": "~55.0.32",
-    "react-native-builder-bob": "^0.41.0"
+    "react-native-builder-bob": "^0.41.0",
+    "vitest": "^4.1.10"
   }
 }
