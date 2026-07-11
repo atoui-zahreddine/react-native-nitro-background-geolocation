@@ -1,20 +1,4 @@
-import { registerRootComponent } from 'expo';
-import { registerHeadlessHandler } from 'react-native-nitro-background-geolocation';
-
-import App from './src/App';
-
-registerHeadlessHandler(async (event) => {
-  switch (event.event) {
-    case 'location':
-      console.log('[HeadlessTask] location', event.location);
-      break;
-    case 'stationary':
-      console.log('[HeadlessTask] stationary', event.location);
-      break;
-    case 'activity':
-      console.log('[HeadlessTask] activity', event.activity);
-      break;
-  }
-});
-
-registerRootComponent(App);
+// Import order matters: headless registration must run before the router
+// entry, and ES imports hoist — so both must be imports, in this order.
+import './src/registerHeadless';
+import 'expo-router/entry';

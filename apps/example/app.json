@@ -37,8 +37,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "scheme": "nitro-bg-geo-example",
     "plugins": [
-      "../../packages/react-native-nitro-background-geolocation/app.plugin.js"
+      "../../packages/react-native-nitro-background-geolocation/app.plugin.js",
+      "expo-router",
+      "@maplibre/maplibre-react-native"
     ]
   }
 }

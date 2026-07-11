@@ -24,6 +24,7 @@ import {
   type ConfigureOptions,
 } from 'react-native-nitro-background-geolocation';
 import { loadStoredConfig } from '../../lib/tracking/config';
+import { shareSessionRecord } from '../../lib/tracking/exportStore';
 import type {
   SessionEvent,
   SessionLogEntry,
@@ -138,6 +139,18 @@ function OverviewTab({
   onDeleted: () => void;
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [exporting, setExporting] = useState(false);
+
+  const exportSession = useCallback(async () => {
+    setExporting(true);
+    try {
+      await shareSessionRecord(record);
+    } catch (error) {
+      console.warn('[session] export failed', error);
+    } finally {
+      setExporting(false);
+    }
+  }, [record]);
 
   const rawFeature = useMemo(
     () => (record.points.length >= 2 ? lineFeature(record.points) : null),
@@ -297,17 +310,18 @@ function OverviewTab({
           </>
         ) : (
           <>
-            {/* TODO(ticket 004/export): wire to the export bundle share
-                sheet once the export format lands. Disabled until then. */}
             <Pressable
-              disabled
+              disabled={exporting}
+              onPress={exportSession}
               style={[
                 styles.actionPill,
                 styles.exportPill,
-                styles.pillDisabled,
+                exporting && styles.pillDisabled,
               ]}
             >
-              <Text style={styles.exportPillText}>Export session</Text>
+              <Text style={styles.exportPillText}>
+                {exporting ? 'Exporting…' : 'Export session'}
+              </Text>
             </Pressable>
             <Pressable
               onPress={() => setConfirmDelete(true)}
