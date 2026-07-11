@@ -29,6 +29,14 @@ export default function RootLayout() {
           name="settings"
           options={{ headerShown: true, title: 'Settings' }}
         />
+        <Stack.Screen
+          name="history"
+          options={{ headerShown: true, title: 'History' }}
+        />
+        <Stack.Screen
+          name="session/[id]"
+          options={{ headerShown: true, title: 'Session' }}
+        />
       </Stack>
     </>
   );

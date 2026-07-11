@@ -24,6 +24,7 @@ import BackgroundGeolocation, {
   AuthorizationStatus,
   type Location,
 } from 'react-native-nitro-background-geolocation';
+import { attachSnapToRecord } from '../../lib/tracking/historyStore';
 import { detectProfile } from '../../lib/tracking/profile';
 import { snapToRoads } from '../../lib/tracking/snap';
 import type { Profile, SnapResult } from '../../lib/tracking/types';
@@ -253,6 +254,21 @@ export default function TrackerScreen() {
       runSnap(session.points, detection.profile);
     }
   }, [isStopped, session.startedAt, session.points, runSnap]);
+
+  // Persist the snap outcome onto the session's history record whenever a
+  // snap completes for a stopped session (auto-detection and manual profile
+  // overrides both end here). Failures are logged but never block the UI.
+  useEffect(() => {
+    if (isStopped && snap.status === 'done' && session.sessionId !== null) {
+      attachSnapToRecord(session.sessionId, {
+        profile,
+        confident,
+        result: snap.result,
+      }).catch((error) => {
+        console.warn('[Tracker] attaching snap to history failed:', error);
+      });
+    }
+  }, [isStopped, snap, profile, confident, session.sessionId]);
 
   // Reset per-session UI state on phase changes.
   useEffect(() => {
@@ -505,6 +521,19 @@ export default function TrackerScreen() {
         </Pressable>
       </Link>
 
+      {/* History (dimmed while recording — the live session isn't in history yet) */}
+      <Link href="/history" asChild>
+        <Pressable
+          style={StyleSheet.flatten([
+            styles.gearButton,
+            { top: insets.top + 68 },
+            isTracking && styles.gearDimmed,
+          ])}
+        >
+          <Ionicons name="time-outline" size={22} color="#374151" />
+        </Pressable>
+      </Link>
+
       {/* Live stats card */}
       {isTracking && (
         <View style={[styles.statsCard, { top: insets.top + 12 }]}>
@@ -532,7 +561,7 @@ export default function TrackerScreen() {
         <View
           style={[
             styles.cardsStack,
-            { top: insets.top + (isTracking ? 128 : 68) },
+            { top: insets.top + (isTracking ? 128 : 124) },
           ]}
         >
           {cards}
