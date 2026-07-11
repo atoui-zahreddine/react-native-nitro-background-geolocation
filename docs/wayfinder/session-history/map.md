@@ -47,6 +47,8 @@ This map carries execution: it is done when history works on-device.
 - [History UI prototype](tickets/003-history-ui-prototype.md) — approved as-is: clock button off the Tracker, list = index summaries with RECOVERED badges, detail = one screen with Overview / Config / Logs / Events tabs, config-diff amber dots kept, inline-confirm delete; full spec in the ticket, artifact linked there.
 - [Export bundle format](tickets/004-export-bundle-format.md) — versioned envelope (app/library/platform metadata) around the verbatim session record; JSON only, one-way (no import), shared via expo-sharing from the cache dir.
 - [Session store implementation](tickets/005-session-store-implementation.md) — landed (`dc3d07b`): pure history/spool logic tested (50 green), file-per-session store + index, anchor carries config snapshot, hook finalizes at stop and kill-recovery, headless spools stationary/activity; device kill-flow check rides with the UI ticket.
+- [History UI implementation](tickets/006-history-ui-implementation.md) — landed (`5bc3178`): history + detail routes per the approved prototype (long-press delete instead of swipe, recorded deviation), Tracker clock button, snap results attach to records; on-device checks moved to the Device acceptance pass.
+- [Export implementation](tickets/007-export-implementation.md) — landed: tested bundle codec + share-sheet IO (expo-sharing added), detail-screen Export pill wired; side discovery: `.gitignore`'s `lib/` had hidden the whole example tracking lib from git — fixed, 24 files now tracked.
 
 ## Not yet specified
 
@@ -67,5 +69,4 @@ Open children live in [tickets/](tickets/); frontier = open, unassigned, all
 
 | Ticket | Type | Blocked by |
 | --- | --- | --- |
-| [History UI implementation](tickets/006-history-ui-implementation.md) | task | 003 ✓, 005 ✓ |
-| [Export implementation](tickets/007-export-implementation.md) | task | 004 ✓, 005 ✓ |
+| [Device acceptance pass](tickets/008-device-acceptance.md) | task | 006 ✓, 007 ✓ |
