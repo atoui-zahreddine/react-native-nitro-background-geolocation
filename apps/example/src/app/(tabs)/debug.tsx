@@ -92,7 +92,7 @@ function formatNativeTimestamp(timestamp: number): string {
   return new Date(timestamp).toLocaleTimeString();
 }
 
-export default function App() {
+export default function DebugScreen() {
   const [permissionGranted, setPermissionGranted] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
