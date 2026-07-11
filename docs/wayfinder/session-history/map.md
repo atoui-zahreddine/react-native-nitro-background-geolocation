@@ -42,12 +42,15 @@ This map carries execution: it is done when history works on-device.
 
 <!-- one line per closed ticket: gist + link -->
 
+- [Session record schema and storage](tickets/001-session-record-schema.md) — one JSON file per session (documents dir) + AsyncStorage summary index; versioned record with config snapshot (captured at start into the anchor), DEBUG+ uncapped log slice, all-listener events timeline; written at clean stop and by kill-recovery (always before prune); discard deletes from history.
+- [What survives app kill](tickets/002-app-kill-survival.md) — code audit: locations and logs survive (sticky service restarts itself), and the existing headless handler already delivers location/stationary/activity events while dead; gap acceptable, **no native event persistence needed** — headless spool-file enhancement folded into the store implementation.
+- [History UI prototype](tickets/003-history-ui-prototype.md) — approved as-is: clock button off the Tracker, list = index summaries with RECOVERED badges, detail = one screen with Overview / Config / Logs / Events tabs, config-diff amber dots kept, inline-confirm delete; full spec in the ticket, artifact linked there.
+- [Export bundle format](tickets/004-export-bundle-format.md) — versioned envelope (app/library/platform metadata) around the verbatim session record; JSON only, one-way (no import), shared via expo-sharing from the cache dir.
+
 ## Not yet specified
 
 - GPX or other alternate export formats beyond the JSON bundle.
 - Storage-growth handling if keep-all-sessions becomes heavy in practice.
-- Whether native event persistence is ever needed — depends on what the
-  app-kill test reveals.
 
 ## Out of scope
 
@@ -63,10 +66,6 @@ Open children live in [tickets/](tickets/); frontier = open, unassigned, all
 
 | Ticket | Type | Blocked by |
 | --- | --- | --- |
-| [Session record schema and storage](tickets/001-session-record-schema.md) | grilling | — |
-| [What survives app kill](tickets/002-app-kill-survival.md) | task | — |
-| [History UI prototype](tickets/003-history-ui-prototype.md) | prototype | 001 |
-| [Export bundle format](tickets/004-export-bundle-format.md) | grilling | 001 |
-| [Session store implementation](tickets/005-session-store-implementation.md) | task | 001, 002 |
-| [History UI implementation](tickets/006-history-ui-implementation.md) | task | 003, 005 |
-| [Export implementation](tickets/007-export-implementation.md) | task | 004, 005 |
+| [Session store implementation](tickets/005-session-store-implementation.md) | task | 001 ✓, 002 ✓ |
+| [History UI implementation](tickets/006-history-ui-implementation.md) | task | 003 ✓, 005 |
+| [Export implementation](tickets/007-export-implementation.md) | task | 004 ✓, 005 |
