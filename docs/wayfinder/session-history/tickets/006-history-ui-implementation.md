@@ -3,7 +3,7 @@ id: 006
 title: History UI implementation
 labels: [wayfinder:task]
 status: open
-assignee:
+assignee: zahreddine
 blocked-by: [003, 005]
 ---
 
