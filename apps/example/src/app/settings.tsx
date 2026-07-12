@@ -51,12 +51,14 @@ function Section({
 
 function RowShell({
   label,
+  description,
   platform,
   disabled,
   vertical,
   children,
 }: {
   label: string;
+  description?: string;
   platform?: PlatformTag;
   disabled: boolean;
   vertical?: boolean;
@@ -70,12 +72,17 @@ function RowShell({
         disabled && styles.rowDisabled,
       ]}
     >
-      <View style={styles.rowLabelWrap}>
-        <Text style={styles.rowLabel}>{label}</Text>
-        {platform && (
-          <View style={styles.pill}>
-            <Text style={styles.pillText}>{platform.toUpperCase()}</Text>
-          </View>
+      <View style={styles.rowMain}>
+        <View style={styles.rowLabelWrap}>
+          <Text style={styles.rowLabel}>{label}</Text>
+          {platform && (
+            <View style={styles.pill}>
+              <Text style={styles.pillText}>{platform.toUpperCase()}</Text>
+            </View>
+          )}
+        </View>
+        {description && (
+          <Text style={styles.rowDescription}>{description}</Text>
         )}
       </View>
       <View style={vertical ? styles.rowControlFull : styles.rowControl}>
@@ -89,6 +96,7 @@ function RowShell({
 
 function SegmentedRow<T>({
   label,
+  description,
   platform,
   value,
   options,
@@ -96,14 +104,22 @@ function SegmentedRow<T>({
   onChange,
 }: {
   label: string;
+  description?: string;
   platform?: PlatformTag;
   value: T;
-  options: { label: string; value: T }[];
+  options: { label: string; value: T; description?: string }[];
   disabled: boolean;
   onChange: (value: T) => void;
 }) {
+  const selectedOption = options.find((option) => option.value === value);
   return (
-    <RowShell label={label} platform={platform} disabled={disabled} vertical>
+    <RowShell
+      label={label}
+      description={description}
+      platform={platform}
+      disabled={disabled}
+      vertical
+    >
       <View style={styles.segmented}>
         {options.map((option) => {
           const selected = option.value === value;
@@ -126,18 +142,25 @@ function SegmentedRow<T>({
           );
         })}
       </View>
+      {selectedOption?.description && (
+        <Text style={styles.segmentDescription}>
+          {selectedOption.description}
+        </Text>
+      )}
     </RowShell>
   );
 }
 
 function SwitchRow({
   label,
+  description,
   platform,
   value,
   disabled,
   onChange,
 }: {
   label: string;
+  description?: string;
   platform?: PlatformTag;
   value: boolean;
   disabled: boolean;
@@ -145,7 +168,12 @@ function SwitchRow({
 }) {
   const foreign = isForeign(platform);
   return (
-    <RowShell label={label} platform={platform} disabled={disabled || foreign}>
+    <RowShell
+      label={label}
+      description={description}
+      platform={platform}
+      disabled={disabled || foreign}
+    >
       <Switch
         value={value}
         disabled={disabled || foreign}
@@ -158,6 +186,7 @@ function SwitchRow({
 
 function NumberRow({
   label,
+  description,
   platform,
   unit,
   value,
@@ -165,6 +194,7 @@ function NumberRow({
   onChange,
 }: {
   label: string;
+  description?: string;
   platform?: PlatformTag;
   unit?: string;
   value: number;
@@ -185,7 +215,12 @@ function NumberRow({
   };
 
   return (
-    <RowShell label={label} platform={platform} disabled={disabled || foreign}>
+    <RowShell
+      label={label}
+      description={description}
+      platform={platform}
+      disabled={disabled || foreign}
+    >
       <View style={styles.numberWrap}>
         <TextInput
           style={styles.numberInput}
@@ -203,6 +238,7 @@ function NumberRow({
 
 function TextRow({
   label,
+  description,
   platform,
   placeholder,
   value,
@@ -210,6 +246,7 @@ function TextRow({
   onChange,
 }: {
   label: string;
+  description?: string;
   platform?: PlatformTag;
   placeholder?: string;
   value: string;
@@ -222,6 +259,7 @@ function TextRow({
   return (
     <RowShell
       label={label}
+      description={description}
       platform={platform}
       disabled={disabled || foreign}
       vertical
@@ -243,11 +281,13 @@ function TextRow({
 
 function KeyValueEditor({
   label,
+  description,
   value,
   disabled,
   onChange,
 }: {
   label: string;
+  description?: string;
   value: Record<string, string>;
   disabled: boolean;
   onChange: (value: Record<string, string>) => void;
@@ -261,7 +301,12 @@ function KeyValueEditor({
   };
 
   return (
-    <RowShell label={label} disabled={disabled} vertical>
+    <RowShell
+      label={label}
+      description={description}
+      disabled={disabled}
+      vertical
+    >
       {rows.map(([key, val], i) => (
         <View key={i} style={styles.kvRow}>
           <TextInput
@@ -314,11 +359,13 @@ function KeyValueEditor({
 
 function JsonRow({
   label,
+  description,
   value,
   disabled,
   onChange,
 }: {
   label: string;
+  description?: string;
   value: object | null;
   disabled: boolean;
   onChange: (value: object | null) => void;
@@ -342,7 +389,12 @@ function JsonRow({
   };
 
   return (
-    <RowShell label={label} disabled={disabled} vertical>
+    <RowShell
+      label={label}
+      description={description}
+      disabled={disabled}
+      vertical
+    >
       <TextInput
         style={[
           styles.textInput,
@@ -464,17 +516,34 @@ export default function SettingsScreen() {
       <Section title="Provider & accuracy">
         <SegmentedRow
           label="Location provider"
+          description="How locations are collected. Each provider trades points against battery differently."
           value={config.locationProvider ?? LocationProvider.DISTANCE_FILTER}
           options={[
-            { label: 'Distance', value: LocationProvider.DISTANCE_FILTER },
-            { label: 'Activity', value: LocationProvider.ACTIVITY },
-            { label: 'Raw', value: LocationProvider.RAW },
+            {
+              label: 'Distance',
+              value: LocationProvider.DISTANCE_FILTER,
+              description:
+                'Elastic distance filtering with stationary detection. Balanced points vs battery — the best all-round default.',
+            },
+            {
+              label: 'Activity',
+              value: LocationProvider.ACTIVITY,
+              description:
+                'Fused, motion-driven updates (walking, driving, still). Paced by Update interval; does not use Distance filter.',
+            },
+            {
+              label: 'Raw',
+              value: LocationProvider.RAW,
+              description:
+                'Unfiltered OS fixes at the update interval. Most points and highest battery use; no stationary detection.',
+            },
           ]}
           disabled={locked}
           onChange={(locationProvider) => update({ locationProvider })}
         />
         <SegmentedRow
           label="Desired accuracy"
+          description="Precision requested from the OS. Higher accuracy costs battery, and the device may still return coarser fixes."
           value={config.desiredAccuracy ?? LocationAccuracy.MEDIUM}
           options={[
             { label: 'High', value: LocationAccuracy.HIGH },
@@ -487,13 +556,15 @@ export default function SettingsScreen() {
         />
         <NumberRow
           label="Distance filter"
+          description="Minimum distance moved before a point is recorded. Applies to the Distance provider only — the Activity provider ignores it. Default 50 m."
           unit="m"
-          value={config.distanceFilter ?? 500}
+          value={config.distanceFilter ?? 50}
           disabled={locked}
           onChange={(distanceFilter) => update({ distanceFilter })}
         />
         <NumberRow
           label="Stationary radius"
+          description="While stopped, how far you must move before aggressive tracking re-engages. Used by the Distance provider's stationary detection. Default 50 m."
           unit="m"
           value={config.stationaryRadius ?? 50}
           disabled={locked}
@@ -501,6 +572,7 @@ export default function SettingsScreen() {
         />
         <SwitchRow
           label="Debug (sounds & notifications)"
+          description="Plays sounds and shows debug notifications on tracking events. For development only."
           value={config.debug ?? false}
           disabled={locked}
           onChange={(debug) => update({ debug })}
@@ -510,12 +582,14 @@ export default function SettingsScreen() {
       <Section title="Lifecycle">
         <SwitchRow
           label="Stop on app terminate"
+          description="When on, tracking stops if the app is killed. Turn off to keep recording after the app is swiped away."
           value={config.stopOnTerminate ?? true}
           disabled={locked}
           onChange={(stopOnTerminate) => update({ stopOnTerminate })}
         />
         <SwitchRow
           label="Start on boot"
+          description="Resume tracking automatically after the device restarts."
           platform="android"
           value={config.startOnBoot ?? false}
           disabled={locked}
@@ -523,6 +597,7 @@ export default function SettingsScreen() {
         />
         <SwitchRow
           label="Stop on still activity"
+          description="Pause updates when the device is detected as still. Deprecated upstream — leave on unless you need fixes while stationary."
           platform="android"
           value={config.stopOnStillActivity ?? true}
           disabled={locked}
@@ -533,22 +608,25 @@ export default function SettingsScreen() {
       <Section title="Intervals">
         <NumberRow
           label="Update interval"
+          description="Target time between updates. An OS-level floor applied to every provider — it caps the point rate even in Distance mode. Raise to save battery, lower for denser tracks. Default 5000 ms (5 s)."
           platform="android"
           unit="ms"
-          value={config.interval ?? 600000}
+          value={config.interval ?? 5000}
           disabled={locked}
           onChange={(interval) => update({ interval })}
         />
         <NumberRow
           label="Fastest interval"
+          description="Fastest rate the app will accept updates when another app requests locations faster. Sets the tightest spacing between points. Default 1000 ms."
           platform="android"
           unit="ms"
-          value={config.fastestInterval ?? 120000}
+          value={config.fastestInterval ?? 1000}
           disabled={locked}
           onChange={(fastestInterval) => update({ fastestInterval })}
         />
         <NumberRow
           label="Activities interval"
+          description="How often motion type is sampled (walking, driving, still). Larger values save battery but slow detection. Default 10000 ms."
           platform="android"
           unit="ms"
           value={config.activitiesInterval ?? 10000}
@@ -560,6 +638,7 @@ export default function SettingsScreen() {
       <Section title="Foreground notification">
         <SwitchRow
           label="Notifications enabled"
+          description="Show the persistent tracking notification. Required for reliable background tracking."
           platform="android"
           value={config.notificationsEnabled ?? true}
           disabled={locked}
@@ -567,6 +646,7 @@ export default function SettingsScreen() {
         />
         <SwitchRow
           label="Start foreground service"
+          description="Run tracking as a foreground service — this is what keeps location flowing without background-location permission."
           platform="android"
           value={config.startForeground ?? true}
           disabled={locked}
@@ -574,6 +654,7 @@ export default function SettingsScreen() {
         />
         <TextRow
           label="Notification title"
+          description="Title shown on the tracking notification."
           platform="android"
           value={config.notificationTitle ?? ''}
           disabled={locked}
@@ -581,6 +662,7 @@ export default function SettingsScreen() {
         />
         <TextRow
           label="Notification text"
+          description="Body text shown on the tracking notification."
           platform="android"
           value={config.notificationText ?? ''}
           disabled={locked}
@@ -588,6 +670,7 @@ export default function SettingsScreen() {
         />
         <TextRow
           label="Icon color"
+          description="Accent color for the notification icon, as a #RRGGBB hex value."
           platform="android"
           placeholder="#RRGGBB"
           value={config.notificationIconColor ?? ''}
@@ -598,6 +681,7 @@ export default function SettingsScreen() {
         />
         <TextRow
           label="Large icon (resource name)"
+          description="Drawable resource name for the notification's large icon."
           platform="android"
           value={config.notificationIconLarge ?? ''}
           disabled={locked}
@@ -607,6 +691,7 @@ export default function SettingsScreen() {
         />
         <TextRow
           label="Small icon (resource name)"
+          description="Drawable resource name for the status-bar icon. Falls back to the app icon if unset."
           platform="android"
           value={config.notificationIconSmall ?? ''}
           disabled={locked}
@@ -619,6 +704,7 @@ export default function SettingsScreen() {
       <Section title="iOS behavior">
         <SegmentedRow
           label="Activity type"
+          description="Tells iOS your motion type so it tunes GPS and auto-pause. Match it to how you're moving (driving, navigation, fitness)."
           platform="ios"
           value={config.activityType ?? 'OtherNavigation'}
           options={[
@@ -632,6 +718,7 @@ export default function SettingsScreen() {
         />
         <SwitchRow
           label="Pause location updates"
+          description="Let iOS pause updates when it thinks you've stopped moving. Saves battery but can miss slow movement."
           platform="ios"
           value={config.pauseLocationUpdates ?? false}
           disabled={locked}
@@ -639,6 +726,7 @@ export default function SettingsScreen() {
         />
         <SwitchRow
           label="Save battery on background"
+          description="Reduce update frequency while the app is in the background to save power."
           platform="ios"
           value={config.saveBatteryOnBackground ?? false}
           disabled={locked}
@@ -651,6 +739,7 @@ export default function SettingsScreen() {
       <Section title="HTTP sync">
         <TextRow
           label="Post URL"
+          description="Endpoint each recorded location is POSTed to. Leave blank to record on-device only."
           placeholder="https://example.com/locations"
           value={config.url ?? ''}
           disabled={locked}
@@ -658,6 +747,7 @@ export default function SettingsScreen() {
         />
         <TextRow
           label="Sync URL"
+          description="Endpoint for batched uploads, triggered by Sync threshold. Leave blank to disable syncing."
           placeholder="https://example.com/sync"
           value={config.syncUrl ?? ''}
           disabled={locked}
@@ -665,6 +755,7 @@ export default function SettingsScreen() {
         />
         <NumberRow
           label="Sync threshold"
+          description="Number of locations to buffer before a batch is synced to the Sync URL."
           value={config.syncThreshold ?? 100}
           disabled={locked}
           onChange={(syncThreshold) => update({ syncThreshold })}
@@ -681,6 +772,7 @@ export default function SettingsScreen() {
           <>
             <KeyValueEditor
               label="HTTP headers"
+              description="Custom headers sent with every location request, e.g. Authorization."
               value={
                 (config.httpHeaders as Record<string, string> | null) ?? {}
               }
@@ -689,6 +781,7 @@ export default function SettingsScreen() {
             />
             <JsonRow
               label="Post template"
+              description="Reshape the request body as JSON using @latitude, @longitude, and other placeholders. Leave blank for the default payload."
               value={(config.postTemplate as object | null) ?? null}
               disabled={locked}
               onChange={(postTemplate) =>
@@ -705,6 +798,7 @@ export default function SettingsScreen() {
       <Section title="Storage">
         <NumberRow
           label="Max stored locations"
+          description="How many locations to keep on-device before the oldest are dropped."
           value={config.maxLocations ?? 10000}
           disabled={locked}
           onChange={(maxLocations) => update({ maxLocations })}
@@ -794,11 +888,26 @@ const styles = StyleSheet.create({
   rowDisabled: {
     opacity: 0.45,
   },
+  rowMain: {
+    flexShrink: 1,
+    gap: 3,
+  },
   rowLabelWrap: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     flexShrink: 1,
+  },
+  rowDescription: {
+    fontSize: 12.5,
+    lineHeight: 17,
+    color: '#6b7280',
+  },
+  segmentDescription: {
+    fontSize: 12.5,
+    lineHeight: 17,
+    color: '#6b7280',
+    marginTop: 8,
   },
   rowLabel: {
     fontSize: 15,
