@@ -20,4 +20,11 @@ distance filtering + stationary detection vs fused/activity-driven vs raw)?
 Record the comparison (point counts, gaps, stationary handling) as the
 resolution; this closes the map.
 
+Also, since this is the first native build after 004/005, confirm en route:
+- The build is green on both platforms (Gradle + Xcode) — not run in the
+  implementation tickets.
+- The settings subtitles render correctly: readable, wrap cleanly, dim with the
+  read-only lock while recording, and the Location provider gloss switches with
+  the selected segment ([005](005-settings-subtitles-implementation.md)).
+
 ## Resolution

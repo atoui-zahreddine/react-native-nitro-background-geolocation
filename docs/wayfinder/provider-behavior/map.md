@@ -71,6 +71,11 @@ execution: it is done when the differences are verified on-device.
   approved copy for all 27 settings rows ([asset](assets/003-settings-subtitle-copy.md)).
   Variable length, applicability in prose, per-choice glosses only for the
   provider picker. Ready for ticket 005 to implement.
+- [Settings subtitles implementation](tickets/005-settings-subtitles-implementation.md) —
+  `RowShell` gained a description slot (dims with the lock state); `SegmentedRow`
+  shows the selected provider's gloss; all 27 rows carry their subtitle. Stale
+  in-UI default fallbacks fixed to 50/5000/1000. Typecheck + lint green; visual
+  check folds into the device QA pass.
 
 ## Not yet specified
 
