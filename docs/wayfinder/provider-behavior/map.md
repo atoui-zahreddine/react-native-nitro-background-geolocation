@@ -60,6 +60,13 @@ execution: it is done when the differences are verified on-device.
   1000, `distanceFilter` 50); **keep** the Activity displacement filter disabled
   and document it; **clarify JSDoc** on `interval`'s throttle role. No
   versioning process (early-stage, no consumers).
+- [Provider fixes implementation](tickets/004-provider-fixes-implementation.md) —
+  landed the defaults (Android `Config.java` + iOS `MAURConfig.m`), Activity
+  doc comment, and JSDoc. **Corrected premise:** the field starvation came from
+  the example's own `LONG_TRACKING_BASELINE` (`interval: 30000`), not the
+  library default the example always overrides — so the baseline's interval was
+  also lowered to 5000/1000. Typecheck + 53 tests green; native builds not run
+  (see field verification).
 
 ## Not yet specified
 
