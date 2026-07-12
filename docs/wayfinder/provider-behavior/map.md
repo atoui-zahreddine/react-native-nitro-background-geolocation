@@ -54,12 +54,20 @@ execution: it is done when the differences are verified on-device.
   "seems buggy"); enabling it would suppress updates when stationary/slow and
   fight the provider's STILL-stop logic. Research leans **keep disabled +
   document**.
+- [Decide provider and interval behavior changes](tickets/002-provider-interval-decisions.md) —
+  field starvation was real but caused by the harsh 10-min default `interval`,
+  not a provider bug. **Lower defaults** (`interval` 5000, `fastestInterval`
+  1000, `distanceFilter` 50); **keep** the Activity displacement filter disabled
+  and document it; **clarify JSDoc** on `interval`'s throttle role. No
+  versioning process (early-stage, no consumers).
 
 ## Not yet specified
 
-- iOS parity of any behavior changes — field testing covered Android only;
-  what (if anything) needs the same treatment on iOS becomes ticketable once
-  the behavior changes are decided.
+<!-- iOS parity: resolved by ticket 002 — only `distanceFilter` (a cross-platform
+     option) changes default, so iOS parity is just the 500→50 default; folded
+     into [Provider fixes implementation](tickets/004-provider-fixes-implementation.md).
+     `interval`/`fastestInterval` are Android-only, so no iOS work there. -->
+
 - Whether the Raw provider needs distinct positioning or documentation — at
   the platform call it is close to Distance-without-elasticity/stationary.
 

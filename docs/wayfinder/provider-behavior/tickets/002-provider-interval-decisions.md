@@ -2,7 +2,7 @@
 id: 002
 title: Decide provider and interval behavior changes
 labels: [wayfinder:grilling]
-status: open
+status: closed
 assignee:
 blocked-by: [001]
 ---
@@ -36,3 +36,35 @@ defaults (`interval = 600000`) still warrant a change independent of the
 provider-distinctness premise.
 
 ## Resolution
+
+Decided by grilling (2026-07-12). The field starvation was **real but not a
+provider bug** — it was the 10-minute default `interval`. The providers
+themselves behave correctly; the fix is a small defaults change plus
+documentation. The map does **not** collapse to documentation-only.
+
+**1. Defaults — lower them.** In `Config.java` (and the example settings
+fallbacks that mirror it):
+
+| Option | Old | New |
+| --- | --- | --- |
+| `interval` | 600000 (10 min) | **5000** (5 s) |
+| `fastestInterval` | 120000 (2 min) | **1000** (1 s) |
+| `distanceFilter` | 500 m | **50 m** |
+
+`distanceFilter` is cross-platform (`Platform: all`), so its default must change
+on **both** Android and iOS; `interval` / `fastestInterval` are Android-only.
+
+**2. Activity provider — keep displacement disabled, document it.** Do not
+enable `setSmallestDisplacement`. Replace the dead commented line at
+`ActivityRecognitionLocationProvider.java:118` with a short doc note: the
+Activity provider is time/activity-driven, and `distanceFilter` /
+`stationaryRadius` do not apply there. No behavior change (per ticket 001).
+
+**3. JSDoc — clarify `interval` semantics and per-provider applicability** in
+`NitroBackgroundGeolocation.nitro.ts`: state that `interval` is an OS-level
+`minTime` throttle applied in **every** provider (it caps point rate even in
+Distance mode), and that the Activity provider ignores `distanceFilter`.
+
+**4. Versioning — none.** The library is early-stage with no external
+consumers; change the defaults directly with no changelog or migration/
+breaking-change process.
