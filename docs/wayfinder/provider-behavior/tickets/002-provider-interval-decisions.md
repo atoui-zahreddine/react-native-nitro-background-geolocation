@@ -25,4 +25,14 @@ decide what changes the library makes:
   explicit.
 - Note breaking-change/versioning implications for whatever changes.
 
+**Context added post-001 (2026-07-12):** the dev now suspects the field
+impression that started this map ("providers looked identical", "`interval:
+30000` starved the track") may have been a misread — the app is working fine —
+and a prior session confirmed the config reaches native correctly. Combined
+with the 001 finding that the Activity provider's displacement gate was
+intentionally disabled upstream, the live question for this ticket may be
+"documentation-only vs any behavior change at all". Weigh whether the harsh
+defaults (`interval = 600000`) still warrant a change independent of the
+provider-distinctness premise.
+
 ## Resolution

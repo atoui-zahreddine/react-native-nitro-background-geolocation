@@ -27,8 +27,11 @@ execution: it is done when the differences are verified on-device.
     `ActivityRecognitionLocationProvider.java:116-117`. Defaults are harsh:
     `interval = 600000` (10 min), `fastestInterval = 120000`,
     `distanceFilter = 500` (`Config.java:128-142`).
-  - The Activity provider **ignores `distanceFilter`** — `setSmallestDisplacement`
-    is commented out at `ActivityRecognitionLocationProvider.java:118`.
+  - The Activity provider applies **no displacement filter** —
+    `setSmallestDisplacement` is commented out at
+    `ActivityRecognitionLocationProvider.java:118`. (Correction from ticket 001:
+    the commented call used `stationaryRadius`, not `distanceFilter`; the disable
+    was an intentional upstream bug workaround.)
   - Provider selection itself is wired correctly end-to-end
     (`LocationProviderFactory.java:29-46`).
 - The native code mirrors upstream mauron85/christocracy — check upstream
@@ -44,6 +47,13 @@ execution: it is done when the differences are verified on-device.
 ## Decisions so far
 
 <!-- one line per closed ticket: gist + link -->
+
+- [Why the Activity provider ignores distanceFilter](tickets/001-activity-distancefilter-research.md) —
+  the commented line uses `stationaryRadius` (not `distanceFilter`); it was an
+  intentional upstream bug workaround (mauron85 commit `10503ed`, 2015,
+  "seems buggy"); enabling it would suppress updates when stationary/slow and
+  fight the provider's STILL-stop logic. Research leans **keep disabled +
+  document**.
 
 ## Not yet specified
 
