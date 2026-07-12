@@ -171,7 +171,11 @@ export interface ConfigureOptions {
   /**
    * Minimum horizontal distance in meters the device must move before an update is generated.
    *
-   * - **Default:** `500`
+   * Applies to the Distance Filter provider. The Activity provider ignores it —
+   * that provider is time/activity-driven, so use {@link interval} to control
+   * its cadence.
+   *
+   * - **Default:** `50`
    * - **Platform:** all
    */
   distanceFilter?: NullableNumber;
@@ -192,14 +196,23 @@ export interface ConfigureOptions {
   /**
    * Minimum time interval between location updates, in milliseconds.
    *
-   * - **Default:** `600000`
+   * This is an OS-level throttle (passed as `minTime` to the location request),
+   * applied in **every** Android provider — including the Distance Filter
+   * provider. It caps the point rate regardless of movement, so a large value
+   * thins the track even when {@link distanceFilter} would otherwise emit
+   * points. Lower it for dense tracking; raise it to save battery.
+   *
+   * - **Default:** `5000`
    * - **Platform:** Android
    */
   interval?: NullableNumber;
   /**
    * Fastest rate, in milliseconds, at which the app can handle location updates.
    *
-   * - **Default:** `120000`
+   * Upper bound on the update rate when other apps request locations faster than
+   * {@link interval}; the OS will not deliver updates faster than this.
+   *
+   * - **Default:** `1000`
    * - **Platform:** Android
    */
   fastestInterval?: NullableNumber;

@@ -115,7 +115,14 @@ public class ActivityRecognitionLocationProvider extends AbstractLocationProvide
                 .setPriority(priority) // this.accuracy
                 .setFastestInterval(mConfig.getFastestInterval())
                 .setInterval(mConfig.getInterval());
-        // .setSmallestDisplacement(mConfig.getStationaryRadius());
+        // No setSmallestDisplacement here on purpose: this provider is
+        // time/activity-driven, cadence comes from interval/fastestInterval and
+        // the ActivityRecognition STILL/active signal (see onLocationChanged).
+        // distanceFilter/stationaryRadius do not apply to it — a displacement
+        // gate suppresses updates while stationary or moving slowly and fights
+        // the STILL -> stopTracking logic. It was disabled upstream as buggy
+        // (mauron85 cordova-plugin commit 10503ed). For distance-based thinning
+        // use the DISTANCE_FILTER_PROVIDER instead.
         try {
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
             isTracking = true;

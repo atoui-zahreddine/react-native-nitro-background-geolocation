@@ -22,7 +22,7 @@
     }
     
     stationaryRadius = [NSNumber numberWithInt:50];
-    distanceFilter = [NSNumber numberWithInt:500];
+    distanceFilter = [NSNumber numberWithInt:50];
     desiredAccuracy = [NSNumber numberWithInt:100];
     _debug = [NSNumber numberWithBool:NO];
     activityType = @"OtherNavigation";

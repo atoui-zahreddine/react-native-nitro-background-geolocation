@@ -128,7 +128,7 @@ public class Config implements Parcelable
     public static Config getDefault() {
         Config config = new Config();
         config.stationaryRadius = 50f;
-        config.distanceFilter = 500;
+        config.distanceFilter = 50;
         config.desiredAccuracy = 100;
         config.debug = false;
         config.notificationTitle = "Background tracking";
@@ -137,8 +137,8 @@ public class Config implements Parcelable
         config.notificationIconSmall = "";
         config.notificationIconColor = "";
         config.locationProvider = DISTANCE_FILTER_PROVIDER;
-        config.interval = 600000; //milliseconds
-        config.fastestInterval = 120000; //milliseconds
+        config.interval = 5000; //milliseconds
+        config.fastestInterval = 1000; //milliseconds
         config.activitiesInterval = 10000; //milliseconds
         config.stopOnTerminate = true;
         config.startOnBoot = false;
