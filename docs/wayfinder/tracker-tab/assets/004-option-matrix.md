@@ -18,7 +18,7 @@ settings-UI ticket asked for.
 | --- | --- | --- | --- |
 | `locationProvider` | enum `LocationProvider`: `DISTANCE_FILTER` 0 / `ACTIVITY` 1 / `RAW` 2 | `DISTANCE_FILTER` | segmented (3) |
 | `desiredAccuracy` | enum `LocationAccuracy`: `HIGH` 0 / `MEDIUM` 100 / `LOW` 1000 / `PASSIVE` 10000 | `MEDIUM` | segmented (4) |
-| `distanceFilter` | number (m) | `500` | numeric + unit |
+| `distanceFilter` | number (m) | `50` | numeric + unit |
 | `stationaryRadius` | number (m) | `50` | numeric + unit |
 | `debug` | boolean (debug sounds) | `false` | switch |
 
@@ -34,8 +34,8 @@ settings-UI ticket asked for.
 
 | Option | Type | Default | Control |
 | --- | --- | --- | --- |
-| `interval` | number (ms) | `600000` | numeric + unit |
-| `fastestInterval` | number (ms) | `120000` | numeric + unit |
+| `interval` | number (ms) | `5000` | numeric + unit |
+| `fastestInterval` | number (ms) | `1000` | numeric + unit |
 | `activitiesInterval` | number (ms) | `10000` | numeric + unit |
 
 ### Section 4 — Foreground notification (Android)

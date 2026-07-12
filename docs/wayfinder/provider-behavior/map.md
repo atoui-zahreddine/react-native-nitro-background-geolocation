@@ -67,6 +67,10 @@ execution: it is done when the differences are verified on-device.
   library default the example always overrides — so the baseline's interval was
   also lowered to 5000/1000. Typecheck + 53 tests green; native builds not run
   (see field verification).
+- [Settings subtitle copy for all options](tickets/003-settings-subtitle-copy.md) —
+  approved copy for all 27 settings rows ([asset](assets/003-settings-subtitle-copy.md)).
+  Variable length, applicability in prose, per-choice glosses only for the
+  provider picker. Ready for ticket 005 to implement.
 
 ## Not yet specified
 

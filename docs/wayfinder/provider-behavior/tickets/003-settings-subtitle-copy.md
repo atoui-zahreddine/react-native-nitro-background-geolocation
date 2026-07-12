@@ -2,7 +2,7 @@
 id: 003
 title: Settings subtitle copy for all options
 labels: [wayfinder:grilling]
-status: open
+status: closed
 assignee:
 blocked-by: [002]
 ---
@@ -25,3 +25,23 @@ used.
   per-choice descriptions.
 
 ## Resolution
+
+Copy approved by the dev (2026-07-12). Full text for all 27 settings rows:
+[003-settings-subtitle-copy.md](../assets/003-settings-subtitle-copy.md).
+
+**Presentation rules decided:**
+- **Length:** variable, no hard cap — simple rows stay short, tricky ones carry
+  the caveat.
+- **Applicability:** in prose. Provider applicability (Distance vs Activity) is
+  written into the subtitle; OS applicability stays on the existing platform
+  pill (prose does not repeat "(Android)"/"(iOS)").
+- **Per-choice descriptions:** only the Location provider picker gets a line per
+  choice (Distance / Activity / Raw); other segmented rows get one subtitle.
+
+Semantics reflect ticket 002 (Activity ignores `distanceFilter`; `interval` is
+an OS throttle on every provider; new defaults). The option matrix
+[004-option-matrix.md](../../tracker-tab/assets/004-option-matrix.md) was
+updated to the new defaults (`distanceFilter` 50, `interval` 5000,
+`fastestInterval` 1000). Convention note for 005: subtitles describe the option
+and quote **native** defaults, which may differ from the example's seeded value
+(e.g. `stationaryRadius` shows 25 but the copy says 50).
