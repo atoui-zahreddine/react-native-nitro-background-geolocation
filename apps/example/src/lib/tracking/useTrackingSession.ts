@@ -54,6 +54,8 @@ export interface TrackingSession {
   lastError: string | null;
   start: () => Promise<void>;
   stop: () => Promise<void>;
+  /** Dismiss the stopped track, keeping its history record, return to idle. */
+  finish: () => void;
   /** Dismiss the stopped track, delete its history record, return to idle. */
   discard: () => void;
   /** Re-read the route and service status from the native side. */
@@ -352,6 +354,12 @@ export function useTrackingSession(): TrackingSession {
       return;
     }
     setPhase('stopping');
+    // Record the stop deterministically here rather than relying on the native
+    // onStop callback: that fires on MSG_ON_SERVICE_STOPPED, which round-trips
+    // back to JS only after finalizeSession has already snapshotted the events
+    // timeline and the phase has moved to 'stopped' (past recordEvent's gate),
+    // so the native stop event never lands in the record.
+    recordEvent('stop');
     try {
       await BackgroundGeolocation.stop();
     } catch (error) {
@@ -381,7 +389,24 @@ export function useTrackingSession(): TrackingSession {
     }
     setPhase('stopped');
     await clearSessionAnchor();
-  }, [finalizeSession]);
+  }, [finalizeSession, recordEvent]);
+
+  // Reset the stopped-track view back to idle. Shared by finish (keep the
+  // history record) and discard (delete it).
+  const resetToIdle = useCallback(() => {
+    setPoints([]);
+    setStartedAt(null);
+    setSessionId(null);
+    setPhase('idle');
+  }, []);
+
+  const finish = useCallback(() => {
+    if (phaseRef.current !== 'stopped') {
+      return;
+    }
+    // The record was already persisted at stop; just dismiss the view.
+    resetToIdle();
+  }, [resetToIdle]);
 
   const discard = useCallback(() => {
     if (phaseRef.current !== 'stopped') {
@@ -394,11 +419,8 @@ export function useTrackingSession(): TrackingSession {
         setLastError(formatError(error))
       );
     }
-    setPoints([]);
-    setStartedAt(null);
-    setSessionId(null);
-    setPhase('idle');
-  }, [sessionId]);
+    resetToIdle();
+  }, [sessionId, resetToIdle]);
 
   const stats = useMemo(() => deriveStats(points), [points]);
 
@@ -414,6 +436,7 @@ export function useTrackingSession(): TrackingSession {
     lastError,
     start,
     stop,
+    finish,
     discard,
     resync,
   };

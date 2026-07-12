@@ -764,7 +764,7 @@ export default function TrackerScreen() {
                   <Text style={styles.footerSecondaryText}>Discard</Text>
                 </Pressable>
                 <Pressable
-                  onPress={session.discard}
+                  onPress={session.finish}
                   style={[styles.footerButton, styles.footerPrimary]}
                 >
                   <Text style={styles.footerPrimaryText}>Done</Text>
