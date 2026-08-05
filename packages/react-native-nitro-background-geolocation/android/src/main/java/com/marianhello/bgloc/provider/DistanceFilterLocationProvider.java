@@ -218,7 +218,7 @@ public class DistanceFilterLocationProvider extends AbstractLocationProvider imp
                 // Turn on each provider aggressively for a short period of time
                 List<String> matchingProviders = locationManager.getAllProviders();
                 for (String provider: matchingProviders) {
-                    if (provider != LocationManager.PASSIVE_PROVIDER) {
+                    if (!LocationManager.PASSIVE_PROVIDER.equals(provider)) {
                         logger.info("Requesting location updates from provider {}", provider);
                         locationManager.requestLocationUpdates(provider, 0, 0, this);
                     }
