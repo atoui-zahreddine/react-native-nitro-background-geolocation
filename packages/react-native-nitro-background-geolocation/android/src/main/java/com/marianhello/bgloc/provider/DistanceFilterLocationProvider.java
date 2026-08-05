@@ -144,8 +144,16 @@ public class DistanceFilterLocationProvider extends AbstractLocationProvider imp
 
     @Override
     public void onStop() {
+        stopRecording(true);
+    }
+
+    private void stopRecording(boolean flushFinalLocation) {
         if (!isStarted) {
             return;
+        }
+
+        if (flushFinalLocation) {
+            flushFinalLocation();
         }
 
         try {
@@ -155,6 +163,35 @@ public class DistanceFilterLocationProvider extends AbstractLocationProvider imp
             //noop
         } finally {
             isStarted = false;
+        }
+    }
+
+    /**
+     * Recording almost always stops mid-bucket: a location is only emitted once
+     * scaledDistanceFilter is crossed, so up to that much of the end of a track is
+     * never reported. Emit the freshest trustworthy fix so a track ends where the
+     * user actually stopped.
+     */
+    private void flushFinalLocation() {
+        if (!isMoving || lastLocation == null) {
+            return;
+        }
+
+        try {
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location == null
+                    || location.getTime() <= lastLocation.getTime()
+                    || location.getAccuracy() > mConfig.getStationaryRadius()) {
+                return;
+            }
+
+            logger.info("Flushing final location: {}m past last recorded point",
+                    round(location.distanceTo(lastLocation)));
+            lastLocation = location;
+            handleLocation(location);
+        } catch (SecurityException e) {
+            logger.error("Security exception: {}", e.getMessage());
+            this.handleSecurityException(e);
         }
     }
 
@@ -171,7 +208,8 @@ public class DistanceFilterLocationProvider extends AbstractLocationProvider imp
     public void onConfigure(Config config) {
         super.onConfigure(config);
         if (isStarted) {
-            onStop();
+            // Not a real stop — flushing here would inject a point on every reconfigure.
+            stopRecording(false);
             onStart();
         }
     }
