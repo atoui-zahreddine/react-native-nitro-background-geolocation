@@ -58,6 +58,7 @@ public class DistanceFilterLocationProvider extends AbstractLocationProvider imp
 
     private Location lastLocation;
     private Location stationaryLocation;
+    private Location speedLocation;
     private float stationaryRadius;
     private PendingIntent stationaryAlarmPI;
     private PendingIntent stationaryLocationPollingPI;
@@ -196,6 +197,7 @@ public class DistanceFilterLocationProvider extends AbstractLocationProvider imp
         isAcquiringStationaryLocation = false;
         isAcquiringSpeed    = false;
         stationaryLocation  = null;
+        speedLocation       = null;
 
         try {
             locationManager.removeUpdates(this);
@@ -342,12 +344,26 @@ public class DistanceFilterLocationProvider extends AbstractLocationProvider imp
                 return;
             }
         } else if (isAcquiringSpeed) {
+            if (speedLocation == null || speedLocation.getAccuracy() > location.getAccuracy()) {
+                speedLocation = location;
+            }
             if (++locationAcquisitionAttempts == MAX_SPEED_ACQUISITION_ATTEMPTS) {
                 // Got enough samples, assume we're confident in reported speed now.  Play "woohoo" sound.
                 playDebugTone(Tone.DOODLY_DOO);
                 isAcquiringSpeed = false;
-                scaledDistanceFilter = calculateDistanceFilter(location.getSpeed());
+                Location best = speedLocation;
+                speedLocation = null;
+                scaledDistanceFilter = calculateDistanceFilter(best.getSpeed());
                 setPace(true);
+                // Samples come from every provider at 0/0, so the last one to arrive is
+                // often a coarse network fix. Seeding the track with it fabricates a leg
+                // from nowhere; wait for a real fix instead.
+                if (best.getAccuracy() > mConfig.getStationaryRadius()) {
+                    logger.info("Discarding speed-acquisition location: acy={} > stationaryRadius={}",
+                            best.getAccuracy(), mConfig.getStationaryRadius());
+                    return;
+                }
+                location = best;
             } else {
                 playDebugTone(Tone.BEEP);
                 return;
