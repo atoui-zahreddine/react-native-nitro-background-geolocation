@@ -34,6 +34,17 @@ execution: it is done when the differences are verified on-device.
     was an intentional upstream bug workaround.)
   - Provider selection itself is wired correctly end-to-end
     (`LocationProviderFactory.java:29-46`).
+- Distance provider field diagnosis (S21 biking session, 2026-07-22): the
+  `distanceFilter` you set is a **base**, not the spacing. `calculateDistanceFilter`
+  (`DistanceFilterLocationProvider.java:385-392`, and the identical iOS formula in
+  `MAURDistanceFilterLocationProvider.m:481-490`) adds
+  `(speed rounded to nearest 5 m/s)²`, so `distanceFilter: 25` produced a 50 m
+  effective filter for the whole ride and `interval: 5000` never bound. Confirmed
+  by replaying the state machine over the session's own native logs: 16/16 points
+  reproduced exactly, including the `Updating distanceFilter: new=50 old=25` line.
+  Three defects fixed off the back of it — coarse network fix seeded as point 0,
+  no final flush on stop (lost 34 s / ~124 m of tail), and `!=` string identity
+  comparison that failed to exclude the passive provider.
 - The native code mirrors upstream mauron85/christocracy — check upstream
   history before changing behavior (see the research ticket).
 - Subtitle copy source: the option matrix asset
