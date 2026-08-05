@@ -476,14 +476,13 @@ enum {
 }
 
 /**
- * Calculates distanceFilter by rounding speed to nearest 5 and multiplying by 10.  Clamped at 1km max.
+ * Elastic distance filter: config.distanceFilter + (speed rounded to nearest 5 m/s)^2.
+ * eg 5.2 m/s becomes distanceFilter + 25. Clamped at 1km max.
  */
 - (float) calculateDistanceFilter:(float)speed
 {
     float newDistanceFilter = _config.distanceFilter.integerValue;
     if (speed < 100) {
-        // (rounded-speed-to-nearest-5) / 2)^2
-        // eg 5.2 becomes (5/2)^2
         newDistanceFilter = pow((5.0 * floorf(fabsf(speed) / 5.0 + 0.5f)), 2) + _config.distanceFilter.integerValue;
     }
     return (newDistanceFilter < 1000) ? newDistanceFilter : 1000;

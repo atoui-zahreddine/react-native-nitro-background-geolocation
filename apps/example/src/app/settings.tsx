@@ -556,7 +556,7 @@ export default function SettingsScreen() {
         />
         <NumberRow
           label="Distance filter"
-          description="Minimum distance moved before a point is recorded. Applies to the Distance provider only — the Activity provider ignores it. Default 50 m."
+          description="Base distance moved before a point is recorded — the Distance provider adds a speed penalty on top, so spacing grows as you go faster (50 m walking, 75 m cycling, 150 m driving). The Activity provider ignores it. Default 50 m."
           unit="m"
           value={config.distanceFilter ?? 50}
           disabled={locked}

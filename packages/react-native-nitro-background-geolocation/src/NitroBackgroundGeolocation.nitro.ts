@@ -169,11 +169,26 @@ export interface ConfigureOptions {
    */
   debug?: NullableBoolean;
   /**
-   * Minimum horizontal distance in meters the device must move before an update is generated.
+   * Base horizontal distance in meters the device must move before an update is
+   * generated.
    *
-   * Applies to the Distance Filter provider. The Activity provider ignores it —
-   * that provider is time/activity-driven, so use {@link interval} to control
-   * its cadence.
+   * This is a floor, not the spacing you get. The Distance Filter provider is
+   * *elastic*: it adds a speed penalty on top of this value, so points thin out
+   * as you move faster. The effective filter is
+   * `distanceFilter + (speed rounded to the nearest 5 m/s)²`, clamped to 1000 m:
+   *
+   * | Speed | Effective filter (with `distanceFilter: 50`) |
+   * | --- | --- |
+   * | `< 2.5 m/s` (walking) | 50 m |
+   * | `2.5–7.5 m/s` (cycling) | 75 m |
+   * | `7.5–12.5 m/s` (city driving) | 150 m |
+   * | `12.5–17.5 m/s` (highway) | 275 m |
+   *
+   * Set it low if you want dense tracks; the penalty still applies, so expect
+   * roughly `distanceFilter + 25` m spacing at cycling speed.
+   *
+   * The Activity provider ignores this entirely — that provider is
+   * time/activity-driven, so use {@link interval} to control its cadence.
    *
    * - **Default:** `50`
    * - **Platform:** all
