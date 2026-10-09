@@ -23,20 +23,24 @@ import BackgroundGeolocation, {
 } from 'react-native-nitro-background-geolocation';
 
 await BackgroundGeolocation.configure({
-  locationProvider: LocationProvider.DISTANCE_FILTER,
-  desiredAccuracy: LocationAccuracy.HIGH,
-  distanceFilter: 50,
-  stationaryRadius: 50,
-  stopOnTerminate: false,
-  startOnBoot: true,
+  tracking: {
+    locationProvider: LocationProvider.DISTANCE_FILTER,
+    desiredAccuracy: LocationAccuracy.HIGH,
+    distanceFilter: 50,
+    stationaryRadius: 50,
+  },
+  lifecycle: {
+    stopOnTerminate: false,
+    startOnBoot: true,
+  },
 });
 ```
 
 ## Relevant options
 
-- [`distanceFilter`](../configuration#options) — minimum distance between updates.
-- [`stationaryRadius`](../configuration#options) — radius before stationary detection triggers.
-- [`desiredAccuracy`](../configuration#options) — accuracy tier.
+- [`tracking.distanceFilter`](../configuration#tracking) — minimum distance between updates.
+- [`tracking.stationaryRadius`](../configuration#tracking) — radius before stationary detection triggers.
+- [`tracking.desiredAccuracy`](../configuration#tracking) — accuracy tier.
 
 ## When not to use it
 

@@ -26,9 +26,11 @@ import BackgroundGeolocation, {
 } from 'react-native-nitro-background-geolocation';
 
 await BackgroundGeolocation.configure({
-  locationProvider: LocationProvider.RAW,
-  desiredAccuracy: LocationAccuracy.HIGH,
-  interval: 5000,
-  fastestInterval: 5000,
+  tracking: {
+    locationProvider: LocationProvider.RAW,
+    desiredAccuracy: LocationAccuracy.HIGH,
+    interval: 5000,
+    fastestInterval: 5000,
+  },
 });
 ```

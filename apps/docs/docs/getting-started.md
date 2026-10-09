@@ -74,13 +74,17 @@ import BackgroundGeolocation, {
 } from 'react-native-nitro-background-geolocation';
 
 await BackgroundGeolocation.configure({
-  locationProvider: LocationProvider.DISTANCE_FILTER,
-  desiredAccuracy: LocationAccuracy.HIGH,
-  distanceFilter: 50,
-  stationaryRadius: 50,
-  notificationTitle: 'Tracking active',
-  url: 'https://your-server.com/locations',
-  httpHeaders: { Authorization: 'Bearer YOUR_TOKEN' },
+  tracking: {
+    locationProvider: LocationProvider.DISTANCE_FILTER,
+    desiredAccuracy: LocationAccuracy.HIGH,
+    distanceFilter: 50,
+    stationaryRadius: 50,
+  },
+  notification: { notificationTitle: 'Tracking active' },
+  http: {
+    url: 'https://your-server.com/locations',
+    httpHeaders: { Authorization: 'Bearer YOUR_TOKEN' },
+  },
 });
 
 const unsubscribe = BackgroundGeolocation.onLocation((location) => {
@@ -100,7 +104,7 @@ See [Configuration](./configuration) for the full list of options.
 
 `configure()` is **required before `start()`** — `start()` uses the configured provider, URL, intervals, and notification text.
 
-Most other methods do **not** require `configure()` first. They read native/persisted state, which is useful after app relaunch (especially with `stopOnTerminate: false` — see [Platform Quirks](./platform-quirks#ios-native-continuation)).
+Most other methods do **not** require `configure()` first. They read native/persisted state, which is useful after app relaunch (especially with `lifecycle.stopOnTerminate: false` — see [Platform Quirks](./platform-quirks#ios-native-continuation)).
 
 | Method | Needs `configure()` first? |
 |---|---|

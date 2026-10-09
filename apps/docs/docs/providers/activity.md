@@ -19,21 +19,25 @@ import BackgroundGeolocation, {
 } from 'react-native-nitro-background-geolocation';
 
 await BackgroundGeolocation.configure({
-  locationProvider: LocationProvider.ACTIVITY,
-  desiredAccuracy: LocationAccuracy.HIGH,
-  interval: 10000,
-  fastestInterval: 5000,
-  activitiesInterval: 10000,
-  stopOnStillActivity: true,
+  tracking: {
+    locationProvider: LocationProvider.ACTIVITY,
+    desiredAccuracy: LocationAccuracy.HIGH,
+    interval: 10000,
+    fastestInterval: 5000,
+  },
+  activity: {
+    activitiesInterval: 10000,
+    stopOnStillActivity: true,
+  },
 });
 ```
 
 ## Relevant options
 
-- [`interval`](../configuration#options) — minimum time between location updates.
-- [`fastestInterval`](../configuration#options) — fastest rate the app can handle updates.
-- [`activitiesInterval`](../configuration#options) — how often activity recognition fires.
-- [`stopOnStillActivity`](../configuration#options) — stop updates when the user is detected as STILL.
+- [`tracking.interval`](../configuration#tracking) — minimum time between location updates.
+- [`tracking.fastestInterval`](../configuration#tracking) — fastest rate the app can handle updates.
+- [`activity.activitiesInterval`](../configuration#activity) — how often activity recognition fires.
+- [`activity.stopOnStillActivity`](../configuration#activity) — stop updates when the user is detected as STILL.
 
 ## Subscribing to activities
 

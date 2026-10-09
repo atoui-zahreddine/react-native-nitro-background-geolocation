@@ -10,12 +10,14 @@ The plugin can post recorded locations to your server. Configure a `url` and loc
 
 ```ts
 await BackgroundGeolocation.configure({
-  url: 'https://your-server.com/locations',
-  syncUrl: 'https://your-server.com/sync',
-  syncThreshold: 100,
-  httpHeaders: {
-    'Authorization': 'Bearer YOUR_TOKEN',
-    'Content-Type': 'application/json',
+  http: {
+    url: 'https://your-server.com/locations',
+    syncUrl: 'https://your-server.com/sync',
+    syncThreshold: 100,
+    httpHeaders: {
+      'Authorization': 'Bearer YOUR_TOKEN',
+      'Content-Type': 'application/json',
+    },
   },
 });
 ```
@@ -26,13 +28,15 @@ By default each POST contains a single Location object serialized as JSON. Overr
 
 ```ts
 await BackgroundGeolocation.configure({
-  url: 'https://your-server.com/locations',
-  postTemplate: {
-    lat: '@latitude',
-    lon: '@longitude',
-    timestamp: '@time',
-    accuracy: '@accuracy',
-    deviceId: 'fixed-device-id',
+  http: {
+    url: 'https://your-server.com/locations',
+    postTemplate: {
+      lat: '@latitude',
+      lon: '@longitude',
+      timestamp: '@time',
+      accuracy: '@accuracy',
+      deviceId: 'fixed-device-id',
+    },
   },
 });
 ```

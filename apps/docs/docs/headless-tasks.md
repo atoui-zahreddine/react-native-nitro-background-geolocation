@@ -59,9 +59,11 @@ Nothing extra to set. As long as `stopOnTerminate: false` is configured, the lib
 
 ```ts
 await BackgroundGeolocation.configure({
-  stopOnTerminate: false,
-  startOnBoot: true,
-  // ... other options
+  lifecycle: {
+    stopOnTerminate: false,
+    startOnBoot: true,
+  },
+  // ... other groups
 });
 ```
 

@@ -2,55 +2,125 @@
 sidebar_position: 3
 ---
 
+import ConfigTracking from './generated/_config-tracking.md';
+import ConfigLifecycle from './generated/_config-lifecycle.md';
+import ConfigActivity from './generated/_config-activity.md';
+import ConfigNotification from './generated/_config-notification.md';
+import ConfigHttp from './generated/_config-http.md';
+import ConfigStorage from './generated/_config-storage.md';
+import ConfigDebug from './generated/_config-debug.md';
+import LocationOptions from './generated/_location-options.md';
+
 # Configuration
 
-The `configure()` method accepts a `ConfigureOptions` object. Omitted fields keep their previous values. Pass `null` for a supported option when you want Cordova-style "reset to default" behavior.
+`configure()` accepts a `ConfigureOptions` object grouped by domain: `tracking`,
+`lifecycle`, `activity`, `notification`, `http`, `storage` and `debug`. Every
+group and field is optional, and an omitted one keeps its previous value.
 
 ```ts
 import BackgroundGeolocation, {
-  LocationProvider,
   LocationAccuracy,
+  LocationProvider,
 } from 'react-native-nitro-background-geolocation';
 
 await BackgroundGeolocation.configure({
-  locationProvider: LocationProvider.DISTANCE_FILTER,
-  desiredAccuracy: LocationAccuracy.HIGH,
-  distanceFilter: 50,
-  // ...
+  tracking: {
+    locationProvider: LocationProvider.DISTANCE_FILTER,
+    desiredAccuracy: LocationAccuracy.HIGH,
+    distanceFilter: 50,
+  },
+  lifecycle: { stopOnTerminate: false },
 });
 ```
 
-## Options
+## Reading and resetting
 
-| Option | Type | Default | Platform | Description |
-|--------|------|---------|----------|-------------|
-| `locationProvider` | `LocationProvider \| null` | `DISTANCE_FILTER` | all | Location provider to use. See [Providers](./providers/distance-filter). |
-| `desiredAccuracy` | `LocationAccuracy \| null` | `MEDIUM` | all | Desired accuracy level. Lower accuracy generally reduces power drain. |
-| `stationaryRadius` | `number \| null` | `50` | all | Radius in meters to trigger stationary detection. |
-| `debug` | `boolean \| null` | `false` | all | Enable debug sounds and notifications. Useful during field testing. |
-| `distanceFilter` | `number \| null` | `500` | all | Minimum distance (meters) between location updates. |
-| `stopOnTerminate` | `boolean \| null` | `true` | all | Stop tracking when the app is terminated. On Android, the service is destroyed. On iOS, `false` enables [Native Continuation](./platform-quirks#ios-native-continuation). |
-| `startOnBoot` | `boolean \| null` | `false` | Android | Start tracking on device boot. |
-| `interval` | `number \| null` | `600000` | Android | Minimum time interval between location updates (ms). |
-| `fastestInterval` | `number \| null` | `120000` | Android | Fastest location update interval (ms). |
-| `activitiesInterval` | `number \| null` | `10000` | Android | Activity recognition interval (ms). |
-| `stopOnStillActivity` | `boolean \| null` | `true` | Android | Deprecated upstream Android option that stops updates when STILL is detected. |
-| `notificationsEnabled` | `boolean \| null` | `true` | Android | Show foreground service notification. |
-| `startForeground` | `boolean \| null` | `true` | Android | Run as a foreground service. |
-| `notificationTitle` | `string \| null` | `"Background tracking"` | Android | Notification title. |
-| `notificationText` | `string \| null` | `"ENABLED"` | Android | Notification text. |
-| `notificationIconColor` | `string \| null` | `''` | Android | Notification icon color (hex). |
-| `notificationIconLarge` | `string \| null` | `''` | Android | Large notification icon resource name. |
-| `notificationIconSmall` | `string \| null` | `''` | Android | Small notification icon resource name. |
-| `activityType` | `string \| null` | platform default | iOS | iOS activity type hint. |
-| `pauseLocationUpdates` | `boolean \| null` | platform default | iOS | Allow the system to pause location updates. |
-| `saveBatteryOnBackground` | `boolean \| null` | platform default | iOS | Reduce accuracy in the background to save battery. |
-| `url` | `string \| null` | `''` | all | URL for HTTP location posting. See [HTTP Posting](./http-posting). |
-| `syncUrl` | `string \| null` | `''` | all | URL for batch sync of stored locations. |
-| `syncThreshold` | `number \| null` | `100` | all | Number of failed locations to batch together before sync. |
-| `httpHeaders` | `Record<string, string> \| null` | `undefined` | all | Optional HTTP headers for location posting. |
-| `maxLocations` | `number \| null` | `10000` | all | Maximum number of locations to store. |
-| `postTemplate` | `AnyMap \| null` | `undefined` | all | Custom POST body template. See below. |
+`getConfig()` returns an `AppliedConfig`: every group and every field, with
+defaults applied, so no fallback is needed.
+
+To reset a field, pass its published default from `CONFIG_DEFAULTS`:
+
+```ts
+import { CONFIG_DEFAULTS } from 'react-native-nitro-background-geolocation';
+
+await BackgroundGeolocation.configure({
+  tracking: { distanceFilter: CONFIG_DEFAULTS.tracking.distanceFilter },
+});
+```
+
+`null` is a *value*, not a reset. Only `http.httpHeaders` and
+`http.postTemplate` accept it, meaning "send none" and "use the native default
+template". `configure({})` changes nothing.
+
+## Platform ownership
+
+Each field lists the platforms that read it. A platform that does not read a
+field drops the write — in development it also logs a warning that names the
+field and its owner — and `getConfig()` reports that field as its default.
+
+`CONFIG_FIELDS` exposes the same facts at runtime, keyed by `group.field`, so an
+app can hide or label rows without restating them:
+
+```ts
+import { Platform } from 'react-native';
+import { CONFIG_FIELDS, ownsField } from 'react-native-nitro-background-geolocation';
+
+CONFIG_FIELDS['tracking.interval'].units; // 'ms'
+ownsField(Platform.OS as 'android' | 'ios', 'tracking.interval'); // false on iOS
+```
+
+The tables below are generated from the Config Contract, so they cannot drift
+from the native defaults.
+
+## Tracking
+
+<ConfigTracking />
+
+The Distance Filter provider's filter is elastic: the effective value is
+`distanceFilter + (speed rounded to the nearest 5 m/s)²`, clamped to 1000 m.
+
+| Speed | Effective filter (with `distanceFilter: 50`) |
+| --- | --- |
+| `< 2.5 m/s` (walking) | 50 m |
+| `2.5–7.5 m/s` (cycling) | 75 m |
+| `7.5–12.5 m/s` (city driving) | 150 m |
+| `12.5–17.5 m/s` (highway) | 275 m |
+
+## Lifecycle
+
+<ConfigLifecycle />
+
+## Activity
+
+Activity *recognition*. Not to be confused with `tracking.activityType`, which
+is a CoreLocation journey hint.
+
+<ConfigActivity />
+
+## Notification
+
+<ConfigNotification />
+
+## HTTP and sync
+
+```ts
+await BackgroundGeolocation.configure({
+  http: {
+    url: 'https://example.com/locations',
+    syncThreshold: 100,
+  },
+});
+```
+
+<ConfigHttp />
+
+## Storage
+
+<ConfigStorage />
+
+## Debug
+
+<ConfigDebug />
 
 ## postTemplate
 
@@ -58,16 +128,25 @@ Customize the JSON body sent to your server. Supports object or array shapes and
 
 ```ts
 await BackgroundGeolocation.configure({
-  url: 'https://your-server.com/locations',
-  postTemplate: {
-    lat: '@latitude',
-    lon: '@longitude',
-    timestamp: '@time',
-    accuracy: '@accuracy',
-    custom: 'static-value',
+  http: {
+    url: 'https://your-server.com/locations',
+    postTemplate: {
+      lat: '@latitude',
+      lon: '@longitude',
+      timestamp: '@time',
+      accuracy: '@accuracy',
+      custom: 'static-value',
+    },
   },
 });
 ```
+
+## getCurrentLocation options
+
+`getCurrentLocation()` takes a `LocationOptions` object. It is not persisted: an
+omitted field uses the default below for that call only.
+
+<LocationOptions />
 
 ## Enums
 
@@ -78,6 +157,17 @@ await BackgroundGeolocation.configure({
 | `DISTANCE_FILTER` | `0` | Classic background provider with stationary detection and elastic distance filter. |
 | `ACTIVITY` | `1` | Activity-aware provider with fused locations and activity recognition. |
 | `RAW` | `2` | Raw sensor/device locations with minimal processing. |
+
+### ActivityType
+
+iOS only. The journey hint passed to CoreLocation.
+
+| Value | Code | Description |
+|---|---|---|
+| `AutomotiveNavigation` | `0` | Driving in a vehicle on roads. |
+| `OtherNavigation` | `1` | Other navigation, such as by boat, train or plane. |
+| `Fitness` | `2` | Walking, running or cycling. |
+| `Other` | `3` | No specific journey type. |
 
 ### LocationAccuracy
 
