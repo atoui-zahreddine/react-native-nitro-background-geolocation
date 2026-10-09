@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import BackgroundGeolocation from 'react-native-nitro-background-geolocation';
-import { loadStoredConfig } from '../lib/tracking/config';
+import { loadStoredConfig, ownedOptions } from '../lib/tracking/config';
 
 export default function RootLayout() {
   // Apply the persisted settings once per launch, but never touch a live
@@ -12,7 +12,9 @@ export default function RootLayout() {
       try {
         const status = await BackgroundGeolocation.checkStatus();
         if (!status.isRunning) {
-          await BackgroundGeolocation.configure(await loadStoredConfig());
+          await BackgroundGeolocation.configure(
+            ownedOptions(await loadStoredConfig())
+          );
         }
       } catch (error) {
         console.warn('[App] configure on launch failed:', error);

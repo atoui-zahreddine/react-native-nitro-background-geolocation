@@ -3,8 +3,10 @@ export { snapToRoads } from './snap';
 export { decodePolyline, encodePolyline } from './polyline';
 export { deriveStats, filterSessionPoints, type SessionStats } from './session';
 export {
+  BASELINE_CONFIG,
   LONG_TRACKING_BASELINE,
   loadStoredConfig,
+  ownedOptions,
   resetStoredConfig,
   saveStoredConfig,
 } from './config';

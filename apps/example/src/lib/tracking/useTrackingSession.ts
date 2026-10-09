@@ -4,7 +4,7 @@ import BackgroundGeolocation, {
   AuthorizationStatus,
   type Location,
 } from 'react-native-nitro-background-geolocation';
-import { loadStoredConfig } from './config';
+import { loadStoredConfig, ownedOptions } from './config';
 import {
   buildSessionRecord,
   mergeEventTimelines,
@@ -327,7 +327,7 @@ export function useTrackingSession(): TrackingSession {
       // is skipped.
       await BackgroundGeolocation.deleteAllLocations();
       const config = await loadStoredConfig();
-      await BackgroundGeolocation.configure(config);
+      await BackgroundGeolocation.configure(ownedOptions(config));
       const now = Date.now();
       const configSnapshot = config as unknown as Record<string, unknown>;
       await setSessionAnchor({ startedAt: now, config: configSnapshot });

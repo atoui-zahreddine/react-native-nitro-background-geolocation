@@ -18,11 +18,21 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {
-  LocationAccuracy,
-  LocationProvider,
-  type ConfigureOptions,
+import type {
+  AppliedConfig,
+  ConfigFieldPath,
 } from 'react-native-nitro-background-geolocation';
+import {
+  CONFIG_SECTIONS,
+  FIELD_PRESENTATION,
+  formatField,
+  soleOwner,
+} from '../../lib/config/fieldPresentation';
+import {
+  CONFIG_FIELD_PATHS,
+  nestConfig,
+  readField,
+} from '../../lib/config/shape';
 import { loadStoredConfig } from '../../lib/tracking/config';
 import { shareSessionRecord } from '../../lib/tracking/exportStore';
 import type {
@@ -338,200 +348,6 @@ function OverviewTab({
 
 // --- Config tab ---------------------------------------------------------------------
 
-const PROVIDER_LABELS: Partial<Record<number, string>> = {
-  [LocationProvider.DISTANCE_FILTER]: 'Distance',
-  [LocationProvider.ACTIVITY]: 'Activity',
-  [LocationProvider.RAW]: 'Raw',
-};
-
-const ACCURACY_LABELS: Partial<Record<number, string>> = {
-  [LocationAccuracy.HIGH]: 'High',
-  [LocationAccuracy.MEDIUM]: 'Medium',
-  [LocationAccuracy.LOW]: 'Low',
-  [LocationAccuracy.PASSIVE]: 'Passive',
-};
-
-type Formatter = (value: unknown) => string;
-
-const bool: Formatter = (v) => (v === true ? 'On' : v === false ? 'Off' : '—');
-const text: Formatter = (v) =>
-  typeof v === 'string' && v.length > 0 ? v : '—';
-const num =
-  (unit?: string): Formatter =>
-  (v) =>
-    typeof v === 'number' ? `${v}${unit ? ` ${unit}` : ''}` : '—';
-const json: Formatter = (v) =>
-  v === null ||
-  v === undefined ||
-  (typeof v === 'object' && Object.keys(v).length === 0)
-    ? '—'
-    : JSON.stringify(v);
-const enumLabel =
-  (labels: Partial<Record<number, string>>): Formatter =>
-  (v) =>
-    (typeof v === 'number' && labels[v]) || '—';
-
-interface ConfigRowSpec {
-  key: keyof ConfigureOptions;
-  label: string;
-  format: Formatter;
-  platform?: 'android' | 'ios';
-}
-
-interface ConfigSectionSpec {
-  title: string;
-  rows: ConfigRowSpec[];
-}
-
-// Mirrors the 7 sections/grouping of the Settings screen.
-const CONFIG_SECTIONS: ConfigSectionSpec[] = [
-  {
-    title: 'Provider & accuracy',
-    rows: [
-      {
-        key: 'locationProvider',
-        label: 'Location provider',
-        format: enumLabel(PROVIDER_LABELS),
-      },
-      {
-        key: 'desiredAccuracy',
-        label: 'Desired accuracy',
-        format: enumLabel(ACCURACY_LABELS),
-      },
-      { key: 'distanceFilter', label: 'Distance filter', format: num('m') },
-      { key: 'stationaryRadius', label: 'Stationary radius', format: num('m') },
-      { key: 'debug', label: 'Debug (sounds & notifications)', format: bool },
-    ],
-  },
-  {
-    title: 'Lifecycle',
-    rows: [
-      { key: 'stopOnTerminate', label: 'Stop on app terminate', format: bool },
-      {
-        key: 'startOnBoot',
-        label: 'Start on boot',
-        format: bool,
-        platform: 'android',
-      },
-      {
-        key: 'stopOnStillActivity',
-        label: 'Stop on still activity',
-        format: bool,
-        platform: 'android',
-      },
-    ],
-  },
-  {
-    title: 'Intervals',
-    rows: [
-      {
-        key: 'interval',
-        label: 'Update interval',
-        format: num('ms'),
-        platform: 'android',
-      },
-      {
-        key: 'fastestInterval',
-        label: 'Fastest interval',
-        format: num('ms'),
-        platform: 'android',
-      },
-      {
-        key: 'activitiesInterval',
-        label: 'Activities interval',
-        format: num('ms'),
-        platform: 'android',
-      },
-    ],
-  },
-  {
-    title: 'Foreground notification',
-    rows: [
-      {
-        key: 'notificationsEnabled',
-        label: 'Notifications enabled',
-        format: bool,
-        platform: 'android',
-      },
-      {
-        key: 'startForeground',
-        label: 'Start foreground service',
-        format: bool,
-        platform: 'android',
-      },
-      {
-        key: 'notificationTitle',
-        label: 'Notification title',
-        format: text,
-        platform: 'android',
-      },
-      {
-        key: 'notificationText',
-        label: 'Notification text',
-        format: text,
-        platform: 'android',
-      },
-      {
-        key: 'notificationIconColor',
-        label: 'Icon color',
-        format: text,
-        platform: 'android',
-      },
-      {
-        key: 'notificationIconLarge',
-        label: 'Large icon (resource name)',
-        format: text,
-        platform: 'android',
-      },
-      {
-        key: 'notificationIconSmall',
-        label: 'Small icon (resource name)',
-        format: text,
-        platform: 'android',
-      },
-    ],
-  },
-  {
-    title: 'iOS behavior',
-    rows: [
-      {
-        key: 'activityType',
-        label: 'Activity type',
-        format: text,
-        platform: 'ios',
-      },
-      {
-        key: 'pauseLocationUpdates',
-        label: 'Pause location updates',
-        format: bool,
-        platform: 'ios',
-      },
-      {
-        key: 'saveBatteryOnBackground',
-        label: 'Save battery on background',
-        format: bool,
-        platform: 'ios',
-      },
-    ],
-  },
-  {
-    title: 'HTTP sync',
-    rows: [
-      { key: 'url', label: 'Post URL', format: text },
-      { key: 'syncUrl', label: 'Sync URL', format: text },
-      { key: 'syncThreshold', label: 'Sync threshold', format: num() },
-      { key: 'httpHeaders', label: 'HTTP headers', format: json },
-      { key: 'postTemplate', label: 'Post template', format: json },
-    ],
-  },
-  {
-    title: 'Storage',
-    rows: [
-      { key: 'maxLocations', label: 'Max stored locations', format: num() },
-    ],
-  },
-];
-
 function sameValue(a: unknown, b: unknown): boolean {
   return JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
 }
@@ -541,16 +357,14 @@ function ConfigTab({
   current,
 }: {
   snapshot: Record<string, unknown>;
-  current: ConfigureOptions | null;
+  current: AppliedConfig | null;
 }) {
-  const currentMap = current as Record<string, unknown> | null;
-  const anyDiffers =
-    currentMap !== null &&
-    CONFIG_SECTIONS.some((section) =>
-      section.rows.some(
-        (row) => !sameValue(snapshot[row.key], currentMap[row.key])
-      )
-    );
+  // Sessions recorded by older builds carry a flat snapshot.
+  const recorded = useMemo(() => nestConfig(snapshot), [snapshot]);
+  const differs = (path: ConfigFieldPath) =>
+    current !== null &&
+    !sameValue(readField(recorded, path), readField(current, path));
+  const anyDiffers = CONFIG_FIELD_PATHS.some(differs);
 
   return (
     <ScrollView
@@ -565,28 +379,28 @@ function ConfigTab({
         </View>
       )}
       {CONFIG_SECTIONS.map((section) => (
-        <View key={section.title} style={styles.section}>
+        <View key={section.group} style={styles.section}>
           <Text style={styles.sectionTitle}>{section.title}</Text>
           <View style={styles.sectionCard}>
-            {section.rows.map((row) => {
-              const value = snapshot[row.key];
-              const differs =
-                currentMap !== null && !sameValue(value, currentMap[row.key]);
+            {section.fields.map((path) => {
+              const owner = soleOwner(path);
               return (
-                <View key={row.key} style={styles.configRow}>
+                <View key={path} style={styles.configRow}>
                   <View style={styles.configLabelWrap}>
-                    {differs && <Text style={styles.diffDot}>●</Text>}
-                    <Text style={styles.configLabel}>{row.label}</Text>
-                    {row.platform && (
+                    {differs(path) && <Text style={styles.diffDot}>●</Text>}
+                    <Text style={styles.configLabel}>
+                      {FIELD_PRESENTATION[path].label}
+                    </Text>
+                    {owner && (
                       <View style={styles.platformPill}>
                         <Text style={styles.platformPillText}>
-                          {row.platform.toUpperCase()}
+                          {owner.toUpperCase()}
                         </Text>
                       </View>
                     )}
                   </View>
                   <Text style={styles.configValue} numberOfLines={2}>
-                    {row.format(value)}
+                    {formatField(path, readField(recorded, path))}
                   </Text>
                 </View>
               );
@@ -800,7 +614,7 @@ export default function SessionDetailScreen() {
   const router = useRouter();
   const [record, setRecord] = useState<SessionRecord | null>(null);
   const [loaded, setLoaded] = useState(false);
-  const [currentConfig, setCurrentConfig] = useState<ConfigureOptions | null>(
+  const [currentConfig, setCurrentConfig] = useState<AppliedConfig | null>(
     null
   );
   const [tab, setTab] = useState<DetailTab>('overview');

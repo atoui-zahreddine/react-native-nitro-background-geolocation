@@ -11,26 +11,34 @@ import {
 } from 'react-native';
 import { Stack } from 'expo-router';
 import BackgroundGeolocation, {
-  LocationAccuracy,
-  LocationProvider,
-  type ConfigureOptions,
+  CONFIG_FIELDS,
+  ownsField,
+  type AppliedConfig,
+  type ConfigFieldPath,
+  type ConfigGroupName,
+  type ConfigPlatform,
+  type HttpConfig,
 } from 'react-native-nitro-background-geolocation';
 import {
+  CONFIG_SECTIONS,
+  FIELD_PRESENTATION,
+  soleOwner,
+  type FieldOption,
+} from '../lib/config/fieldPresentation';
+import { readField, splitPath } from '../lib/config/shape';
+import {
+  BASELINE_CONFIG,
   loadStoredConfig,
+  ownedOptions,
   resetStoredConfig,
   saveStoredConfig,
-  LONG_TRACKING_BASELINE,
 } from '../lib/tracking/config';
 
 const ACCENT = '#6366f1';
 const AMBER = '#b45309';
 const AMBER_BG = '#fef3c7';
 
-type PlatformTag = 'android' | 'ios';
-
-function isForeign(platform?: PlatformTag): boolean {
-  return platform !== undefined && platform !== Platform.OS;
-}
+const PLATFORM = Platform.OS as ConfigPlatform;
 
 // --- Row scaffolding ---------------------------------------------------------
 
@@ -50,20 +58,18 @@ function Section({
 }
 
 function RowShell({
-  label,
-  description,
-  platform,
+  path,
   disabled,
   vertical,
   children,
 }: {
-  label: string;
-  description?: string;
-  platform?: PlatformTag;
+  path: ConfigFieldPath;
   disabled: boolean;
   vertical?: boolean;
   children: React.ReactNode;
 }) {
+  const { label, subtitle } = FIELD_PRESENTATION[path];
+  const owner = soleOwner(path);
   return (
     <View
       style={[
@@ -75,15 +81,13 @@ function RowShell({
       <View style={styles.rowMain}>
         <View style={styles.rowLabelWrap}>
           <Text style={styles.rowLabel}>{label}</Text>
-          {platform && (
+          {owner && (
             <View style={styles.pill}>
-              <Text style={styles.pillText}>{platform.toUpperCase()}</Text>
+              <Text style={styles.pillText}>{owner.toUpperCase()}</Text>
             </View>
           )}
         </View>
-        {description && (
-          <Text style={styles.rowDescription}>{description}</Text>
-        )}
+        {subtitle && <Text style={styles.rowDescription}>{subtitle}</Text>}
       </View>
       <View style={vertical ? styles.rowControlFull : styles.rowControl}>
         {children}
@@ -92,34 +96,25 @@ function RowShell({
   );
 }
 
+interface RowProps<T> {
+  path: ConfigFieldPath;
+  value: T;
+  disabled: boolean;
+  onChange: (value: T) => void;
+}
+
 // --- Controls ----------------------------------------------------------------
 
-function SegmentedRow<T>({
-  label,
-  description,
-  platform,
+function SegmentedRow({
+  path,
   value,
   options,
   disabled,
   onChange,
-}: {
-  label: string;
-  description?: string;
-  platform?: PlatformTag;
-  value: T;
-  options: { label: string; value: T; description?: string }[];
-  disabled: boolean;
-  onChange: (value: T) => void;
-}) {
+}: RowProps<number> & { options: FieldOption[] }) {
   const selectedOption = options.find((option) => option.value === value);
   return (
-    <RowShell
-      label={label}
-      description={description}
-      platform={platform}
-      disabled={disabled}
-      vertical
-    >
+    <RowShell path={path} disabled={disabled} vertical>
       <View style={styles.segmented}>
         {options.map((option) => {
           const selected = option.value === value;
@@ -151,32 +146,12 @@ function SegmentedRow<T>({
   );
 }
 
-function SwitchRow({
-  label,
-  description,
-  platform,
-  value,
-  disabled,
-  onChange,
-}: {
-  label: string;
-  description?: string;
-  platform?: PlatformTag;
-  value: boolean;
-  disabled: boolean;
-  onChange: (value: boolean) => void;
-}) {
-  const foreign = isForeign(platform);
+function SwitchRow({ path, value, disabled, onChange }: RowProps<boolean>) {
   return (
-    <RowShell
-      label={label}
-      description={description}
-      platform={platform}
-      disabled={disabled || foreign}
-    >
+    <RowShell path={path} disabled={disabled}>
       <Switch
         value={value}
-        disabled={disabled || foreign}
+        disabled={disabled}
         onValueChange={onChange}
         trackColor={{ true: ACCENT }}
       />
@@ -184,26 +159,10 @@ function SwitchRow({
   );
 }
 
-function NumberRow({
-  label,
-  description,
-  platform,
-  unit,
-  value,
-  disabled,
-  onChange,
-}: {
-  label: string;
-  description?: string;
-  platform?: PlatformTag;
-  unit?: string;
-  value: number;
-  disabled: boolean;
-  onChange: (value: number) => void;
-}) {
-  const foreign = isForeign(platform);
+function NumberRow({ path, value, disabled, onChange }: RowProps<number>) {
   const [text, setText] = useState(String(value));
   useEffect(() => setText(String(value)), [value]);
+  const { units } = CONFIG_FIELDS[path];
 
   const commit = () => {
     const parsed = Number(text);
@@ -215,60 +174,32 @@ function NumberRow({
   };
 
   return (
-    <RowShell
-      label={label}
-      description={description}
-      platform={platform}
-      disabled={disabled || foreign}
-    >
+    <RowShell path={path} disabled={disabled}>
       <View style={styles.numberWrap}>
         <TextInput
           style={styles.numberInput}
           value={text}
-          editable={!disabled && !foreign}
+          editable={!disabled}
           keyboardType="numeric"
           onChangeText={setText}
           onEndEditing={commit}
         />
-        {unit && <Text style={styles.unit}>{unit}</Text>}
+        {units && <Text style={styles.unit}>{units}</Text>}
       </View>
     </RowShell>
   );
 }
 
-function TextRow({
-  label,
-  description,
-  platform,
-  placeholder,
-  value,
-  disabled,
-  onChange,
-}: {
-  label: string;
-  description?: string;
-  platform?: PlatformTag;
-  placeholder?: string;
-  value: string;
-  disabled: boolean;
-  onChange: (value: string) => void;
-}) {
-  const foreign = isForeign(platform);
+function TextRow({ path, value, disabled, onChange }: RowProps<string>) {
   const [text, setText] = useState(value);
   useEffect(() => setText(value), [value]);
   return (
-    <RowShell
-      label={label}
-      description={description}
-      platform={platform}
-      disabled={disabled || foreign}
-      vertical
-    >
+    <RowShell path={path} disabled={disabled} vertical>
       <TextInput
         style={styles.textInput}
         value={text}
-        editable={!disabled && !foreign}
-        placeholder={placeholder}
+        editable={!disabled}
+        placeholder={FIELD_PRESENTATION[path].placeholder}
         placeholderTextColor="#9ca3af"
         autoCapitalize="none"
         autoCorrect={false}
@@ -280,20 +211,15 @@ function TextRow({
 }
 
 function KeyValueEditor({
-  label,
-  description,
+  path,
   value,
   disabled,
   onChange,
-}: {
-  label: string;
-  description?: string;
-  value: Record<string, string>;
-  disabled: boolean;
-  onChange: (value: Record<string, string>) => void;
-}) {
-  const [rows, setRows] = useState<[string, string][]>(Object.entries(value));
-  useEffect(() => setRows(Object.entries(value)), [value]);
+}: RowProps<HttpConfig['httpHeaders']>) {
+  const [rows, setRows] = useState<[string, string][]>(
+    Object.entries(value ?? {})
+  );
+  useEffect(() => setRows(Object.entries(value ?? {})), [value]);
 
   const commit = (next: [string, string][]) => {
     setRows(next);
@@ -301,12 +227,7 @@ function KeyValueEditor({
   };
 
   return (
-    <RowShell
-      label={label}
-      description={description}
-      disabled={disabled}
-      vertical
-    >
+    <RowShell path={path} disabled={disabled} vertical>
       {rows.map(([key, val], i) => (
         <View key={i} style={styles.kvRow}>
           <TextInput
@@ -358,18 +279,11 @@ function KeyValueEditor({
 }
 
 function JsonRow({
-  label,
-  description,
+  path,
   value,
   disabled,
   onChange,
-}: {
-  label: string;
-  description?: string;
-  value: object | null;
-  disabled: boolean;
-  onChange: (value: object | null) => void;
-}) {
+}: RowProps<HttpConfig['postTemplate']>) {
   const [text, setText] = useState(value ? JSON.stringify(value, null, 2) : '');
   const [invalid, setInvalid] = useState(false);
 
@@ -389,12 +303,7 @@ function JsonRow({
   };
 
   return (
-    <RowShell
-      label={label}
-      description={description}
-      disabled={disabled}
-      vertical
-    >
+    <RowShell path={path} disabled={disabled} vertical>
       <TextInput
         style={[
           styles.textInput,
@@ -418,10 +327,40 @@ function JsonRow({
   );
 }
 
+// The control follows the contract's value type; only the two map-valued HTTP
+// fields need a dedicated editor.
+function FieldRow({ path, value, disabled, onChange }: RowProps<unknown>) {
+  const row = {
+    path,
+    disabled: disabled || !ownsField(PLATFORM, path),
+    onChange,
+  };
+  const { options } = FIELD_PRESENTATION[path];
+  if (path === 'http.httpHeaders') {
+    return (
+      <KeyValueEditor {...row} value={value as HttpConfig['httpHeaders']} />
+    );
+  }
+  if (path === 'http.postTemplate') {
+    return <JsonRow {...row} value={value as HttpConfig['postTemplate']} />;
+  }
+  if (options) {
+    return <SegmentedRow {...row} value={value as number} options={options} />;
+  }
+  switch (typeof CONFIG_FIELDS[path].default) {
+    case 'boolean':
+      return <SwitchRow {...row} value={value as boolean} />;
+    case 'number':
+      return <NumberRow {...row} value={value as number} />;
+    default:
+      return <TextRow {...row} value={value as string} />;
+  }
+}
+
 // --- Screen ------------------------------------------------------------------
 
 export default function SettingsScreen() {
-  const [config, setConfig] = useState<ConfigureOptions | null>(null);
+  const [config, setConfig] = useState<AppliedConfig | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [resetArmed, setResetArmed] = useState(false);
@@ -456,12 +395,12 @@ export default function SettingsScreen() {
       // never reconfigure a live session.
       const latest = configRef.current;
       if (latest && !runningRef.current) {
-        BackgroundGeolocation.configure(latest)
+        BackgroundGeolocation.configure(ownedOptions(latest))
           .then(() => BackgroundGeolocation.getConfig())
           .then((applied) => {
             console.log(
               '[Settings] configure applied; native distanceFilter =',
-              applied.distanceFilter
+              applied.tracking.distanceFilter
             );
           })
           .catch((error) => {
@@ -471,22 +410,25 @@ export default function SettingsScreen() {
     };
   }, []);
 
-  const update = useCallback((patch: Partial<ConfigureOptions>) => {
-    setConfig((prev) => {
-      if (!prev) {
-        return prev;
-      }
-      const next = { ...prev, ...patch };
-      saveStoredConfig(next).catch((error) => {
-        console.warn('[Settings] persist failed:', error);
+  const update = useCallback(
+    <G extends ConfigGroupName>(group: G, patch: Partial<AppliedConfig[G]>) => {
+      setConfig((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        const next = { ...prev, [group]: { ...prev[group], ...patch } };
+        saveStoredConfig(next).catch((error) => {
+          console.warn('[Settings] persist failed:', error);
+        });
+        return next;
       });
-      return next;
-    });
-  }, []);
+    },
+    []
+  );
 
   const reset = useCallback(async () => {
     await resetStoredConfig();
-    setConfig({ ...LONG_TRACKING_BASELINE });
+    setConfig(BASELINE_CONFIG);
     setResetArmed(false);
   }, []);
 
@@ -501,6 +443,19 @@ export default function SettingsScreen() {
 
   const locked = isRunning;
 
+  const renderField = (path: ConfigFieldPath) => {
+    const [group, field] = splitPath(path);
+    return (
+      <FieldRow
+        key={path}
+        path={path}
+        value={readField(config, path)}
+        disabled={locked}
+        onChange={(value) => update(group, { [field]: value })}
+      />
+    );
+  };
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <Stack.Screen options={{ title: 'Settings', headerShown: true }} />
@@ -513,297 +468,31 @@ export default function SettingsScreen() {
         </View>
       )}
 
-      <Section title="Provider & accuracy">
-        <SegmentedRow
-          label="Location provider"
-          description="How locations are collected. Each provider trades points against battery differently."
-          value={config.locationProvider ?? LocationProvider.DISTANCE_FILTER}
-          options={[
-            {
-              label: 'Distance',
-              value: LocationProvider.DISTANCE_FILTER,
-              description:
-                'Elastic distance filtering with stationary detection. Balanced points vs battery — the best all-round default.',
-            },
-            {
-              label: 'Activity',
-              value: LocationProvider.ACTIVITY,
-              description:
-                'Fused, motion-driven updates (walking, driving, still). Paced by Update interval; does not use Distance filter.',
-            },
-            {
-              label: 'Raw',
-              value: LocationProvider.RAW,
-              description:
-                'Unfiltered OS fixes at the update interval. Most points and highest battery use; no stationary detection.',
-            },
-          ]}
-          disabled={locked}
-          onChange={(locationProvider) => update({ locationProvider })}
-        />
-        <SegmentedRow
-          label="Desired accuracy"
-          description="Precision requested from the OS. Higher accuracy costs battery, and the device may still return coarser fixes."
-          value={config.desiredAccuracy ?? LocationAccuracy.MEDIUM}
-          options={[
-            { label: 'High', value: LocationAccuracy.HIGH },
-            { label: 'Medium', value: LocationAccuracy.MEDIUM },
-            { label: 'Low', value: LocationAccuracy.LOW },
-            { label: 'Passive', value: LocationAccuracy.PASSIVE },
-          ]}
-          disabled={locked}
-          onChange={(desiredAccuracy) => update({ desiredAccuracy })}
-        />
-        <NumberRow
-          label="Distance filter"
-          description="Base distance moved before a point is recorded — the Distance provider adds a speed penalty on top, so spacing grows as you go faster (50 m walking, 75 m cycling, 150 m driving). The Activity provider ignores it. Default 50 m."
-          unit="m"
-          value={config.distanceFilter ?? 50}
-          disabled={locked}
-          onChange={(distanceFilter) => update({ distanceFilter })}
-        />
-        <NumberRow
-          label="Stationary radius"
-          description="While stopped, how far you must move before aggressive tracking re-engages. Used by the Distance provider's stationary detection. Default 50 m."
-          unit="m"
-          value={config.stationaryRadius ?? 50}
-          disabled={locked}
-          onChange={(stationaryRadius) => update({ stationaryRadius })}
-        />
-        <SwitchRow
-          label="Debug (sounds & notifications)"
-          description="Plays sounds and shows debug notifications on tracking events. For development only."
-          value={config.debug ?? false}
-          disabled={locked}
-          onChange={(debug) => update({ debug })}
-        />
-      </Section>
-
-      <Section title="Lifecycle">
-        <SwitchRow
-          label="Stop on app terminate"
-          description="When on, tracking stops if the app is killed. Turn off to keep recording after the app is swiped away."
-          value={config.stopOnTerminate ?? true}
-          disabled={locked}
-          onChange={(stopOnTerminate) => update({ stopOnTerminate })}
-        />
-        <SwitchRow
-          label="Start on boot"
-          description="Resume tracking automatically after the device restarts."
-          platform="android"
-          value={config.startOnBoot ?? false}
-          disabled={locked}
-          onChange={(startOnBoot) => update({ startOnBoot })}
-        />
-        <SwitchRow
-          label="Stop on still activity"
-          description="Pause updates when the device is detected as still. Deprecated upstream — leave on unless you need fixes while stationary."
-          platform="android"
-          value={config.stopOnStillActivity ?? true}
-          disabled={locked}
-          onChange={(stopOnStillActivity) => update({ stopOnStillActivity })}
-        />
-      </Section>
-
-      <Section title="Intervals">
-        <NumberRow
-          label="Update interval"
-          description="Target time between updates. An OS-level floor applied to every provider — it caps the point rate even in Distance mode. Raise to save battery, lower for denser tracks. Default 5000 ms (5 s)."
-          platform="android"
-          unit="ms"
-          value={config.interval ?? 5000}
-          disabled={locked}
-          onChange={(interval) => update({ interval })}
-        />
-        <NumberRow
-          label="Fastest interval"
-          description="Fastest rate the app will accept updates when another app requests locations faster. Sets the tightest spacing between points. Default 1000 ms."
-          platform="android"
-          unit="ms"
-          value={config.fastestInterval ?? 1000}
-          disabled={locked}
-          onChange={(fastestInterval) => update({ fastestInterval })}
-        />
-        <NumberRow
-          label="Activities interval"
-          description="How often motion type is sampled (walking, driving, still). Larger values save battery but slow detection. Default 10000 ms."
-          platform="android"
-          unit="ms"
-          value={config.activitiesInterval ?? 10000}
-          disabled={locked}
-          onChange={(activitiesInterval) => update({ activitiesInterval })}
-        />
-      </Section>
-
-      <Section title="Foreground notification">
-        <SwitchRow
-          label="Notifications enabled"
-          description="Show the persistent tracking notification. Required for reliable background tracking."
-          platform="android"
-          value={config.notificationsEnabled ?? true}
-          disabled={locked}
-          onChange={(notificationsEnabled) => update({ notificationsEnabled })}
-        />
-        <SwitchRow
-          label="Start foreground service"
-          description="Run tracking as a foreground service — this is what keeps location flowing without background-location permission."
-          platform="android"
-          value={config.startForeground ?? true}
-          disabled={locked}
-          onChange={(startForeground) => update({ startForeground })}
-        />
-        <TextRow
-          label="Notification title"
-          description="Title shown on the tracking notification."
-          platform="android"
-          value={config.notificationTitle ?? ''}
-          disabled={locked}
-          onChange={(notificationTitle) => update({ notificationTitle })}
-        />
-        <TextRow
-          label="Notification text"
-          description="Body text shown on the tracking notification."
-          platform="android"
-          value={config.notificationText ?? ''}
-          disabled={locked}
-          onChange={(notificationText) => update({ notificationText })}
-        />
-        <TextRow
-          label="Icon color"
-          description="Accent color for the notification icon, as a #RRGGBB hex value."
-          platform="android"
-          placeholder="#RRGGBB"
-          value={config.notificationIconColor ?? ''}
-          disabled={locked}
-          onChange={(notificationIconColor) =>
-            update({ notificationIconColor })
-          }
-        />
-        <TextRow
-          label="Large icon (resource name)"
-          description="Drawable resource name for the notification's large icon."
-          platform="android"
-          value={config.notificationIconLarge ?? ''}
-          disabled={locked}
-          onChange={(notificationIconLarge) =>
-            update({ notificationIconLarge })
-          }
-        />
-        <TextRow
-          label="Small icon (resource name)"
-          description="Drawable resource name for the status-bar icon. Falls back to the app icon if unset."
-          platform="android"
-          value={config.notificationIconSmall ?? ''}
-          disabled={locked}
-          onChange={(notificationIconSmall) =>
-            update({ notificationIconSmall })
-          }
-        />
-      </Section>
-
-      <Section title="iOS behavior">
-        <SegmentedRow
-          label="Activity type"
-          description="Tells iOS your motion type so it tunes GPS and auto-pause. Match it to how you're moving (driving, navigation, fitness)."
-          platform="ios"
-          value={config.activityType ?? 'OtherNavigation'}
-          options={[
-            { label: 'Automotive', value: 'AutomotiveNavigation' },
-            { label: 'Navigation', value: 'OtherNavigation' },
-            { label: 'Fitness', value: 'Fitness' },
-            { label: 'Other', value: 'Other' },
-          ]}
-          disabled={locked || Platform.OS !== 'ios'}
-          onChange={(activityType) => update({ activityType })}
-        />
-        <SwitchRow
-          label="Pause location updates"
-          description="Let iOS pause updates when it thinks you've stopped moving. Saves battery but can miss slow movement."
-          platform="ios"
-          value={config.pauseLocationUpdates ?? false}
-          disabled={locked}
-          onChange={(pauseLocationUpdates) => update({ pauseLocationUpdates })}
-        />
-        <SwitchRow
-          label="Save battery on background"
-          description="Reduce update frequency while the app is in the background to save power."
-          platform="ios"
-          value={config.saveBatteryOnBackground ?? false}
-          disabled={locked}
-          onChange={(saveBatteryOnBackground) =>
-            update({ saveBatteryOnBackground })
-          }
-        />
-      </Section>
-
-      <Section title="HTTP sync">
-        <TextRow
-          label="Post URL"
-          description="Endpoint each recorded location is POSTed to. Leave blank to record on-device only."
-          placeholder="https://example.com/locations"
-          value={config.url ?? ''}
-          disabled={locked}
-          onChange={(url) => update({ url })}
-        />
-        <TextRow
-          label="Sync URL"
-          description="Endpoint for batched uploads, triggered by Sync threshold. Leave blank to disable syncing."
-          placeholder="https://example.com/sync"
-          value={config.syncUrl ?? ''}
-          disabled={locked}
-          onChange={(syncUrl) => update({ syncUrl })}
-        />
-        <NumberRow
-          label="Sync threshold"
-          description="Number of locations to buffer before a batch is synced to the Sync URL."
-          value={config.syncThreshold ?? 100}
-          disabled={locked}
-          onChange={(syncThreshold) => update({ syncThreshold })}
-        />
-        <Pressable
-          onPress={() => setAdvancedOpen((open) => !open)}
-          style={styles.advancedToggle}
-        >
-          <Text style={styles.advancedToggleText}>
-            {advancedOpen ? '▾' : '▸'} Advanced
-          </Text>
-        </Pressable>
-        {advancedOpen && (
-          <>
-            <KeyValueEditor
-              label="HTTP headers"
-              description="Custom headers sent with every location request, e.g. Authorization."
-              value={
-                (config.httpHeaders as Record<string, string> | null) ?? {}
-              }
-              disabled={locked}
-              onChange={(httpHeaders) => update({ httpHeaders })}
-            />
-            <JsonRow
-              label="Post template"
-              description="Reshape the request body as JSON using @latitude, @longitude, and other placeholders. Leave blank for the default payload."
-              value={(config.postTemplate as object | null) ?? null}
-              disabled={locked}
-              onChange={(postTemplate) =>
-                update({
-                  postTemplate:
-                    postTemplate as ConfigureOptions['postTemplate'],
-                })
-              }
-            />
-          </>
-        )}
-      </Section>
-
-      <Section title="Storage">
-        <NumberRow
-          label="Max stored locations"
-          description="How many locations to keep on-device before the oldest are dropped."
-          value={config.maxLocations ?? 10000}
-          disabled={locked}
-          onChange={(maxLocations) => update({ maxLocations })}
-        />
-      </Section>
+      {CONFIG_SECTIONS.map(({ group, title, fields }) => {
+        const advanced = fields.filter(
+          (path) => FIELD_PRESENTATION[path].advanced
+        );
+        return (
+          <Section key={group} title={title}>
+            {fields
+              .filter((path) => !FIELD_PRESENTATION[path].advanced)
+              .map(renderField)}
+            {advanced.length > 0 && (
+              <>
+                <Pressable
+                  onPress={() => setAdvancedOpen((open) => !open)}
+                  style={styles.advancedToggle}
+                >
+                  <Text style={styles.advancedToggleText}>
+                    {advancedOpen ? '▾' : '▸'} Advanced
+                  </Text>
+                </Pressable>
+                {advancedOpen && advanced.map(renderField)}
+              </>
+            )}
+          </Section>
+        );
+      })}
 
       <Pressable
         disabled={locked}

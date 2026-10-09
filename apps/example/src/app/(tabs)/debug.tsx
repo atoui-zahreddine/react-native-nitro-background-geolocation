@@ -208,16 +208,20 @@ export default function DebugScreen() {
   const handleConfigure = useCallback(async () => {
     try {
       await BackgroundGeolocation.configure({
-        locationProvider: LocationProvider.DISTANCE_FILTER,
-        desiredAccuracy: LocationAccuracy.HIGH,
-        distanceFilter: 50,
-        debug: true,
-        interval: 10000,
-        fastestInterval: 5000,
-        stopOnTerminate: false,
-        notificationsEnabled: true,
-        notificationTitle: 'BG Geolocation',
-        notificationText: 'Tracking location in background',
+        tracking: {
+          locationProvider: LocationProvider.DISTANCE_FILTER,
+          desiredAccuracy: LocationAccuracy.HIGH,
+          distanceFilter: 50,
+          interval: 10000,
+          fastestInterval: 5000,
+        },
+        lifecycle: { stopOnTerminate: false },
+        notification: {
+          notificationsEnabled: true,
+          notificationTitle: 'BG Geolocation',
+          notificationText: 'Tracking location in background',
+        },
+        debug: { debug: true },
       });
       addLog('Configured successfully');
     } catch (err) {

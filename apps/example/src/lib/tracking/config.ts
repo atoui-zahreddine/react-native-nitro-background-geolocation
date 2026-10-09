@@ -1,9 +1,22 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 import {
+  ActivityType,
+  CONFIG_DEFAULTS,
   LocationAccuracy,
   LocationProvider,
+  ownsField,
+  type AppliedConfig,
+  type ConfigPlatform,
   type ConfigureOptions,
 } from 'react-native-nitro-background-geolocation';
+import {
+  applyOptions,
+  CONFIG_FIELD_PATHS,
+  nestConfig,
+  readField,
+  splitPath,
+} from '../config/shape';
 
 /**
  * The "long-tracking defaults": balanced accuracy/battery baseline for
@@ -17,46 +30,75 @@ import {
  * - `stopOnTerminate: false` keeps recording after the app is killed.
  */
 export const LONG_TRACKING_BASELINE: ConfigureOptions = {
-  locationProvider: LocationProvider.DISTANCE_FILTER,
-  desiredAccuracy: LocationAccuracy.HIGH,
-  distanceFilter: 25,
-  stationaryRadius: 25,
-  interval: 5000,
-  fastestInterval: 1000,
-  activitiesInterval: 30000,
-  stopOnTerminate: false,
-  startOnBoot: false,
-  startForeground: true,
-  notificationsEnabled: true,
-  notificationTitle: 'Route tracker',
-  notificationText: 'Recording your route',
-  activityType: 'OtherNavigation',
-  pauseLocationUpdates: false,
-  saveBatteryOnBackground: false,
-  maxLocations: 10000,
-  debug: false,
+  tracking: {
+    locationProvider: LocationProvider.DISTANCE_FILTER,
+    desiredAccuracy: LocationAccuracy.HIGH,
+    distanceFilter: 25,
+    stationaryRadius: 25,
+    interval: 5000,
+    fastestInterval: 1000,
+    activityType: ActivityType.OtherNavigation,
+    pauseLocationUpdates: false,
+    saveBatteryOnBackground: false,
+  },
+  lifecycle: {
+    stopOnTerminate: false,
+    startOnBoot: false,
+  },
+  activity: {
+    activitiesInterval: 30000,
+  },
+  notification: {
+    startForeground: true,
+    notificationsEnabled: true,
+    notificationTitle: 'Route tracker',
+    notificationText: 'Recording your route',
+  },
+  storage: {
+    maxLocations: 10000,
+  },
+  debug: {
+    debug: false,
+  },
 };
+
+export const BASELINE_CONFIG: AppliedConfig = applyOptions(
+  CONFIG_DEFAULTS,
+  LONG_TRACKING_BASELINE
+);
 
 const CONFIG_KEY = 'tracker.config';
 
-/** Stored settings merged over the baseline (missing keys fall back). */
-export async function loadStoredConfig(): Promise<ConfigureOptions> {
+/** Stored settings applied over the baseline; older flat snapshots are nested. */
+export async function loadStoredConfig(): Promise<AppliedConfig> {
   const raw = await AsyncStorage.getItem(CONFIG_KEY);
   if (raw === null) {
-    return { ...LONG_TRACKING_BASELINE };
+    return BASELINE_CONFIG;
   }
   try {
-    const stored = JSON.parse(raw) as ConfigureOptions;
-    return { ...LONG_TRACKING_BASELINE, ...stored };
+    return applyOptions(BASELINE_CONFIG, nestConfig(JSON.parse(raw)));
   } catch {
-    return { ...LONG_TRACKING_BASELINE };
+    return BASELINE_CONFIG;
   }
 }
 
-export async function saveStoredConfig(config: ConfigureOptions): Promise<void> {
+export async function saveStoredConfig(config: AppliedConfig): Promise<void> {
   await AsyncStorage.setItem(CONFIG_KEY, JSON.stringify(config));
 }
 
 export async function resetStoredConfig(): Promise<void> {
   await AsyncStorage.removeItem(CONFIG_KEY);
+}
+
+/** Only the fields this platform reads, so configure() drops nothing. */
+export function ownedOptions(config: AppliedConfig): ConfigureOptions {
+  const platform = Platform.OS as ConfigPlatform;
+  const options: Record<string, Record<string, unknown>> = {};
+  for (const path of CONFIG_FIELD_PATHS) {
+    if (ownsField(platform, path)) {
+      const [group, field] = splitPath(path);
+      options[group] = { ...options[group], [field]: readField(config, path) };
+    }
+  }
+  return options as ConfigureOptions;
 }
