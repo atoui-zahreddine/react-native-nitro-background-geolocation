@@ -10,7 +10,6 @@ package com.margelo.nitro.nitrobackgroundgeolocation
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import dalvik.annotation.optimization.FastNative
 
 
 /**
@@ -59,7 +58,6 @@ class Func_void_AuthorizationStatus_cxx: Func_void_AuthorizationStatus {
   override fun invoke(status: AuthorizationStatus): Unit
     = invoke_cxx(status)
 
-  @FastNative
   private external fun invoke_cxx(status: AuthorizationStatus): Unit
 }
 

@@ -10,17 +10,28 @@
 #include <fbjni/fbjni.h>
 #include "ConfigureOptions.hpp"
 
+#include "ActivityOptions.hpp"
+#include "ActivityType.hpp"
+#include "DebugOptions.hpp"
+#include "HttpOptions.hpp"
+#include "JActivityOptions.hpp"
+#include "JActivityType.hpp"
+#include "JDebugOptions.hpp"
+#include "JHttpOptions.hpp"
+#include "JLifecycleOptions.hpp"
 #include "JLocationAccuracy.hpp"
 #include "JLocationProvider.hpp"
+#include "JNotificationOptions.hpp"
+#include "JStorageOptions.hpp"
+#include "JTrackingOptions.hpp"
 #include "JVariant_NullType_AnyMap.hpp"
-#include "JVariant_NullType_Boolean.hpp"
-#include "JVariant_NullType_Double.hpp"
-#include "JVariant_NullType_LocationAccuracy.hpp"
-#include "JVariant_NullType_LocationProvider.hpp"
 #include "JVariant_NullType_Map_String__String_.hpp"
-#include "JVariant_NullType_String.hpp"
+#include "LifecycleOptions.hpp"
 #include "LocationAccuracy.hpp"
 #include "LocationProvider.hpp"
+#include "NotificationOptions.hpp"
+#include "StorageOptions.hpp"
+#include "TrackingOptions.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
 #include <NitroModules/JNull.hpp>
@@ -35,7 +46,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "ConfigureOptions" and the the Kotlin data class "ConfigureOptions".
+   * The C++ JNI bridge between the C++ struct "ConfigureOptions" and the Kotlin data class "ConfigureOptions".
    */
   struct JConfigureOptions final: public jni::JavaClass<JConfigureOptions> {
   public:
@@ -49,88 +60,28 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
     [[nodiscard]]
     ConfigureOptions toCpp() const {
       static const auto clazz = javaClassStatic();
-      static const auto fieldLocationProvider = clazz->getField<JVariant_NullType_LocationProvider>("locationProvider");
-      jni::local_ref<JVariant_NullType_LocationProvider> locationProvider = this->getFieldValue(fieldLocationProvider);
-      static const auto fieldDesiredAccuracy = clazz->getField<JVariant_NullType_LocationAccuracy>("desiredAccuracy");
-      jni::local_ref<JVariant_NullType_LocationAccuracy> desiredAccuracy = this->getFieldValue(fieldDesiredAccuracy);
-      static const auto fieldStationaryRadius = clazz->getField<JVariant_NullType_Double>("stationaryRadius");
-      jni::local_ref<JVariant_NullType_Double> stationaryRadius = this->getFieldValue(fieldStationaryRadius);
-      static const auto fieldDebug = clazz->getField<JVariant_NullType_Boolean>("debug");
-      jni::local_ref<JVariant_NullType_Boolean> debug = this->getFieldValue(fieldDebug);
-      static const auto fieldDistanceFilter = clazz->getField<JVariant_NullType_Double>("distanceFilter");
-      jni::local_ref<JVariant_NullType_Double> distanceFilter = this->getFieldValue(fieldDistanceFilter);
-      static const auto fieldStopOnTerminate = clazz->getField<JVariant_NullType_Boolean>("stopOnTerminate");
-      jni::local_ref<JVariant_NullType_Boolean> stopOnTerminate = this->getFieldValue(fieldStopOnTerminate);
-      static const auto fieldStartOnBoot = clazz->getField<JVariant_NullType_Boolean>("startOnBoot");
-      jni::local_ref<JVariant_NullType_Boolean> startOnBoot = this->getFieldValue(fieldStartOnBoot);
-      static const auto fieldInterval = clazz->getField<JVariant_NullType_Double>("interval");
-      jni::local_ref<JVariant_NullType_Double> interval = this->getFieldValue(fieldInterval);
-      static const auto fieldFastestInterval = clazz->getField<JVariant_NullType_Double>("fastestInterval");
-      jni::local_ref<JVariant_NullType_Double> fastestInterval = this->getFieldValue(fieldFastestInterval);
-      static const auto fieldActivitiesInterval = clazz->getField<JVariant_NullType_Double>("activitiesInterval");
-      jni::local_ref<JVariant_NullType_Double> activitiesInterval = this->getFieldValue(fieldActivitiesInterval);
-      static const auto fieldStopOnStillActivity = clazz->getField<JVariant_NullType_Boolean>("stopOnStillActivity");
-      jni::local_ref<JVariant_NullType_Boolean> stopOnStillActivity = this->getFieldValue(fieldStopOnStillActivity);
-      static const auto fieldNotificationsEnabled = clazz->getField<JVariant_NullType_Boolean>("notificationsEnabled");
-      jni::local_ref<JVariant_NullType_Boolean> notificationsEnabled = this->getFieldValue(fieldNotificationsEnabled);
-      static const auto fieldStartForeground = clazz->getField<JVariant_NullType_Boolean>("startForeground");
-      jni::local_ref<JVariant_NullType_Boolean> startForeground = this->getFieldValue(fieldStartForeground);
-      static const auto fieldNotificationTitle = clazz->getField<JVariant_NullType_String>("notificationTitle");
-      jni::local_ref<JVariant_NullType_String> notificationTitle = this->getFieldValue(fieldNotificationTitle);
-      static const auto fieldNotificationText = clazz->getField<JVariant_NullType_String>("notificationText");
-      jni::local_ref<JVariant_NullType_String> notificationText = this->getFieldValue(fieldNotificationText);
-      static const auto fieldNotificationIconColor = clazz->getField<JVariant_NullType_String>("notificationIconColor");
-      jni::local_ref<JVariant_NullType_String> notificationIconColor = this->getFieldValue(fieldNotificationIconColor);
-      static const auto fieldNotificationIconLarge = clazz->getField<JVariant_NullType_String>("notificationIconLarge");
-      jni::local_ref<JVariant_NullType_String> notificationIconLarge = this->getFieldValue(fieldNotificationIconLarge);
-      static const auto fieldNotificationIconSmall = clazz->getField<JVariant_NullType_String>("notificationIconSmall");
-      jni::local_ref<JVariant_NullType_String> notificationIconSmall = this->getFieldValue(fieldNotificationIconSmall);
-      static const auto fieldActivityType = clazz->getField<JVariant_NullType_String>("activityType");
-      jni::local_ref<JVariant_NullType_String> activityType = this->getFieldValue(fieldActivityType);
-      static const auto fieldPauseLocationUpdates = clazz->getField<JVariant_NullType_Boolean>("pauseLocationUpdates");
-      jni::local_ref<JVariant_NullType_Boolean> pauseLocationUpdates = this->getFieldValue(fieldPauseLocationUpdates);
-      static const auto fieldSaveBatteryOnBackground = clazz->getField<JVariant_NullType_Boolean>("saveBatteryOnBackground");
-      jni::local_ref<JVariant_NullType_Boolean> saveBatteryOnBackground = this->getFieldValue(fieldSaveBatteryOnBackground);
-      static const auto fieldUrl = clazz->getField<JVariant_NullType_String>("url");
-      jni::local_ref<JVariant_NullType_String> url = this->getFieldValue(fieldUrl);
-      static const auto fieldSyncUrl = clazz->getField<JVariant_NullType_String>("syncUrl");
-      jni::local_ref<JVariant_NullType_String> syncUrl = this->getFieldValue(fieldSyncUrl);
-      static const auto fieldSyncThreshold = clazz->getField<JVariant_NullType_Double>("syncThreshold");
-      jni::local_ref<JVariant_NullType_Double> syncThreshold = this->getFieldValue(fieldSyncThreshold);
-      static const auto fieldHttpHeaders = clazz->getField<JVariant_NullType_Map_String__String_>("httpHeaders");
-      jni::local_ref<JVariant_NullType_Map_String__String_> httpHeaders = this->getFieldValue(fieldHttpHeaders);
-      static const auto fieldMaxLocations = clazz->getField<JVariant_NullType_Double>("maxLocations");
-      jni::local_ref<JVariant_NullType_Double> maxLocations = this->getFieldValue(fieldMaxLocations);
-      static const auto fieldPostTemplate = clazz->getField<JVariant_NullType_AnyMap>("postTemplate");
-      jni::local_ref<JVariant_NullType_AnyMap> postTemplate = this->getFieldValue(fieldPostTemplate);
+      static const auto fieldTracking = clazz->getField<JTrackingOptions>("tracking");
+      jni::local_ref<JTrackingOptions> tracking = this->getFieldValue(fieldTracking);
+      static const auto fieldLifecycle = clazz->getField<JLifecycleOptions>("lifecycle");
+      jni::local_ref<JLifecycleOptions> lifecycle = this->getFieldValue(fieldLifecycle);
+      static const auto fieldActivity = clazz->getField<JActivityOptions>("activity");
+      jni::local_ref<JActivityOptions> activity = this->getFieldValue(fieldActivity);
+      static const auto fieldNotification = clazz->getField<JNotificationOptions>("notification");
+      jni::local_ref<JNotificationOptions> notification = this->getFieldValue(fieldNotification);
+      static const auto fieldHttp = clazz->getField<JHttpOptions>("http");
+      jni::local_ref<JHttpOptions> http = this->getFieldValue(fieldHttp);
+      static const auto fieldStorage = clazz->getField<JStorageOptions>("storage");
+      jni::local_ref<JStorageOptions> storage = this->getFieldValue(fieldStorage);
+      static const auto fieldDebug = clazz->getField<JDebugOptions>("debug");
+      jni::local_ref<JDebugOptions> debug = this->getFieldValue(fieldDebug);
       return ConfigureOptions(
-        locationProvider != nullptr ? std::make_optional(locationProvider->toCpp()) : std::nullopt,
-        desiredAccuracy != nullptr ? std::make_optional(desiredAccuracy->toCpp()) : std::nullopt,
-        stationaryRadius != nullptr ? std::make_optional(stationaryRadius->toCpp()) : std::nullopt,
-        debug != nullptr ? std::make_optional(debug->toCpp()) : std::nullopt,
-        distanceFilter != nullptr ? std::make_optional(distanceFilter->toCpp()) : std::nullopt,
-        stopOnTerminate != nullptr ? std::make_optional(stopOnTerminate->toCpp()) : std::nullopt,
-        startOnBoot != nullptr ? std::make_optional(startOnBoot->toCpp()) : std::nullopt,
-        interval != nullptr ? std::make_optional(interval->toCpp()) : std::nullopt,
-        fastestInterval != nullptr ? std::make_optional(fastestInterval->toCpp()) : std::nullopt,
-        activitiesInterval != nullptr ? std::make_optional(activitiesInterval->toCpp()) : std::nullopt,
-        stopOnStillActivity != nullptr ? std::make_optional(stopOnStillActivity->toCpp()) : std::nullopt,
-        notificationsEnabled != nullptr ? std::make_optional(notificationsEnabled->toCpp()) : std::nullopt,
-        startForeground != nullptr ? std::make_optional(startForeground->toCpp()) : std::nullopt,
-        notificationTitle != nullptr ? std::make_optional(notificationTitle->toCpp()) : std::nullopt,
-        notificationText != nullptr ? std::make_optional(notificationText->toCpp()) : std::nullopt,
-        notificationIconColor != nullptr ? std::make_optional(notificationIconColor->toCpp()) : std::nullopt,
-        notificationIconLarge != nullptr ? std::make_optional(notificationIconLarge->toCpp()) : std::nullopt,
-        notificationIconSmall != nullptr ? std::make_optional(notificationIconSmall->toCpp()) : std::nullopt,
-        activityType != nullptr ? std::make_optional(activityType->toCpp()) : std::nullopt,
-        pauseLocationUpdates != nullptr ? std::make_optional(pauseLocationUpdates->toCpp()) : std::nullopt,
-        saveBatteryOnBackground != nullptr ? std::make_optional(saveBatteryOnBackground->toCpp()) : std::nullopt,
-        url != nullptr ? std::make_optional(url->toCpp()) : std::nullopt,
-        syncUrl != nullptr ? std::make_optional(syncUrl->toCpp()) : std::nullopt,
-        syncThreshold != nullptr ? std::make_optional(syncThreshold->toCpp()) : std::nullopt,
-        httpHeaders != nullptr ? std::make_optional(httpHeaders->toCpp()) : std::nullopt,
-        maxLocations != nullptr ? std::make_optional(maxLocations->toCpp()) : std::nullopt,
-        postTemplate != nullptr ? std::make_optional(postTemplate->toCpp()) : std::nullopt
+        tracking != nullptr ? std::make_optional(tracking->toCpp()) : std::nullopt,
+        lifecycle != nullptr ? std::make_optional(lifecycle->toCpp()) : std::nullopt,
+        activity != nullptr ? std::make_optional(activity->toCpp()) : std::nullopt,
+        notification != nullptr ? std::make_optional(notification->toCpp()) : std::nullopt,
+        http != nullptr ? std::make_optional(http->toCpp()) : std::nullopt,
+        storage != nullptr ? std::make_optional(storage->toCpp()) : std::nullopt,
+        debug != nullptr ? std::make_optional(debug->toCpp()) : std::nullopt
       );
     }
 
@@ -140,38 +91,18 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
      */
     [[maybe_unused]]
     static jni::local_ref<JConfigureOptions::javaobject> fromCpp(const ConfigureOptions& value) {
-      using JSignature = JConfigureOptions(jni::alias_ref<JVariant_NullType_LocationProvider>, jni::alias_ref<JVariant_NullType_LocationAccuracy>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_Boolean>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Map_String__String_>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_AnyMap>);
+      using JSignature = JConfigureOptions(jni::alias_ref<JTrackingOptions>, jni::alias_ref<JLifecycleOptions>, jni::alias_ref<JActivityOptions>, jni::alias_ref<JNotificationOptions>, jni::alias_ref<JHttpOptions>, jni::alias_ref<JStorageOptions>, jni::alias_ref<JDebugOptions>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
-        value.locationProvider.has_value() ? JVariant_NullType_LocationProvider::fromCpp(value.locationProvider.value()) : nullptr,
-        value.desiredAccuracy.has_value() ? JVariant_NullType_LocationAccuracy::fromCpp(value.desiredAccuracy.value()) : nullptr,
-        value.stationaryRadius.has_value() ? JVariant_NullType_Double::fromCpp(value.stationaryRadius.value()) : nullptr,
-        value.debug.has_value() ? JVariant_NullType_Boolean::fromCpp(value.debug.value()) : nullptr,
-        value.distanceFilter.has_value() ? JVariant_NullType_Double::fromCpp(value.distanceFilter.value()) : nullptr,
-        value.stopOnTerminate.has_value() ? JVariant_NullType_Boolean::fromCpp(value.stopOnTerminate.value()) : nullptr,
-        value.startOnBoot.has_value() ? JVariant_NullType_Boolean::fromCpp(value.startOnBoot.value()) : nullptr,
-        value.interval.has_value() ? JVariant_NullType_Double::fromCpp(value.interval.value()) : nullptr,
-        value.fastestInterval.has_value() ? JVariant_NullType_Double::fromCpp(value.fastestInterval.value()) : nullptr,
-        value.activitiesInterval.has_value() ? JVariant_NullType_Double::fromCpp(value.activitiesInterval.value()) : nullptr,
-        value.stopOnStillActivity.has_value() ? JVariant_NullType_Boolean::fromCpp(value.stopOnStillActivity.value()) : nullptr,
-        value.notificationsEnabled.has_value() ? JVariant_NullType_Boolean::fromCpp(value.notificationsEnabled.value()) : nullptr,
-        value.startForeground.has_value() ? JVariant_NullType_Boolean::fromCpp(value.startForeground.value()) : nullptr,
-        value.notificationTitle.has_value() ? JVariant_NullType_String::fromCpp(value.notificationTitle.value()) : nullptr,
-        value.notificationText.has_value() ? JVariant_NullType_String::fromCpp(value.notificationText.value()) : nullptr,
-        value.notificationIconColor.has_value() ? JVariant_NullType_String::fromCpp(value.notificationIconColor.value()) : nullptr,
-        value.notificationIconLarge.has_value() ? JVariant_NullType_String::fromCpp(value.notificationIconLarge.value()) : nullptr,
-        value.notificationIconSmall.has_value() ? JVariant_NullType_String::fromCpp(value.notificationIconSmall.value()) : nullptr,
-        value.activityType.has_value() ? JVariant_NullType_String::fromCpp(value.activityType.value()) : nullptr,
-        value.pauseLocationUpdates.has_value() ? JVariant_NullType_Boolean::fromCpp(value.pauseLocationUpdates.value()) : nullptr,
-        value.saveBatteryOnBackground.has_value() ? JVariant_NullType_Boolean::fromCpp(value.saveBatteryOnBackground.value()) : nullptr,
-        value.url.has_value() ? JVariant_NullType_String::fromCpp(value.url.value()) : nullptr,
-        value.syncUrl.has_value() ? JVariant_NullType_String::fromCpp(value.syncUrl.value()) : nullptr,
-        value.syncThreshold.has_value() ? JVariant_NullType_Double::fromCpp(value.syncThreshold.value()) : nullptr,
-        value.httpHeaders.has_value() ? JVariant_NullType_Map_String__String_::fromCpp(value.httpHeaders.value()) : nullptr,
-        value.maxLocations.has_value() ? JVariant_NullType_Double::fromCpp(value.maxLocations.value()) : nullptr,
-        value.postTemplate.has_value() ? JVariant_NullType_AnyMap::fromCpp(value.postTemplate.value()) : nullptr
+        value.tracking.has_value() ? JTrackingOptions::fromCpp(value.tracking.value()) : nullptr,
+        value.lifecycle.has_value() ? JLifecycleOptions::fromCpp(value.lifecycle.value()) : nullptr,
+        value.activity.has_value() ? JActivityOptions::fromCpp(value.activity.value()) : nullptr,
+        value.notification.has_value() ? JNotificationOptions::fromCpp(value.notification.value()) : nullptr,
+        value.http.has_value() ? JHttpOptions::fromCpp(value.http.value()) : nullptr,
+        value.storage.has_value() ? JStorageOptions::fromCpp(value.storage.value()) : nullptr,
+        value.debug.has_value() ? JDebugOptions::fromCpp(value.debug.value()) : nullptr
       );
     }
   };

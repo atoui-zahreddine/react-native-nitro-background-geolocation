@@ -23,6 +23,8 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct LocationOptions; }
 namespace margelo::nitro::nitrobackgroundgeolocation { struct StationaryLocation; }
 // Forward declaration of `ServiceStatus` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct ServiceStatus; }
+// Forward declaration of `AppliedConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct AppliedConfig; }
 // Forward declaration of `LogEntry` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct LogEntry; }
 // Forward declaration of `NativeLogLevel` to properly resolve imports.
@@ -41,6 +43,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation { enum class AuthorizationS
 #include "StationaryLocation.hpp"
 #include <optional>
 #include "ServiceStatus.hpp"
+#include "AppliedConfig.hpp"
 #include <vector>
 #include "LogEntry.hpp"
 #include "NativeLogLevel.hpp"
@@ -86,7 +89,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
       virtual std::shared_ptr<Promise<Location>> getCurrentLocation(const LocationOptions& options) = 0;
       virtual std::shared_ptr<Promise<std::optional<StationaryLocation>>> getStationaryLocation() = 0;
       virtual std::shared_ptr<Promise<ServiceStatus>> checkStatus() = 0;
-      virtual std::shared_ptr<Promise<ConfigureOptions>> getConfig() = 0;
+      virtual std::shared_ptr<Promise<AppliedConfig>> getConfig() = 0;
       virtual void showAppSettings() = 0;
       virtual void showLocationSettings() = 0;
       virtual std::shared_ptr<Promise<std::vector<Location>>> getLocations() = 0;

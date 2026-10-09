@@ -60,7 +60,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
     std::shared_ptr<Promise<Location>> getCurrentLocation(const LocationOptions& options) override;
     std::shared_ptr<Promise<std::optional<StationaryLocation>>> getStationaryLocation() override;
     std::shared_ptr<Promise<ServiceStatus>> checkStatus() override;
-    std::shared_ptr<Promise<ConfigureOptions>> getConfig() override;
+    std::shared_ptr<Promise<AppliedConfig>> getConfig() override;
     void showAppSettings() override;
     void showLocationSettings() override;
     std::shared_ptr<Promise<std::vector<Location>>> getLocations() override;

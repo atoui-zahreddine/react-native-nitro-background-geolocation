@@ -39,7 +39,7 @@ data class LocationOptions(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       timeout,
       maximumAge,
       enableHighAccuracy

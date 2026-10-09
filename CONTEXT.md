@@ -8,7 +8,7 @@
 | **Stationary Location** | A Location with an additional radius, representing where the device is considered "at rest." |
 | **Location Provider** | The strategy used to determine location updates: Distance Filter, Activity-based, or Raw. |
 | **Distance Filter Provider** | Tracks location by requiring the device to move a minimum distance before firing an update. |
-| **Activity Provider** | Uses activity recognition (walking, driving, still) to adjust tracking aggressiveness. Android only. |
+| **Activity Provider** | Uses activity recognition (walking, driving, still) to adjust tracking aggressiveness. Exists on both platforms — Android via the ActivityRecognition API, iOS via SOMotionDetector — so the recognition source and behaviour differ while the option does not. |
 | **Raw Provider** | Emits location updates at a fixed time interval regardless of movement or activity. |
 | **Stationary Radius** | The minimum distance (meters) the device must move beyond a stationary location before aggressive tracking re-engages. |
 | **Foreground Mode** | Plugin operation mode when the app is visible to the user. |
@@ -19,6 +19,12 @@
 | **Force Sync** | Immediately posts all pending locations, ignoring the sync threshold. |
 | **Sync Threshold** | Number of pending locations that triggers an automatic sync batch. |
 | **Post Template** | A customizable JSON template controlling the shape of HTTP POST bodies sent during sync. |
+| **Config Contract** | The single authored declaration of every configuration field — name, group, platform owner, type, default, reset behaviour, value range and description. Everything else derives from it: the public shape, both native mappers, the native defaults, and the docs table. A configuration fact written anywhere else is a bug. |
+| **Config Group** | A named subset of configuration fields within the Config Contract, divided by **domain** — the concern the fields serve — never by platform. Seven exist: tracking, lifecycle, activity, notification, http, storage, debug. |
+| **Applied Config** | The configuration a read reports: the same groups and keys the write side accepts, with every field present because the contract's defaults have been applied. Distinct from the write shape, where every field and group is optional. |
+| **Activity Type** | The kind of journey the device is on, used on iOS as a hint to CoreLocation: automotive navigation, other navigation, fitness, or other. Unrelated to activity recognition, which detects motion state rather than being told it. |
+| **Platform Owner** | Which platforms actually read a configuration field, recorded as Config Contract metadata on the field rather than expressed by the shape. Never copied from prose; derived from what native reads. |
+| **Reset** | Restoring a configuration field to its default by passing that default explicitly, read from the Config Contract's published defaults. Omitting a field leaves it unchanged; there is no separate reset signal. |
 
 ## Repository Structure
 

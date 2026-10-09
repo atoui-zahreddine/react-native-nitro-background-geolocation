@@ -8,16 +8,34 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `ActivityConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct ActivityConfig; }
+// Forward declaration of `ActivityOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct ActivityOptions; }
+// Forward declaration of `ActivityType` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { enum class ActivityType; }
 // Forward declaration of `Activity` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct Activity; }
+// Forward declaration of `AppliedConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct AppliedConfig; }
 // Forward declaration of `AuthorizationStatus` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { enum class AuthorizationStatus; }
 // Forward declaration of `BackgroundGeolocationError` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct BackgroundGeolocationError; }
-// Forward declaration of `ConfigureOptions` to properly resolve imports.
-namespace margelo::nitro::nitrobackgroundgeolocation { struct ConfigureOptions; }
+// Forward declaration of `DebugConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct DebugConfig; }
+// Forward declaration of `DebugOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct DebugOptions; }
+// Forward declaration of `HttpConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct HttpConfig; }
+// Forward declaration of `HttpOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct HttpOptions; }
 // Forward declaration of `HybridNitroBackgroundGeolocationSpec` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { class HybridNitroBackgroundGeolocationSpec; }
+// Forward declaration of `LifecycleConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct LifecycleConfig; }
+// Forward declaration of `LifecycleOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct LifecycleOptions; }
 // Forward declaration of `LocationAccuracy` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { enum class LocationAccuracy; }
 // Forward declaration of `LocationProvider` to properly resolve imports.
@@ -26,10 +44,22 @@ namespace margelo::nitro::nitrobackgroundgeolocation { enum class LocationProvid
 namespace margelo::nitro::nitrobackgroundgeolocation { struct Location; }
 // Forward declaration of `LogEntry` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct LogEntry; }
+// Forward declaration of `NotificationConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct NotificationConfig; }
+// Forward declaration of `NotificationOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct NotificationOptions; }
 // Forward declaration of `ServiceStatus` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct ServiceStatus; }
 // Forward declaration of `StationaryLocation` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct StationaryLocation; }
+// Forward declaration of `StorageConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct StorageConfig; }
+// Forward declaration of `StorageOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct StorageOptions; }
+// Forward declaration of `TrackingConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct TrackingConfig; }
+// Forward declaration of `TrackingOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct TrackingOptions; }
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridNitroBackgroundGeolocationSpec_cxx` to properly resolve imports.
@@ -37,16 +67,31 @@ namespace NitroBackgroundGeolocation { class HybridNitroBackgroundGeolocationSpe
 
 // Include C++ defined types
 #include "Activity.hpp"
+#include "ActivityConfig.hpp"
+#include "ActivityOptions.hpp"
+#include "ActivityType.hpp"
+#include "AppliedConfig.hpp"
 #include "AuthorizationStatus.hpp"
 #include "BackgroundGeolocationError.hpp"
-#include "ConfigureOptions.hpp"
+#include "DebugConfig.hpp"
+#include "DebugOptions.hpp"
+#include "HttpConfig.hpp"
+#include "HttpOptions.hpp"
 #include "HybridNitroBackgroundGeolocationSpec.hpp"
+#include "LifecycleConfig.hpp"
+#include "LifecycleOptions.hpp"
 #include "Location.hpp"
 #include "LocationAccuracy.hpp"
 #include "LocationProvider.hpp"
 #include "LogEntry.hpp"
+#include "NotificationConfig.hpp"
+#include "NotificationOptions.hpp"
 #include "ServiceStatus.hpp"
 #include "StationaryLocation.hpp"
+#include "StorageConfig.hpp"
+#include "StorageOptions.hpp"
+#include "TrackingConfig.hpp"
+#include "TrackingOptions.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/Null.hpp>
 #include <NitroModules/Promise.hpp>
@@ -123,223 +168,153 @@ namespace margelo::nitro::nitrobackgroundgeolocation::bridge::swift {
     return Func_void_std__exception_ptr_Wrapper(std::move(value));
   }
   
-  // pragma MARK: std::variant<nitro::NullType, LocationProvider>
+  // pragma MARK: std::optional<LocationProvider>
   /**
-   * Wrapper struct for `std::variant<nitro::NullType, LocationProvider>`.
-   * std::variant cannot be used in Swift because of a Swift bug.
-   * Not even specializing it works. So we create a wrapper struct.
+   * Specialized version of `std::optional<LocationProvider>`.
    */
-  struct std__variant_nitro__NullType__LocationProvider_ final {
-    std::variant<nitro::NullType, LocationProvider> variant;
-    std__variant_nitro__NullType__LocationProvider_(std::variant<nitro::NullType, LocationProvider> variant): variant(variant) { }
-    operator std::variant<nitro::NullType, LocationProvider>() const noexcept {
-      return variant;
-    }
-    inline size_t index() const noexcept {
-      return variant.index();
-    }
-    inline nitro::NullType get_0() const noexcept {
-      return std::get<0>(variant);
-    }
-    inline LocationProvider get_1() const noexcept {
-      return std::get<1>(variant);
-    }
-  };
-  inline std__variant_nitro__NullType__LocationProvider_ create_std__variant_nitro__NullType__LocationProvider_(nitro::NullType value) noexcept {
-    return std__variant_nitro__NullType__LocationProvider_(value);
+  using std__optional_LocationProvider_ = std::optional<LocationProvider>;
+  inline std::optional<LocationProvider> create_std__optional_LocationProvider_(const LocationProvider& value) noexcept {
+    return std::optional<LocationProvider>(value);
   }
-  inline std__variant_nitro__NullType__LocationProvider_ create_std__variant_nitro__NullType__LocationProvider_(LocationProvider value) noexcept {
-    return std__variant_nitro__NullType__LocationProvider_(value);
-  }
-  
-  // pragma MARK: std::optional<std::variant<nitro::NullType, LocationProvider>>
-  /**
-   * Specialized version of `std::optional<std::variant<nitro::NullType, LocationProvider>>`.
-   */
-  using std__optional_std__variant_nitro__NullType__LocationProvider__ = std::optional<std::variant<nitro::NullType, LocationProvider>>;
-  inline std::optional<std::variant<nitro::NullType, LocationProvider>> create_std__optional_std__variant_nitro__NullType__LocationProvider__(const std::variant<nitro::NullType, LocationProvider>& value) noexcept {
-    return std::optional<std::variant<nitro::NullType, LocationProvider>>(value);
-  }
-  inline bool has_value_std__optional_std__variant_nitro__NullType__LocationProvider__(const std::optional<std::variant<nitro::NullType, LocationProvider>>& optional) noexcept {
+  inline bool has_value_std__optional_LocationProvider_(const std::optional<LocationProvider>& optional) noexcept {
     return optional.has_value();
   }
-  inline std::variant<nitro::NullType, LocationProvider> get_std__optional_std__variant_nitro__NullType__LocationProvider__(const std::optional<std::variant<nitro::NullType, LocationProvider>>& optional) noexcept {
+  inline LocationProvider get_std__optional_LocationProvider_(const std::optional<LocationProvider>& optional) noexcept {
     return optional.value();
   }
   
-  // pragma MARK: std::variant<nitro::NullType, LocationAccuracy>
+  // pragma MARK: std::optional<LocationAccuracy>
   /**
-   * Wrapper struct for `std::variant<nitro::NullType, LocationAccuracy>`.
-   * std::variant cannot be used in Swift because of a Swift bug.
-   * Not even specializing it works. So we create a wrapper struct.
+   * Specialized version of `std::optional<LocationAccuracy>`.
    */
-  struct std__variant_nitro__NullType__LocationAccuracy_ final {
-    std::variant<nitro::NullType, LocationAccuracy> variant;
-    std__variant_nitro__NullType__LocationAccuracy_(std::variant<nitro::NullType, LocationAccuracy> variant): variant(variant) { }
-    operator std::variant<nitro::NullType, LocationAccuracy>() const noexcept {
-      return variant;
-    }
-    inline size_t index() const noexcept {
-      return variant.index();
-    }
-    inline nitro::NullType get_0() const noexcept {
-      return std::get<0>(variant);
-    }
-    inline LocationAccuracy get_1() const noexcept {
-      return std::get<1>(variant);
-    }
-  };
-  inline std__variant_nitro__NullType__LocationAccuracy_ create_std__variant_nitro__NullType__LocationAccuracy_(nitro::NullType value) noexcept {
-    return std__variant_nitro__NullType__LocationAccuracy_(value);
+  using std__optional_LocationAccuracy_ = std::optional<LocationAccuracy>;
+  inline std::optional<LocationAccuracy> create_std__optional_LocationAccuracy_(const LocationAccuracy& value) noexcept {
+    return std::optional<LocationAccuracy>(value);
   }
-  inline std__variant_nitro__NullType__LocationAccuracy_ create_std__variant_nitro__NullType__LocationAccuracy_(LocationAccuracy value) noexcept {
-    return std__variant_nitro__NullType__LocationAccuracy_(value);
-  }
-  
-  // pragma MARK: std::optional<std::variant<nitro::NullType, LocationAccuracy>>
-  /**
-   * Specialized version of `std::optional<std::variant<nitro::NullType, LocationAccuracy>>`.
-   */
-  using std__optional_std__variant_nitro__NullType__LocationAccuracy__ = std::optional<std::variant<nitro::NullType, LocationAccuracy>>;
-  inline std::optional<std::variant<nitro::NullType, LocationAccuracy>> create_std__optional_std__variant_nitro__NullType__LocationAccuracy__(const std::variant<nitro::NullType, LocationAccuracy>& value) noexcept {
-    return std::optional<std::variant<nitro::NullType, LocationAccuracy>>(value);
-  }
-  inline bool has_value_std__optional_std__variant_nitro__NullType__LocationAccuracy__(const std::optional<std::variant<nitro::NullType, LocationAccuracy>>& optional) noexcept {
+  inline bool has_value_std__optional_LocationAccuracy_(const std::optional<LocationAccuracy>& optional) noexcept {
     return optional.has_value();
   }
-  inline std::variant<nitro::NullType, LocationAccuracy> get_std__optional_std__variant_nitro__NullType__LocationAccuracy__(const std::optional<std::variant<nitro::NullType, LocationAccuracy>>& optional) noexcept {
+  inline LocationAccuracy get_std__optional_LocationAccuracy_(const std::optional<LocationAccuracy>& optional) noexcept {
     return optional.value();
   }
   
-  // pragma MARK: std::variant<nitro::NullType, double>
+  // pragma MARK: std::optional<double>
   /**
-   * Wrapper struct for `std::variant<nitro::NullType, double>`.
-   * std::variant cannot be used in Swift because of a Swift bug.
-   * Not even specializing it works. So we create a wrapper struct.
+   * Specialized version of `std::optional<double>`.
    */
-  struct std__variant_nitro__NullType__double_ final {
-    std::variant<nitro::NullType, double> variant;
-    std__variant_nitro__NullType__double_(std::variant<nitro::NullType, double> variant): variant(variant) { }
-    operator std::variant<nitro::NullType, double>() const noexcept {
-      return variant;
-    }
-    inline size_t index() const noexcept {
-      return variant.index();
-    }
-    inline nitro::NullType get_0() const noexcept {
-      return std::get<0>(variant);
-    }
-    inline double get_1() const noexcept {
-      return std::get<1>(variant);
-    }
-  };
-  inline std__variant_nitro__NullType__double_ create_std__variant_nitro__NullType__double_(nitro::NullType value) noexcept {
-    return std__variant_nitro__NullType__double_(value);
+  using std__optional_double_ = std::optional<double>;
+  inline std::optional<double> create_std__optional_double_(const double& value) noexcept {
+    return std::optional<double>(value);
   }
-  inline std__variant_nitro__NullType__double_ create_std__variant_nitro__NullType__double_(double value) noexcept {
-    return std__variant_nitro__NullType__double_(value);
-  }
-  
-  // pragma MARK: std::optional<std::variant<nitro::NullType, double>>
-  /**
-   * Specialized version of `std::optional<std::variant<nitro::NullType, double>>`.
-   */
-  using std__optional_std__variant_nitro__NullType__double__ = std::optional<std::variant<nitro::NullType, double>>;
-  inline std::optional<std::variant<nitro::NullType, double>> create_std__optional_std__variant_nitro__NullType__double__(const std::variant<nitro::NullType, double>& value) noexcept {
-    return std::optional<std::variant<nitro::NullType, double>>(value);
-  }
-  inline bool has_value_std__optional_std__variant_nitro__NullType__double__(const std::optional<std::variant<nitro::NullType, double>>& optional) noexcept {
+  inline bool has_value_std__optional_double_(const std::optional<double>& optional) noexcept {
     return optional.has_value();
   }
-  inline std::variant<nitro::NullType, double> get_std__optional_std__variant_nitro__NullType__double__(const std::optional<std::variant<nitro::NullType, double>>& optional) noexcept {
+  inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
     return optional.value();
   }
   
-  // pragma MARK: std::variant<nitro::NullType, bool>
+  // pragma MARK: std::optional<bool>
   /**
-   * Wrapper struct for `std::variant<nitro::NullType, bool>`.
-   * std::variant cannot be used in Swift because of a Swift bug.
-   * Not even specializing it works. So we create a wrapper struct.
+   * Specialized version of `std::optional<bool>`.
    */
-  struct std__variant_nitro__NullType__bool_ final {
-    std::variant<nitro::NullType, bool> variant;
-    std__variant_nitro__NullType__bool_(std::variant<nitro::NullType, bool> variant): variant(variant) { }
-    operator std::variant<nitro::NullType, bool>() const noexcept {
-      return variant;
-    }
-    inline size_t index() const noexcept {
-      return variant.index();
-    }
-    inline nitro::NullType get_0() const noexcept {
-      return std::get<0>(variant);
-    }
-    inline bool get_1() const noexcept {
-      return std::get<1>(variant);
-    }
-  };
-  inline std__variant_nitro__NullType__bool_ create_std__variant_nitro__NullType__bool_(nitro::NullType value) noexcept {
-    return std__variant_nitro__NullType__bool_(value);
+  using std__optional_bool_ = std::optional<bool>;
+  inline std::optional<bool> create_std__optional_bool_(const bool& value) noexcept {
+    return std::optional<bool>(value);
   }
-  inline std__variant_nitro__NullType__bool_ create_std__variant_nitro__NullType__bool_(bool value) noexcept {
-    return std__variant_nitro__NullType__bool_(value);
-  }
-  
-  // pragma MARK: std::optional<std::variant<nitro::NullType, bool>>
-  /**
-   * Specialized version of `std::optional<std::variant<nitro::NullType, bool>>`.
-   */
-  using std__optional_std__variant_nitro__NullType__bool__ = std::optional<std::variant<nitro::NullType, bool>>;
-  inline std::optional<std::variant<nitro::NullType, bool>> create_std__optional_std__variant_nitro__NullType__bool__(const std::variant<nitro::NullType, bool>& value) noexcept {
-    return std::optional<std::variant<nitro::NullType, bool>>(value);
-  }
-  inline bool has_value_std__optional_std__variant_nitro__NullType__bool__(const std::optional<std::variant<nitro::NullType, bool>>& optional) noexcept {
+  inline bool has_value_std__optional_bool_(const std::optional<bool>& optional) noexcept {
     return optional.has_value();
   }
-  inline std::variant<nitro::NullType, bool> get_std__optional_std__variant_nitro__NullType__bool__(const std::optional<std::variant<nitro::NullType, bool>>& optional) noexcept {
+  inline bool get_std__optional_bool_(const std::optional<bool>& optional) noexcept {
     return optional.value();
   }
   
-  // pragma MARK: std::variant<nitro::NullType, std::string>
+  // pragma MARK: std::optional<ActivityType>
   /**
-   * Wrapper struct for `std::variant<nitro::NullType, std::string>`.
-   * std::variant cannot be used in Swift because of a Swift bug.
-   * Not even specializing it works. So we create a wrapper struct.
+   * Specialized version of `std::optional<ActivityType>`.
    */
-  struct std__variant_nitro__NullType__std__string_ final {
-    std::variant<nitro::NullType, std::string> variant;
-    std__variant_nitro__NullType__std__string_(std::variant<nitro::NullType, std::string> variant): variant(variant) { }
-    operator std::variant<nitro::NullType, std::string>() const noexcept {
-      return variant;
-    }
-    inline size_t index() const noexcept {
-      return variant.index();
-    }
-    inline nitro::NullType get_0() const noexcept {
-      return std::get<0>(variant);
-    }
-    inline std::string get_1() const noexcept {
-      return std::get<1>(variant);
-    }
-  };
-  inline std__variant_nitro__NullType__std__string_ create_std__variant_nitro__NullType__std__string_(nitro::NullType value) noexcept {
-    return std__variant_nitro__NullType__std__string_(value);
+  using std__optional_ActivityType_ = std::optional<ActivityType>;
+  inline std::optional<ActivityType> create_std__optional_ActivityType_(const ActivityType& value) noexcept {
+    return std::optional<ActivityType>(value);
   }
-  inline std__variant_nitro__NullType__std__string_ create_std__variant_nitro__NullType__std__string_(const std::string& value) noexcept {
-    return std__variant_nitro__NullType__std__string_(value);
-  }
-  
-  // pragma MARK: std::optional<std::variant<nitro::NullType, std::string>>
-  /**
-   * Specialized version of `std::optional<std::variant<nitro::NullType, std::string>>`.
-   */
-  using std__optional_std__variant_nitro__NullType__std__string__ = std::optional<std::variant<nitro::NullType, std::string>>;
-  inline std::optional<std::variant<nitro::NullType, std::string>> create_std__optional_std__variant_nitro__NullType__std__string__(const std::variant<nitro::NullType, std::string>& value) noexcept {
-    return std::optional<std::variant<nitro::NullType, std::string>>(value);
-  }
-  inline bool has_value_std__optional_std__variant_nitro__NullType__std__string__(const std::optional<std::variant<nitro::NullType, std::string>>& optional) noexcept {
+  inline bool has_value_std__optional_ActivityType_(const std::optional<ActivityType>& optional) noexcept {
     return optional.has_value();
   }
-  inline std::variant<nitro::NullType, std::string> get_std__optional_std__variant_nitro__NullType__std__string__(const std::optional<std::variant<nitro::NullType, std::string>>& optional) noexcept {
+  inline ActivityType get_std__optional_ActivityType_(const std::optional<ActivityType>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<TrackingOptions>
+  /**
+   * Specialized version of `std::optional<TrackingOptions>`.
+   */
+  using std__optional_TrackingOptions_ = std::optional<TrackingOptions>;
+  inline std::optional<TrackingOptions> create_std__optional_TrackingOptions_(const TrackingOptions& value) noexcept {
+    return std::optional<TrackingOptions>(value);
+  }
+  inline bool has_value_std__optional_TrackingOptions_(const std::optional<TrackingOptions>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline TrackingOptions get_std__optional_TrackingOptions_(const std::optional<TrackingOptions>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<LifecycleOptions>
+  /**
+   * Specialized version of `std::optional<LifecycleOptions>`.
+   */
+  using std__optional_LifecycleOptions_ = std::optional<LifecycleOptions>;
+  inline std::optional<LifecycleOptions> create_std__optional_LifecycleOptions_(const LifecycleOptions& value) noexcept {
+    return std::optional<LifecycleOptions>(value);
+  }
+  inline bool has_value_std__optional_LifecycleOptions_(const std::optional<LifecycleOptions>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline LifecycleOptions get_std__optional_LifecycleOptions_(const std::optional<LifecycleOptions>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<ActivityOptions>
+  /**
+   * Specialized version of `std::optional<ActivityOptions>`.
+   */
+  using std__optional_ActivityOptions_ = std::optional<ActivityOptions>;
+  inline std::optional<ActivityOptions> create_std__optional_ActivityOptions_(const ActivityOptions& value) noexcept {
+    return std::optional<ActivityOptions>(value);
+  }
+  inline bool has_value_std__optional_ActivityOptions_(const std::optional<ActivityOptions>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline ActivityOptions get_std__optional_ActivityOptions_(const std::optional<ActivityOptions>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<std::string>
+  /**
+   * Specialized version of `std::optional<std::string>`.
+   */
+  using std__optional_std__string_ = std::optional<std::string>;
+  inline std::optional<std::string> create_std__optional_std__string_(const std::string& value) noexcept {
+    return std::optional<std::string>(value);
+  }
+  inline bool has_value_std__optional_std__string_(const std::optional<std::string>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::string get_std__optional_std__string_(const std::optional<std::string>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<NotificationOptions>
+  /**
+   * Specialized version of `std::optional<NotificationOptions>`.
+   */
+  using std__optional_NotificationOptions_ = std::optional<NotificationOptions>;
+  inline std::optional<NotificationOptions> create_std__optional_NotificationOptions_(const NotificationOptions& value) noexcept {
+    return std::optional<NotificationOptions>(value);
+  }
+  inline bool has_value_std__optional_NotificationOptions_(const std::optional<NotificationOptions>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline NotificationOptions get_std__optional_NotificationOptions_(const std::optional<NotificationOptions>& optional) noexcept {
     return optional.value();
   }
   
@@ -456,6 +431,51 @@ namespace margelo::nitro::nitrobackgroundgeolocation::bridge::swift {
     return optional.value();
   }
   
+  // pragma MARK: std::optional<HttpOptions>
+  /**
+   * Specialized version of `std::optional<HttpOptions>`.
+   */
+  using std__optional_HttpOptions_ = std::optional<HttpOptions>;
+  inline std::optional<HttpOptions> create_std__optional_HttpOptions_(const HttpOptions& value) noexcept {
+    return std::optional<HttpOptions>(value);
+  }
+  inline bool has_value_std__optional_HttpOptions_(const std::optional<HttpOptions>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline HttpOptions get_std__optional_HttpOptions_(const std::optional<HttpOptions>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<StorageOptions>
+  /**
+   * Specialized version of `std::optional<StorageOptions>`.
+   */
+  using std__optional_StorageOptions_ = std::optional<StorageOptions>;
+  inline std::optional<StorageOptions> create_std__optional_StorageOptions_(const StorageOptions& value) noexcept {
+    return std::optional<StorageOptions>(value);
+  }
+  inline bool has_value_std__optional_StorageOptions_(const std::optional<StorageOptions>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline StorageOptions get_std__optional_StorageOptions_(const std::optional<StorageOptions>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<DebugOptions>
+  /**
+   * Specialized version of `std::optional<DebugOptions>`.
+   */
+  using std__optional_DebugOptions_ = std::optional<DebugOptions>;
+  inline std::optional<DebugOptions> create_std__optional_DebugOptions_(const DebugOptions& value) noexcept {
+    return std::optional<DebugOptions>(value);
+  }
+  inline bool has_value_std__optional_DebugOptions_(const std::optional<DebugOptions>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline DebugOptions get_std__optional_DebugOptions_(const std::optional<DebugOptions>& optional) noexcept {
+    return optional.value();
+  }
+  
   // pragma MARK: std::shared_ptr<Promise<Location>>
   /**
    * Specialized version of `std::shared_ptr<Promise<Location>>`.
@@ -488,36 +508,6 @@ namespace margelo::nitro::nitrobackgroundgeolocation::bridge::swift {
   Func_void_Location create_Func_void_Location(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_Location_Wrapper wrap_Func_void_Location(Func_void_Location value) noexcept {
     return Func_void_Location_Wrapper(std::move(value));
-  }
-  
-  // pragma MARK: std::optional<double>
-  /**
-   * Specialized version of `std::optional<double>`.
-   */
-  using std__optional_double_ = std::optional<double>;
-  inline std::optional<double> create_std__optional_double_(const double& value) noexcept {
-    return std::optional<double>(value);
-  }
-  inline bool has_value_std__optional_double_(const std::optional<double>& optional) noexcept {
-    return optional.has_value();
-  }
-  inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
-    return optional.value();
-  }
-  
-  // pragma MARK: std::optional<bool>
-  /**
-   * Specialized version of `std::optional<bool>`.
-   */
-  using std__optional_bool_ = std::optional<bool>;
-  inline std::optional<bool> create_std__optional_bool_(const bool& value) noexcept {
-    return std::optional<bool>(value);
-  }
-  inline bool has_value_std__optional_bool_(const std::optional<bool>& optional) noexcept {
-    return optional.has_value();
-  }
-  inline bool get_std__optional_bool_(const std::optional<bool>& optional) noexcept {
-    return optional.value();
   }
   
   // pragma MARK: std::optional<StationaryLocation>
@@ -603,38 +593,38 @@ namespace margelo::nitro::nitrobackgroundgeolocation::bridge::swift {
     return Func_void_ServiceStatus_Wrapper(std::move(value));
   }
   
-  // pragma MARK: std::shared_ptr<Promise<ConfigureOptions>>
+  // pragma MARK: std::shared_ptr<Promise<AppliedConfig>>
   /**
-   * Specialized version of `std::shared_ptr<Promise<ConfigureOptions>>`.
+   * Specialized version of `std::shared_ptr<Promise<AppliedConfig>>`.
    */
-  using std__shared_ptr_Promise_ConfigureOptions__ = std::shared_ptr<Promise<ConfigureOptions>>;
-  inline std::shared_ptr<Promise<ConfigureOptions>> create_std__shared_ptr_Promise_ConfigureOptions__() noexcept {
-    return Promise<ConfigureOptions>::create();
+  using std__shared_ptr_Promise_AppliedConfig__ = std::shared_ptr<Promise<AppliedConfig>>;
+  inline std::shared_ptr<Promise<AppliedConfig>> create_std__shared_ptr_Promise_AppliedConfig__() noexcept {
+    return Promise<AppliedConfig>::create();
   }
-  inline PromiseHolder<ConfigureOptions> wrap_std__shared_ptr_Promise_ConfigureOptions__(std::shared_ptr<Promise<ConfigureOptions>> promise) noexcept {
-    return PromiseHolder<ConfigureOptions>(std::move(promise));
+  inline PromiseHolder<AppliedConfig> wrap_std__shared_ptr_Promise_AppliedConfig__(std::shared_ptr<Promise<AppliedConfig>> promise) noexcept {
+    return PromiseHolder<AppliedConfig>(std::move(promise));
   }
   
-  // pragma MARK: std::function<void(const ConfigureOptions& /* result */)>
+  // pragma MARK: std::function<void(const AppliedConfig& /* result */)>
   /**
-   * Specialized version of `std::function<void(const ConfigureOptions&)>`.
+   * Specialized version of `std::function<void(const AppliedConfig&)>`.
    */
-  using Func_void_ConfigureOptions = std::function<void(const ConfigureOptions& /* result */)>;
+  using Func_void_AppliedConfig = std::function<void(const AppliedConfig& /* result */)>;
   /**
-   * Wrapper class for a `std::function<void(const ConfigureOptions& / * result * /)>`, this can be used from Swift.
+   * Wrapper class for a `std::function<void(const AppliedConfig& / * result * /)>`, this can be used from Swift.
    */
-  class Func_void_ConfigureOptions_Wrapper final {
+  class Func_void_AppliedConfig_Wrapper final {
   public:
-    explicit Func_void_ConfigureOptions_Wrapper(std::function<void(const ConfigureOptions& /* result */)>&& func): _function(std::make_unique<std::function<void(const ConfigureOptions& /* result */)>>(std::move(func))) {}
-    inline void call(ConfigureOptions result) const noexcept {
+    explicit Func_void_AppliedConfig_Wrapper(std::function<void(const AppliedConfig& /* result */)>&& func): _function(std::make_unique<std::function<void(const AppliedConfig& /* result */)>>(std::move(func))) {}
+    inline void call(AppliedConfig result) const noexcept {
       _function->operator()(result);
     }
   private:
-    std::unique_ptr<std::function<void(const ConfigureOptions& /* result */)>> _function;
+    std::unique_ptr<std::function<void(const AppliedConfig& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_ConfigureOptions create_Func_void_ConfigureOptions(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_ConfigureOptions_Wrapper wrap_Func_void_ConfigureOptions(Func_void_ConfigureOptions value) noexcept {
-    return Func_void_ConfigureOptions_Wrapper(std::move(value));
+  Func_void_AppliedConfig create_Func_void_AppliedConfig(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_AppliedConfig_Wrapper wrap_Func_void_AppliedConfig(Func_void_AppliedConfig value) noexcept {
+    return Func_void_AppliedConfig_Wrapper(std::move(value));
   }
   
   // pragma MARK: std::vector<Location>
@@ -863,13 +853,13 @@ namespace margelo::nitro::nitrobackgroundgeolocation::bridge::swift {
     return Result<std::shared_ptr<Promise<ServiceStatus>>>::withError(error);
   }
   
-  // pragma MARK: Result<std::shared_ptr<Promise<ConfigureOptions>>>
-  using Result_std__shared_ptr_Promise_ConfigureOptions___ = Result<std::shared_ptr<Promise<ConfigureOptions>>>;
-  inline Result_std__shared_ptr_Promise_ConfigureOptions___ create_Result_std__shared_ptr_Promise_ConfigureOptions___(const std::shared_ptr<Promise<ConfigureOptions>>& value) noexcept {
-    return Result<std::shared_ptr<Promise<ConfigureOptions>>>::withValue(value);
+  // pragma MARK: Result<std::shared_ptr<Promise<AppliedConfig>>>
+  using Result_std__shared_ptr_Promise_AppliedConfig___ = Result<std::shared_ptr<Promise<AppliedConfig>>>;
+  inline Result_std__shared_ptr_Promise_AppliedConfig___ create_Result_std__shared_ptr_Promise_AppliedConfig___(const std::shared_ptr<Promise<AppliedConfig>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<AppliedConfig>>>::withValue(value);
   }
-  inline Result_std__shared_ptr_Promise_ConfigureOptions___ create_Result_std__shared_ptr_Promise_ConfigureOptions___(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<Promise<ConfigureOptions>>>::withError(error);
+  inline Result_std__shared_ptr_Promise_AppliedConfig___ create_Result_std__shared_ptr_Promise_AppliedConfig___(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<AppliedConfig>>>::withError(error);
   }
   
   // pragma MARK: Result<void>

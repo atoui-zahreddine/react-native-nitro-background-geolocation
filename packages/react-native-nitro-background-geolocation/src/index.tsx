@@ -1,5 +1,10 @@
+import { Platform } from 'react-native';
 import { NitroModules } from 'react-native-nitro-modules';
-import type { NitroBackgroundGeolocation } from './NitroBackgroundGeolocation.nitro';
+import type {
+  ConfigureOptions,
+  NitroBackgroundGeolocation,
+} from './NitroBackgroundGeolocation.nitro';
+import { CONFIG_FIELDS, foreignFields, type ConfigPlatform } from './contract';
 
 export {
   registerHeadlessHandler,
@@ -10,15 +15,44 @@ export {
 // Re-export all enums
 export {
   LocationProvider,
-  ServiceMode,
+  ActivityType,
   AuthorizationStatus,
   LocationAccuracy,
   NativeLogLevel as LogLevel,
   LocationErrorCode,
 } from './NitroBackgroundGeolocation.nitro';
 
+export {
+  CONFIG_DEFAULTS,
+  CONFIG_FIELDS,
+  CONFIG_GROUPS,
+  LOCATION_OPTIONS_DEFAULTS,
+  foreignFields,
+  ownsField,
+  type ConfigFieldMeta,
+  type ConfigFieldPath,
+  type ConfigGroupName,
+  type ConfigPlatform,
+  type ConfigRange,
+} from './contract';
+
 export type {
+  AppliedConfig,
   ConfigureOptions,
+  TrackingOptions,
+  TrackingConfig,
+  LifecycleOptions,
+  LifecycleConfig,
+  ActivityOptions,
+  ActivityConfig,
+  NotificationOptions,
+  NotificationConfig,
+  HttpOptions,
+  HttpConfig,
+  StorageOptions,
+  StorageConfig,
+  DebugOptions,
+  DebugConfig,
   Location,
   StationaryLocation,
   Activity,
@@ -51,9 +85,22 @@ function forward<M extends keyof OwnMethods>(method: M): OwnMethods[M] {
   }) as OwnMethods[M];
 }
 
+function warnForeignWrites(options: ConfigureOptions): void {
+  const platform = Platform.OS as ConfigPlatform;
+  for (const path of foreignFields(platform, options)) {
+    const owners = CONFIG_FIELDS[path]?.platforms.join(', ') ?? 'no platform';
+    console.warn(
+      `[BackgroundGeolocation] ${path} is read only on ${owners}; ${platform} drops it.`
+    );
+  }
+}
+
 const BackgroundGeolocation: OwnMethods = {
   // Lifecycle
-  configure: forward('configure'),
+  configure: (options) => {
+    if (__DEV__) warnForeignWrites(options);
+    return getInstance().configure(options);
+  },
   start: forward('start'),
   stop: forward('stop'),
 

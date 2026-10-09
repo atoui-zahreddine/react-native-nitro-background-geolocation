@@ -4,8 +4,6 @@ import type { AnyMap, HybridObject } from 'react-native-nitro-modules';
 
 /**
  * Selects which native location provider strategy should be used.
- *
- * - **Default:** `LocationProvider.DISTANCE_FILTER`
  */
 export enum LocationProvider {
   /**
@@ -22,23 +20,6 @@ export enum LocationProvider {
    * Returns raw sensor/device locations without additional provider-side processing.
    */
   RAW = 2,
-}
-
-/**
- * Operational mode used by the original Cordova plugin's iOS `switchMode()`.
- * Kept for parity in the type surface, but not currently consumed by the Nitro API.
- *
- * - **Platform:** iOS concept
- */
-export enum ServiceMode {
-  /**
-   * Background mode.
-   */
-  BACKGROUND = 0,
-  /**
-   * Foreground mode.
-   */
-  FOREGROUND = 1,
 }
 
 /**
@@ -65,8 +46,6 @@ export enum AuthorizationStatus {
 /**
  * Desired location accuracy in meters.
  * Lower accuracy generally means lower power drain.
- *
- * - **Default:** `LocationAccuracy.MEDIUM`
  */
 export enum LocationAccuracy {
   /**
@@ -85,6 +64,21 @@ export enum LocationAccuracy {
    * Passive accuracy.
    */
   PASSIVE = 10000,
+}
+
+/**
+ * Journey hint passed to CoreLocation as its `CLActivityType`.
+ * Not activity recognition — see the `activity` config group for that.
+ */
+export enum ActivityType {
+  /** Driving in a vehicle on roads. */
+  AutomotiveNavigation = 0,
+  /** Other navigation, such as by boat, train or plane. */
+  OtherNavigation = 1,
+  /** Walking, running or cycling. */
+  Fitness = 2,
+  /** No specific journey type. */
+  Other = 3,
 }
 
 /**
@@ -122,244 +116,461 @@ export enum LocationErrorCode {
   TIMEOUT = 3,
 }
 
-export type NullableString = string | null;
-export type NullableNumber = number | null;
-export type NullableBoolean = boolean | null;
 export type NullableHeaders = Record<string, string> | null;
 export type NullableAnyMap = AnyMap | null;
-export type NullableLocationProvider = LocationProvider | null;
-export type NullableLocationAccuracy = LocationAccuracy | null;
+
+// --- Config Contract ---
+
+/**
+ * The Config Contract: the single authored declaration of every configuration
+ * field. Public types, published defaults, both native mappers, the native
+ * default constants and the docs tables all derive from it. A configuration fact
+ * written anywhere else is a bug.
+ *
+ * Rules this file must keep (each was a real failure, see the wayfinder map):
+ *
+ * - **No `as const`.** It narrows `default: ''` to the literal type `''`, so no
+ *   caller can set a value and nitrogen rejects the derived optional as an
+ *   inline union.
+ * - `platforms` lists what native actually reads, never what prose claims.
+ *   A platform not listed has no `native` binding and drops the write.
+ * - A field permitting `null` as a *value* sets `nullable: true`, uses a named
+ *   `Nullable*` alias for its default, and declares its Android `nativeType` —
+ *   a bare `null` default is untyped in Kotlin.
+ * - An enum field names its enum in `enumName`; the default is the enum member.
+ * - Every non-primitive field declares a `converter` on **each** platform.
+ * - Group struct names are `PascalCase(key) + Options` / `+ Config`, never bare
+ *   `Config` or `Options`.
+ */
+export const TRACKING_CONTRACT = {
+  locationProvider: {
+    default: LocationProvider.DISTANCE_FILTER,
+    enumName: 'LocationProvider',
+    platforms: ['android', 'ios'],
+    native: {
+      android: { key: 'locationProvider' },
+      ios: { key: 'locationProvider' },
+    },
+    description:
+      'Native provider strategy. See the provider pages for how each one behaves.',
+  },
+  desiredAccuracy: {
+    default: LocationAccuracy.MEDIUM,
+    enumName: 'LocationAccuracy',
+    platforms: ['android', 'ios'],
+    native: {
+      android: { key: 'desiredAccuracy' },
+      ios: { key: 'desiredAccuracy' },
+    },
+    platformNotes: {
+      android: 'Maps to a fused location request priority.',
+      ios: 'Maps to a CLLocationAccuracy tier.',
+    },
+    description:
+      'Desired accuracy in meters. Lower accuracy usually reduces power drain.',
+  },
+  stationaryRadius: {
+    default: 50,
+    platforms: ['android', 'ios'],
+    units: 'm',
+    native: {
+      android: { key: 'stationaryRadius', cast: 'float' },
+      ios: { key: 'stationaryRadius' },
+    },
+    description:
+      'Radius in meters the device must leave before aggressive tracking resumes after it stops.',
+  },
+  distanceFilter: {
+    default: 50,
+    platforms: ['android', 'ios'],
+    units: 'm',
+    native: {
+      android: { key: 'distanceFilter', cast: 'int' },
+      ios: { key: 'distanceFilter' },
+    },
+    platformNotes: {
+      android:
+        'The Activity provider ignores it; use interval to control its cadence.',
+    },
+    description:
+      'Base distance in meters between updates. Elastic: the Distance Filter provider adds a speed penalty, so points thin out as speed increases.',
+  },
+  interval: {
+    default: 5000,
+    platforms: ['android'],
+    units: 'ms',
+    native: { android: { key: 'interval', cast: 'int' } },
+    description:
+      'Minimum time between updates, applied by the OS in every Android provider. Caps the point rate regardless of movement.',
+  },
+  fastestInterval: {
+    default: 1000,
+    platforms: ['android'],
+    units: 'ms',
+    native: { android: { key: 'fastestInterval', cast: 'int' } },
+    description:
+      'Fastest rate the app accepts updates when other apps request locations faster than interval.',
+  },
+  pauseLocationUpdates: {
+    default: false,
+    platforms: ['ios'],
+    native: { ios: { key: 'pauseLocationUpdates' } },
+    description: 'Let the system pause location updates automatically.',
+  },
+  saveBatteryOnBackground: {
+    default: false,
+    platforms: ['ios'],
+    native: { ios: { key: 'saveBatteryOnBackground' } },
+    description: 'Reduce accuracy in the background to save battery.',
+  },
+  activityType: {
+    default: ActivityType.OtherNavigation,
+    enumName: 'ActivityType',
+    platforms: ['ios'],
+    native: { ios: { key: 'activityType', enumAs: 'name' } },
+    description:
+      'Journey hint CoreLocation uses to decide when to pause updates. Not activity recognition.',
+  },
+};
+
+export const LIFECYCLE_CONTRACT = {
+  stopOnTerminate: {
+    default: true,
+    platforms: ['android', 'ios'],
+    native: {
+      android: { key: 'stopOnTerminate' },
+      ios: { key: 'stopOnTerminate' },
+    },
+    platformNotes: {
+      android: '`false` keeps the service alive and runs the headless task.',
+      ios: '`false` enables native continuation after the app is terminated.',
+    },
+    description: 'Stop tracking when the application is terminated.',
+  },
+  startOnBoot: {
+    default: false,
+    platforms: ['android'],
+    native: { android: { key: 'startOnBoot' } },
+    description: 'Start the background service when the device boots.',
+  },
+};
+
+export const ACTIVITY_CONTRACT = {
+  activitiesInterval: {
+    default: 10000,
+    platforms: ['android', 'ios'],
+    units: 'ms',
+    native: {
+      android: { key: 'activitiesInterval', cast: 'int' },
+      ios: { key: 'activitiesInterval' },
+    },
+    platformNotes: {
+      android: 'Rate of the ActivityRecognition API.',
+      ios: 'Rate of the motion detector.',
+    },
+    description:
+      'Rate of activity recognition in milliseconds. Larger values save battery but detect changes later.',
+  },
+  stopOnStillActivity: {
+    default: true,
+    platforms: ['android'],
+    native: { android: { key: 'stopOnStillActivity' } },
+    description:
+      'Stop location updates when activity recognition reports STILL. Deprecated upstream.',
+  },
+};
+
+export const NOTIFICATION_CONTRACT = {
+  notificationsEnabled: {
+    default: true,
+    platforms: ['android'],
+    native: { android: { key: 'notificationsEnabled' } },
+    description:
+      'Show local notifications while tracking and syncing locations.',
+  },
+  startForeground: {
+    default: true,
+    platforms: ['android'],
+    native: { android: { key: 'startForeground' } },
+    description:
+      'Run the location service in the foreground. A foreground service needs a visible notification.',
+  },
+  notificationTitle: {
+    default: 'Background tracking',
+    platforms: ['android'],
+    native: { android: { key: 'notificationTitle' } },
+    description: 'Title of the foreground service notification.',
+  },
+  notificationText: {
+    default: 'ENABLED',
+    platforms: ['android'],
+    native: { android: { key: 'notificationText' } },
+    description: 'Text of the foreground service notification.',
+  },
+  notificationIconColor: {
+    default: '',
+    platforms: ['android'],
+    native: { android: { key: 'notificationIconColor' } },
+    description:
+      'Accent color of the notification, for example `#4CAF50`. Empty uses the system color.',
+  },
+  notificationIconLarge: {
+    default: '',
+    platforms: ['android'],
+    native: { android: { key: 'largeNotificationIcon' } },
+    description:
+      'Resource name of a custom large notification icon. Empty uses the app icon.',
+  },
+  notificationIconSmall: {
+    default: '',
+    platforms: ['android'],
+    native: { android: { key: 'smallNotificationIcon' } },
+    description:
+      'Resource name of a custom small notification icon. Empty uses the app icon.',
+  },
+};
+
+export const HTTP_CONTRACT = {
+  url: {
+    default: '',
+    platforms: ['android', 'ios'],
+    native: { android: { key: 'url' }, ios: { key: 'url' } },
+    description:
+      'Server URL that receives immediate HTTP POSTs for recorded locations. Empty disables posting.',
+  },
+  syncUrl: {
+    default: '',
+    platforms: ['android', 'ios'],
+    native: { android: { key: 'syncUrl' }, ios: { key: 'syncUrl' } },
+    description:
+      'Server URL that receives batched retries for locations that previously failed to post.',
+  },
+  syncThreshold: {
+    default: 100,
+    platforms: ['android', 'ios'],
+    range: { min: 1, max: 1000, step: 1, units: 'locations' },
+    native: {
+      android: { key: 'syncThreshold', cast: 'int' },
+      ios: { key: 'syncThreshold' },
+    },
+    description:
+      'Number of failed locations to batch together before syncing to syncUrl.',
+  },
+  httpHeaders: {
+    default: null as NullableHeaders,
+    nullable: true,
+    nativeType: { android: 'HashMap<String, String>?' },
+    platforms: ['android', 'ios'],
+    native: {
+      android: { key: 'httpHeaders', converter: 'headers' },
+      ios: { key: 'httpHeaders', converter: 'headers' },
+    },
+    description:
+      'HTTP headers sent with every location POST. Pass null to send none.',
+  },
+  postTemplate: {
+    default: null as NullableAnyMap,
+    nullable: true,
+    nativeType: { android: 'LocationTemplate?' },
+    platforms: ['android', 'ios'],
+    native: {
+      android: { key: 'template', converter: 'locationTemplate' },
+      ios: { key: 'postTemplate', converter: 'anyMap' },
+    },
+    description:
+      'Custom POST body template for url and syncUrl. Supports placeholders such as @latitude. Pass null for the native default template.',
+  },
+};
+
+export const STORAGE_CONTRACT = {
+  maxLocations: {
+    default: 10000,
+    platforms: ['android', 'ios'],
+    units: 'locations',
+    native: {
+      android: { key: 'maxLocations', cast: 'int' },
+      ios: { key: 'maxLocations' },
+    },
+    description: 'Maximum number of locations kept in the local database.',
+  },
+};
+
+export const DEBUG_CONTRACT = {
+  debug: {
+    default: false,
+    platforms: ['android', 'ios'],
+    native: {
+      android: { key: 'isDebugging', setter: 'setDebugging' },
+      ios: { key: 'debug' },
+    },
+    description:
+      'Play sounds and show notifications for lifecycle events. For field testing only.',
+  },
+};
+
+/**
+ * The per-call request surface of `getCurrentLocation()`. Not persisted, so it
+ * is not a config group: omission means "use this call's default", not
+ * "unchanged", and nothing reads it back.
+ */
+export const LOCATION_OPTIONS_CONTRACT = {
+  timeout: {
+    default: 30000,
+    platforms: ['android', 'ios'],
+    units: 'ms',
+    native: {
+      android: { key: 'timeout', cast: 'int' },
+      ios: { key: 'timeout' },
+    },
+    description: 'Maximum time to wait for a location fix.',
+  },
+  maximumAge: {
+    default: 0,
+    platforms: ['android', 'ios'],
+    units: 'ms',
+    native: {
+      android: { key: 'maximumAge', cast: 'long' },
+      ios: { key: 'maximumAge' },
+    },
+    description:
+      'Maximum age of a cached location that is acceptable to return. `0` always requests a fresh fix.',
+  },
+  enableHighAccuracy: {
+    default: false,
+    platforms: ['android', 'ios'],
+    native: {
+      android: { key: 'enableHighAccuracy' },
+      ios: { key: 'enableHighAccuracy' },
+    },
+    description: 'Request the most accurate position the device can provide.',
+  },
+};
+
+/**
+ * Every config group in declaration order. `ConfigureOptions` and
+ * `AppliedConfig` carry exactly these keys, which a test enforces.
+ */
+export const CONFIG_CONTRACT = {
+  tracking: TRACKING_CONTRACT,
+  lifecycle: LIFECYCLE_CONTRACT,
+  activity: ACTIVITY_CONTRACT,
+  notification: NOTIFICATION_CONTRACT,
+  http: HTTP_CONTRACT,
+  storage: STORAGE_CONTRACT,
+  debug: DEBUG_CONTRACT,
+};
+
+/** A contract field's TypeScript type is the type of its published default. */
+type ContractValue<E> = E extends { default: infer D } ? D : never;
+
+// Each group is spelled out rather than produced by a generic helper: nitrogen
+// names a struct after the alias it resolves, and a shared generic would give
+// all seven groups one name.
+
+export type TrackingOptions = {
+  [K in keyof typeof TRACKING_CONTRACT]?: ContractValue<
+    (typeof TRACKING_CONTRACT)[K]
+  >;
+};
+export type TrackingConfig = {
+  [K in keyof typeof TRACKING_CONTRACT]-?: ContractValue<
+    (typeof TRACKING_CONTRACT)[K]
+  >;
+};
+export type LifecycleOptions = {
+  [K in keyof typeof LIFECYCLE_CONTRACT]?: ContractValue<
+    (typeof LIFECYCLE_CONTRACT)[K]
+  >;
+};
+export type LifecycleConfig = {
+  [K in keyof typeof LIFECYCLE_CONTRACT]-?: ContractValue<
+    (typeof LIFECYCLE_CONTRACT)[K]
+  >;
+};
+export type ActivityOptions = {
+  [K in keyof typeof ACTIVITY_CONTRACT]?: ContractValue<
+    (typeof ACTIVITY_CONTRACT)[K]
+  >;
+};
+export type ActivityConfig = {
+  [K in keyof typeof ACTIVITY_CONTRACT]-?: ContractValue<
+    (typeof ACTIVITY_CONTRACT)[K]
+  >;
+};
+export type NotificationOptions = {
+  [K in keyof typeof NOTIFICATION_CONTRACT]?: ContractValue<
+    (typeof NOTIFICATION_CONTRACT)[K]
+  >;
+};
+export type NotificationConfig = {
+  [K in keyof typeof NOTIFICATION_CONTRACT]-?: ContractValue<
+    (typeof NOTIFICATION_CONTRACT)[K]
+  >;
+};
+export type HttpOptions = {
+  [K in keyof typeof HTTP_CONTRACT]?: ContractValue<(typeof HTTP_CONTRACT)[K]>;
+};
+export type HttpConfig = {
+  [K in keyof typeof HTTP_CONTRACT]-?: ContractValue<(typeof HTTP_CONTRACT)[K]>;
+};
+export type StorageOptions = {
+  [K in keyof typeof STORAGE_CONTRACT]?: ContractValue<
+    (typeof STORAGE_CONTRACT)[K]
+  >;
+};
+export type StorageConfig = {
+  [K in keyof typeof STORAGE_CONTRACT]-?: ContractValue<
+    (typeof STORAGE_CONTRACT)[K]
+  >;
+};
+export type DebugOptions = {
+  [K in keyof typeof DEBUG_CONTRACT]?: ContractValue<
+    (typeof DEBUG_CONTRACT)[K]
+  >;
+};
+export type DebugConfig = {
+  [K in keyof typeof DEBUG_CONTRACT]-?: ContractValue<
+    (typeof DEBUG_CONTRACT)[K]
+  >;
+};
+
+/** Options for a one-time current location request. */
+export type LocationOptions = {
+  [K in keyof typeof LOCATION_OPTIONS_CONTRACT]?: ContractValue<
+    (typeof LOCATION_OPTIONS_CONTRACT)[K]
+  >;
+};
 
 // --- Structs ---
 
 /**
- * Configuration applied to the background geolocation engine.
- * Later calls may provide only a subset of fields; omitted fields stay unchanged.
- * Pass `null` to restore a supported field to its native default.
+ * Configuration as a caller writes it. Every group and field is optional:
+ * omitting one leaves it unchanged. Reset a field by passing its published
+ * default from `CONFIG_DEFAULTS`.
  */
 export interface ConfigureOptions {
-  /**
-   * Which native provider strategy should be used.
-   *
-   * - **Default:** `LocationProvider.DISTANCE_FILTER`
-   * - **Platform:** all
-   */
-  locationProvider?: NullableLocationProvider;
-  /**
-   * Desired accuracy in meters. Lower accuracy usually reduces power drain.
-   * See `LocationAccuracy` for the available accuracy tiers.
-   *
-   * - **Default:** `LocationAccuracy.MEDIUM`
-   * - **Platform:** all
-   */
-  desiredAccuracy?: NullableLocationAccuracy;
-  /**
-   * Stationary radius in meters.
-   * When stopped, the device must move beyond this radius before aggressive tracking resumes.
-   *
-   * - **Default:** `50`
-   * - **Platform:** all
-   */
-  stationaryRadius?: NullableNumber;
-  /**
-   * When enabled, the plugin emits debugging sounds for lifecycle events.
-   *
-   * - **Default:** `false`
-   * - **Platform:** all
-   */
-  debug?: NullableBoolean;
-  /**
-   * Base horizontal distance in meters the device must move before an update is
-   * generated.
-   *
-   * This is a floor, not the spacing you get. The Distance Filter provider is
-   * *elastic*: it adds a speed penalty on top of this value, so points thin out
-   * as you move faster. The effective filter is
-   * `distanceFilter + (speed rounded to the nearest 5 m/s)²`, clamped to 1000 m:
-   *
-   * | Speed | Effective filter (with `distanceFilter: 50`) |
-   * | --- | --- |
-   * | `< 2.5 m/s` (walking) | 50 m |
-   * | `2.5–7.5 m/s` (cycling) | 75 m |
-   * | `7.5–12.5 m/s` (city driving) | 150 m |
-   * | `12.5–17.5 m/s` (highway) | 275 m |
-   *
-   * Set it low if you want dense tracks; the penalty still applies, so expect
-   * roughly `distanceFilter + 25` m spacing at cycling speed.
-   *
-   * The Activity provider ignores this entirely — that provider is
-   * time/activity-driven, so use {@link interval} to control its cadence.
-   *
-   * - **Default:** `50`
-   * - **Platform:** all
-   */
-  distanceFilter?: NullableNumber;
-  /**
-   * Force tracking to stop when the application is terminated.
-   *
-   * - **Default:** `true`
-   * - **Platform:** all
-   */
-  stopOnTerminate?: NullableBoolean;
-  /**
-   * Start the background service when the device boots.
-   *
-   * - **Default:** `false`
-   * - **Platform:** Android
-   */
-  startOnBoot?: NullableBoolean;
-  /**
-   * Minimum time interval between location updates, in milliseconds.
-   *
-   * This is an OS-level throttle (passed as `minTime` to the location request),
-   * applied in **every** Android provider — including the Distance Filter
-   * provider. It caps the point rate regardless of movement, so a large value
-   * thins the track even when {@link distanceFilter} would otherwise emit
-   * points. Lower it for dense tracking; raise it to save battery.
-   *
-   * - **Default:** `5000`
-   * - **Platform:** Android
-   */
-  interval?: NullableNumber;
-  /**
-   * Fastest rate, in milliseconds, at which the app can handle location updates.
-   *
-   * Upper bound on the update rate when other apps request locations faster than
-   * {@link interval}; the OS will not deliver updates faster than this.
-   *
-   * - **Default:** `1000`
-   * - **Platform:** Android
-   */
-  fastestInterval?: NullableNumber;
-  /**
-   * Rate, in milliseconds, at which activity recognition occurs.
-   * Larger values improve battery life but reduce detection frequency.
-   *
-   * - **Default:** `10000`
-   * - **Platform:** Android
-   */
-  activitiesInterval?: NullableNumber;
-  /**
-   * Deprecated upstream Android option that stops location updates when STILL is detected.
-   *
-   * - **Default:** `true`
-   * - **Platform:** Android
-   */
-  stopOnStillActivity?: NullableBoolean;
-  /**
-   * Enable or disable local notifications while tracking and syncing locations.
-   *
-   * - **Default:** `true`
-   * - **Platform:** Android
-   */
-  notificationsEnabled?: NullableBoolean;
-  /**
-   * Allow the location service to run in foreground state.
-   * Foreground mode requires a visible notification.
-   *
-   * - **Default:** `true`
-   * - **Platform:** Android
-   */
-  startForeground?: NullableBoolean;
-  /**
-   * Custom notification title shown in the drawer.
-   *
-   * - **Default:** `"Background tracking"`
-   * - **Platform:** Android
-   */
-  notificationTitle?: NullableString;
-  /**
-   * Custom notification text shown in the drawer.
-   *
-   * - **Default:** `"ENABLED"`
-   * - **Platform:** Android
-   */
-  notificationText?: NullableString;
-  /**
-   * Accent color used for the notification, for example `#4CAF50`.
-   *
-   * - **Default:** `""`
-   * - **Platform:** Android
-   */
-  notificationIconColor?: NullableString;
-  /**
-   * Resource name of a custom large notification icon.
-   *
-   * - **Default:** `""`
-   * - **Platform:** Android
-   */
-  notificationIconLarge?: NullableString;
-  /**
-   * Resource name of a custom small notification icon.
-   *
-   * - **Default:** `""`
-   * - **Platform:** Android
-   */
-  notificationIconSmall?: NullableString;
-  /**
-   * iOS activity type hint.
-   *
-   * - **Default:** native platform default
-   * - **Platform:** iOS
-   */
-  activityType?: NullableString;
-  /**
-   * Allow the system to pause location updates automatically on iOS.
-   *
-   * - **Default:** platform default / not used on Android
-   * - **Platform:** iOS
-   */
-  pauseLocationUpdates?: NullableBoolean;
-  /**
-   * Reduce accuracy in the background to save battery on iOS.
-   *
-   * - **Default:** platform default / not used on Android
-   * - **Platform:** iOS
-   */
-  saveBatteryOnBackground?: NullableBoolean;
-  /**
-   * Server URL that receives immediate HTTP POSTs for recorded locations.
-   *
-   * - **Default:** `""`
-   * - **Platform:** all
-   */
-  url?: NullableString;
-  /**
-   * Server URL that receives batched retries for locations that previously failed to post.
-   *
-   * - **Default:** `""`
-   * - **Platform:** all
-   */
-  syncUrl?: NullableString;
-  /**
-   * Number of failed locations to batch together before syncing.
-   *
-   * - **Default:** `100`
-   * - **Platform:** all
-   */
-  syncThreshold?: NullableNumber;
-  /**
-   * Optional HTTP headers sent with location POST requests.
-   *
-   * - **Default:** `undefined`
-   * - **Platform:** all
-   */
-  httpHeaders?: NullableHeaders;
-  /**
-   * Maximum number of locations stored in the local database.
-   *
-   * - **Default:** `10000`
-   * - **Platform:** all
-   */
-  maxLocations?: NullableNumber;
-  /**
-   * Custom POST template for `url` and `syncUrl`.
-   * Supports object or array shapes and may include location placeholders such as `@latitude`.
-   *
-   * - **Default:** native template behavior
-   * - **Platform:** all
-   */
-  postTemplate?: NullableAnyMap;
+  tracking?: TrackingOptions;
+  lifecycle?: LifecycleOptions;
+  activity?: ActivityOptions;
+  notification?: NotificationOptions;
+  http?: HttpOptions;
+  storage?: StorageOptions;
+  debug?: DebugOptions;
+}
+
+/**
+ * The fully applied configuration, as a read reports it. Every group and field
+ * is present. A field the running platform does not own reads as its contract
+ * default — consult `CONFIG_FIELDS` to know whether it is in effect.
+ */
+export interface AppliedConfig {
+  tracking: TrackingConfig;
+  lifecycle: LifecycleConfig;
+  activity: ActivityConfig;
+  notification: NotificationConfig;
+  http: HttpConfig;
+  storage: StorageConfig;
+  debug: DebugConfig;
 }
 
 /**
@@ -488,30 +699,6 @@ export interface LogEntry {
 }
 
 /**
- * Options for a one-time current location request.
- */
-export interface LocationOptions {
-  /**
-   * Maximum time in milliseconds to wait for a location fix.
-   *
-   * - **Default:** `30000`
-   */
-  timeout?: number;
-  /**
-   * Maximum age in milliseconds of a cached location that is acceptable to return.
-   *
-   * - **Default:** `0`
-   */
-  maximumAge?: number;
-  /**
-   * If true, request the most accurate position the device can provide.
-   *
-   * - **Default:** `false`
-   */
-  enableHighAccuracy?: boolean;
-}
-
-/**
  * Error payload returned by the native plugin.
  */
 export interface BackgroundGeolocationError {
@@ -537,8 +724,8 @@ export interface NitroBackgroundGeolocation extends HybridObject<{
   // Lifecycle
   /**
    * Configure the plugin.
-   * Omitted fields keep their previous values.
-   * Pass `null` to restore a field to its native default.
+   * Omitted fields keep their previous values. Reset a field by passing its
+   * published default.
    */
   configure(options: ConfigureOptions): Promise<void>;
   /**
@@ -570,7 +757,7 @@ export interface NitroBackgroundGeolocation extends HybridObject<{
    * Return the fully applied configuration after native merging/defaulting.
    * Useful when `configure()` was called with only a subset of fields.
    */
-  getConfig(): Promise<ConfigureOptions>;
+  getConfig(): Promise<AppliedConfig>;
   /**
    * Open the app settings screen so the user can change location permissions.
    *

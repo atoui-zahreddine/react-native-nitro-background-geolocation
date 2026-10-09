@@ -10,6 +10,7 @@ package com.margelo.nitro.nitrobackgroundgeolocation
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import dalvik.annotation.optimization.FastNative
 import com.margelo.nitro.core.Promise
 import com.margelo.nitro.core.HybridObject
 
@@ -55,7 +56,7 @@ abstract class HybridNitroBackgroundGeolocationSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun getConfig(): Promise<ConfigureOptions>
+  abstract fun getConfig(): Promise<AppliedConfig>
   
   @DoNotStrip
   @Keep
@@ -206,6 +207,7 @@ abstract class HybridNitroBackgroundGeolocationSpec: HybridObject() {
   @Keep
   protected open class CxxPart(javaPart: HybridNitroBackgroundGeolocationSpec): HybridObject.CxxPart(javaPart) {
     // C++ JHybridNitroBackgroundGeolocationSpec::CxxPart::initHybrid(...)
+    @FastNative
     external override fun initHybrid(): HybridData
   }
   override fun createCxxPart(): CxxPart {

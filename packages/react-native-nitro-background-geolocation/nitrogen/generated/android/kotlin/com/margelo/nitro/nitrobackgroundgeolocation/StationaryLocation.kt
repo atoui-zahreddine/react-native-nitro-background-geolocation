@@ -83,7 +83,7 @@ data class StationaryLocation(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       id,
       provider,
       locationProvider,

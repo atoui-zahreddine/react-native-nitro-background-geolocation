@@ -40,25 +40,36 @@ Add the following permissions to your `android/app/src/main/AndroidManifest.xml`
 ## Quick Start
 
 ```typescript
-import BackgroundGeolocation from 'react-native-nitro-background-geolocation';
+import BackgroundGeolocation, {
+  LocationAccuracy,
+  LocationProvider,
+} from 'react-native-nitro-background-geolocation';
 
 // Configure
 await BackgroundGeolocation.configure({
-  locationProvider: LocationProvider.DISTANCE_FILTER,
-  desiredAccuracy: LocationAccuracy.HIGH,
-  distanceFilter: 10,
-  stationaryRadius: 50,
-  startOnBoot: true,
-  stopOnTerminate: false,
-  notificationsEnabled: true,
-  notificationTitle: 'Tracking',
-  notificationText: 'Location tracking is active',
-  startForeground: true,
-  interval: 10000,
-  fastestInterval: 5000,
-  url: 'https://your-server.com/locations',
-  httpHeaders: {
-    'Authorization': 'Bearer YOUR_TOKEN',
+  tracking: {
+    locationProvider: LocationProvider.DISTANCE_FILTER,
+    desiredAccuracy: LocationAccuracy.HIGH,
+    distanceFilter: 10,
+    stationaryRadius: 50,
+    interval: 10000,
+    fastestInterval: 5000,
+  },
+  lifecycle: {
+    startOnBoot: true,
+    stopOnTerminate: false,
+  },
+  notification: {
+    notificationsEnabled: true,
+    notificationTitle: 'Tracking',
+    notificationText: 'Location tracking is active',
+    startForeground: true,
+  },
+  http: {
+    url: 'https://your-server.com/locations',
+    httpHeaders: {
+      Authorization: 'Bearer YOUR_TOKEN',
+    },
   },
 });
 
@@ -143,7 +154,7 @@ You can use both at the same time. For example, use `onLocation` to update the U
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `configure` | `(options: ConfigureOptions) => Promise<void>` | Configure the plugin with the given options. Must be called before `start`. Omitted fields stay unchanged; pass `null` to reset a field to its native default. |
+| `configure` | `(options: ConfigureOptions) => Promise<void>` | Configure the plugin with the given options. Must be called before `start`. Omitted fields stay unchanged; reset a field by passing its value from `CONFIG_DEFAULTS`. |
 | `start` | `() => Promise<void>` | Start background geolocation tracking. |
 | `stop` | `() => Promise<void>` | Stop background geolocation tracking. |
 
@@ -259,48 +270,95 @@ All event methods return a disposer function (`() => void`) that removes the lis
 | `LOCATION_UNAVAILABLE` | `2` |
 | `TIMEOUT` | `3` |
 
-### ServiceMode
+### ActivityType
 
 | Value | Code |
 |-------|------|
-| `BACKGROUND` | `0` |
-| `FOREGROUND` | `1` |
+| `AutomotiveNavigation` | `0` |
+| `OtherNavigation` | `1` |
+| `Fitness` | `2` |
+| `Other` | `3` |
 
-`ServiceMode` comes from the Cordova plugin's iOS `switchMode()` concept. It is currently kept for parity in the type surface, but the Nitro API does not actively use it.
+iOS only. The journey hint passed to CoreLocation, not activity recognition.
 
 ## Configuration Options
 
-`configure()` keeps omitted fields unchanged. Pass `null` for a supported option when you want Cordova-style "reset to default" behavior.
+Options are grouped by domain. `configure()` keeps every omitted group and field
+unchanged; reset a field by passing its published default from
+`CONFIG_DEFAULTS`. `getConfig()` returns every field. A field the running
+platform does not own is dropped on write, with a warning in development, and
+reads as its default. `CONFIG_FIELDS` exposes the same metadata at runtime,
+keyed by `group.field`.
 
-| Option | Type | Default | Platform | Description |
-|--------|------|---------|----------|-------------|
-| `locationProvider` | `LocationProvider \| null` | `DISTANCE_FILTER` | all | Location provider to use. `DISTANCE_FILTER` is the classic battery-friendly background provider, `ACTIVITY` is activity-aware, and `RAW` returns less-processed sensor fixes. |
-| `desiredAccuracy` | `LocationAccuracy \| null` | `MEDIUM` | all | Desired accuracy level. Lower accuracy generally reduces power drain. |
-| `stationaryRadius` | `number \| null` | `50` | all | Radius in meters to trigger stationary detection. |
-| `debug` | `boolean \| null` | `false` | all | Enable debug sounds and notifications. |
-| `distanceFilter` | `number \| null` | `500` | all | Minimum distance (meters) between location updates. |
-| `stopOnTerminate` | `boolean \| null` | `true` | all | Stop tracking when the app is terminated. On Android, the service is destroyed. On iOS, `false` enables native continuation: the OS may relaunch the app on significant location changes, and persisted locations can be retrieved via `getLocations()` after relaunch. |
-| `startOnBoot` | `boolean \| null` | `false` | Android | Start tracking on device boot. |
-| `interval` | `number \| null` | `600000` | Android | Minimum time interval between location updates in milliseconds. |
-| `fastestInterval` | `number \| null` | `120000` | Android | Fastest location update interval in milliseconds. |
-| `activitiesInterval` | `number \| null` | `10000` | Android | Activity recognition interval in milliseconds. |
-| `stopOnStillActivity` | `boolean \| null` | `true` | Android | Deprecated upstream Android option that stops updates when STILL is detected. |
-| `notificationsEnabled` | `boolean \| null` | `true` | Android | Show foreground service notification. |
-| `startForeground` | `boolean \| null` | `true` | Android | Run as a foreground service. |
-| `notificationTitle` | `string \| null` | `"Background tracking"` | Android | Notification title. |
-| `notificationText` | `string \| null` | `"ENABLED"` | Android | Notification text. |
-| `notificationIconColor` | `string \| null` | `''` | Android | Notification icon color (hex). |
-| `notificationIconLarge` | `string \| null` | `''` | Android | Large notification icon resource name. |
-| `notificationIconSmall` | `string \| null` | `''` | Android | Small notification icon resource name. |
-| `activityType` | `string \| null` | platform default | iOS | iOS activity type hint. |
-| `pauseLocationUpdates` | `boolean \| null` | platform default | iOS | Allow the system to pause location updates. |
-| `saveBatteryOnBackground` | `boolean \| null` | platform default | iOS | Reduce accuracy in the background to save battery. |
-| `url` | `string \| null` | `''` | all | URL for HTTP location posting. |
-| `syncUrl` | `string \| null` | `''` | all | URL for batch sync of stored locations. |
-| `syncThreshold` | `number \| null` | `100` | all | Number of failed locations to batch together before sync. |
-| `httpHeaders` | `Record<string, string> \| null` | `undefined` | all | Optional HTTP headers for location posting. |
-| `maxLocations` | `number \| null` | `10000` | all | Maximum number of locations to store. |
-| `postTemplate` | `AnyMap \| null` | `undefined` | all | Custom POST body template for location posting. Supports object or array shapes and nested JSON values. |
+These tables are generated from the Config Contract with
+`yarn workspace react-native-nitro-background-geolocation generate:config`.
+
+<!-- CONFIG-CONTRACT:START -->
+<!-- GENERATED from the Config Contract. Do not edit. -->
+
+#### `tracking`
+
+| Field | Type | Default | Platforms | Units | Description |
+| --- | --- | --- | --- | --- | --- |
+| `tracking.locationProvider` | `LocationProvider` | `LocationProvider.DISTANCE_FILTER` | Android, iOS | — | Native provider strategy. See the provider pages for how each one behaves. |
+| `tracking.desiredAccuracy` | `LocationAccuracy` | `LocationAccuracy.MEDIUM` | Android, iOS | — | Desired accuracy in meters. Lower accuracy usually reduces power drain.<br/>**Android:** Maps to a fused location request priority.<br/>**iOS:** Maps to a CLLocationAccuracy tier. |
+| `tracking.stationaryRadius` | `number` | `50` | Android, iOS | m | Radius in meters the device must leave before aggressive tracking resumes after it stops. |
+| `tracking.distanceFilter` | `number` | `50` | Android, iOS | m | Base distance in meters between updates. Elastic: the Distance Filter provider adds a speed penalty, so points thin out as speed increases.<br/>**Android:** The Activity provider ignores it; use interval to control its cadence. |
+| `tracking.interval` | `number` | `5000` | Android | ms | Minimum time between updates, applied by the OS in every Android provider. Caps the point rate regardless of movement. |
+| `tracking.fastestInterval` | `number` | `1000` | Android | ms | Fastest rate the app accepts updates when other apps request locations faster than interval. |
+| `tracking.pauseLocationUpdates` | `boolean` | `false` | iOS | — | Let the system pause location updates automatically. |
+| `tracking.saveBatteryOnBackground` | `boolean` | `false` | iOS | — | Reduce accuracy in the background to save battery. |
+| `tracking.activityType` | `ActivityType` | `ActivityType.OtherNavigation` | iOS | — | Journey hint CoreLocation uses to decide when to pause updates. Not activity recognition. |
+
+#### `lifecycle`
+
+| Field | Type | Default | Platforms | Units | Description |
+| --- | --- | --- | --- | --- | --- |
+| `lifecycle.stopOnTerminate` | `boolean` | `true` | Android, iOS | — | Stop tracking when the application is terminated.<br/>**Android:** `false` keeps the service alive and runs the headless task.<br/>**iOS:** `false` enables native continuation after the app is terminated. |
+| `lifecycle.startOnBoot` | `boolean` | `false` | Android | — | Start the background service when the device boots. |
+
+#### `activity`
+
+| Field | Type | Default | Platforms | Units | Description |
+| --- | --- | --- | --- | --- | --- |
+| `activity.activitiesInterval` | `number` | `10000` | Android, iOS | ms | Rate of activity recognition in milliseconds. Larger values save battery but detect changes later.<br/>**Android:** Rate of the ActivityRecognition API.<br/>**iOS:** Rate of the motion detector. |
+| `activity.stopOnStillActivity` | `boolean` | `true` | Android | — | Stop location updates when activity recognition reports STILL. Deprecated upstream. |
+
+#### `notification`
+
+| Field | Type | Default | Platforms | Units | Description |
+| --- | --- | --- | --- | --- | --- |
+| `notification.notificationsEnabled` | `boolean` | `true` | Android | — | Show local notifications while tracking and syncing locations. |
+| `notification.startForeground` | `boolean` | `true` | Android | — | Run the location service in the foreground. A foreground service needs a visible notification. |
+| `notification.notificationTitle` | `string` | `"Background tracking"` | Android | — | Title of the foreground service notification. |
+| `notification.notificationText` | `string` | `"ENABLED"` | Android | — | Text of the foreground service notification. |
+| `notification.notificationIconColor` | `string` | `""` | Android | — | Accent color of the notification, for example `#4CAF50`. Empty uses the system color. |
+| `notification.notificationIconLarge` | `string` | `""` | Android | — | Resource name of a custom large notification icon. Empty uses the app icon. |
+| `notification.notificationIconSmall` | `string` | `""` | Android | — | Resource name of a custom small notification icon. Empty uses the app icon. |
+
+#### `http`
+
+| Field | Type | Default | Platforms | Units | Description |
+| --- | --- | --- | --- | --- | --- |
+| `http.url` | `string` | `""` | Android, iOS | — | Server URL that receives immediate HTTP POSTs for recorded locations. Empty disables posting. |
+| `http.syncUrl` | `string` | `""` | Android, iOS | — | Server URL that receives batched retries for locations that previously failed to post. |
+| `http.syncThreshold` | `number` | `100` | Android, iOS | 1–1000 locations | Number of failed locations to batch together before syncing to syncUrl. |
+| `http.httpHeaders` | `Record<string, string> \| null` | `null` | Android, iOS | — | HTTP headers sent with every location POST. Pass null to send none. |
+| `http.postTemplate` | `AnyMap \| null` | `null` | Android, iOS | — | Custom POST body template for url and syncUrl. Supports placeholders such as @latitude. Pass null for the native default template. |
+
+#### `storage`
+
+| Field | Type | Default | Platforms | Units | Description |
+| --- | --- | --- | --- | --- | --- |
+| `storage.maxLocations` | `number` | `10000` | Android, iOS | locations | Maximum number of locations kept in the local database. |
+
+#### `debug`
+
+| Field | Type | Default | Platforms | Units | Description |
+| --- | --- | --- | --- | --- | --- |
+| `debug.debug` | `boolean` | `false` | Android, iOS | — | Play sounds and show notifications for lifecycle events. For field testing only. |
+
+<!-- CONFIG-CONTRACT:END -->
 
 ## Platform Support
 

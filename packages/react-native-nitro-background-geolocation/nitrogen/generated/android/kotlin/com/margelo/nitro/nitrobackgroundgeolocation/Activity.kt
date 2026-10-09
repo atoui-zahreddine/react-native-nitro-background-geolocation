@@ -35,7 +35,7 @@ data class Activity(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       confidence,
       type
     ).contentDeepHashCode()

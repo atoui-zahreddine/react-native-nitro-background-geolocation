@@ -19,7 +19,7 @@ public protocol HybridNitroBackgroundGeolocationSpec_protocol: HybridObject {
   func getCurrentLocation(options: LocationOptions) throws -> Promise<Location>
   func getStationaryLocation() throws -> Promise<StationaryLocation?>
   func checkStatus() throws -> Promise<ServiceStatus>
-  func getConfig() throws -> Promise<ConfigureOptions>
+  func getConfig() throws -> Promise<AppliedConfig>
   func showAppSettings() throws -> Void
   func showLocationSettings() throws -> Void
   func getLocations() throws -> Promise<[Location]>

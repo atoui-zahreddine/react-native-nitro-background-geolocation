@@ -54,10 +54,10 @@ namespace margelo::nitro::nitrobackgroundgeolocation::bridge::swift {
     };
   }
   
-  // pragma MARK: std::function<void(const ConfigureOptions& /* result */)>
-  Func_void_ConfigureOptions create_Func_void_ConfigureOptions(void* NON_NULL swiftClosureWrapper) noexcept {
-    auto swiftClosure = NitroBackgroundGeolocation::Func_void_ConfigureOptions::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](const ConfigureOptions& result) mutable -> void {
+  // pragma MARK: std::function<void(const AppliedConfig& /* result */)>
+  Func_void_AppliedConfig create_Func_void_AppliedConfig(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = NitroBackgroundGeolocation::Func_void_AppliedConfig::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const AppliedConfig& result) mutable -> void {
       swiftClosure.call(result);
     };
   }

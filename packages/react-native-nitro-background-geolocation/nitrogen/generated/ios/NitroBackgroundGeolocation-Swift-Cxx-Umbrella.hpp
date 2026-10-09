@@ -8,16 +8,36 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `ActivityConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct ActivityConfig; }
+// Forward declaration of `ActivityOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct ActivityOptions; }
+// Forward declaration of `ActivityType` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { enum class ActivityType; }
 // Forward declaration of `Activity` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct Activity; }
+// Forward declaration of `AppliedConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct AppliedConfig; }
 // Forward declaration of `AuthorizationStatus` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { enum class AuthorizationStatus; }
 // Forward declaration of `BackgroundGeolocationError` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct BackgroundGeolocationError; }
 // Forward declaration of `ConfigureOptions` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct ConfigureOptions; }
+// Forward declaration of `DebugConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct DebugConfig; }
+// Forward declaration of `DebugOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct DebugOptions; }
+// Forward declaration of `HttpConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct HttpConfig; }
+// Forward declaration of `HttpOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct HttpOptions; }
 // Forward declaration of `HybridNitroBackgroundGeolocationSpec` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { class HybridNitroBackgroundGeolocationSpec; }
+// Forward declaration of `LifecycleConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct LifecycleConfig; }
+// Forward declaration of `LifecycleOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct LifecycleOptions; }
 // Forward declaration of `LocationAccuracy` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { enum class LocationAccuracy; }
 // Forward declaration of `LocationOptions` to properly resolve imports.
@@ -30,25 +50,53 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct Location; }
 namespace margelo::nitro::nitrobackgroundgeolocation { struct LogEntry; }
 // Forward declaration of `NativeLogLevel` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { enum class NativeLogLevel; }
+// Forward declaration of `NotificationConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct NotificationConfig; }
+// Forward declaration of `NotificationOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct NotificationOptions; }
 // Forward declaration of `ServiceStatus` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct ServiceStatus; }
 // Forward declaration of `StationaryLocation` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct StationaryLocation; }
+// Forward declaration of `StorageConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct StorageConfig; }
+// Forward declaration of `StorageOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct StorageOptions; }
+// Forward declaration of `TrackingConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct TrackingConfig; }
+// Forward declaration of `TrackingOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct TrackingOptions; }
 
 // Include C++ defined types
 #include "Activity.hpp"
+#include "ActivityConfig.hpp"
+#include "ActivityOptions.hpp"
+#include "ActivityType.hpp"
+#include "AppliedConfig.hpp"
 #include "AuthorizationStatus.hpp"
 #include "BackgroundGeolocationError.hpp"
 #include "ConfigureOptions.hpp"
+#include "DebugConfig.hpp"
+#include "DebugOptions.hpp"
+#include "HttpConfig.hpp"
+#include "HttpOptions.hpp"
 #include "HybridNitroBackgroundGeolocationSpec.hpp"
+#include "LifecycleConfig.hpp"
+#include "LifecycleOptions.hpp"
 #include "Location.hpp"
 #include "LocationAccuracy.hpp"
 #include "LocationOptions.hpp"
 #include "LocationProvider.hpp"
 #include "LogEntry.hpp"
 #include "NativeLogLevel.hpp"
+#include "NotificationConfig.hpp"
+#include "NotificationOptions.hpp"
 #include "ServiceStatus.hpp"
 #include "StationaryLocation.hpp"
+#include "StorageConfig.hpp"
+#include "StorageOptions.hpp"
+#include "TrackingConfig.hpp"
+#include "TrackingOptions.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/Null.hpp>
 #include <NitroModules/Promise.hpp>

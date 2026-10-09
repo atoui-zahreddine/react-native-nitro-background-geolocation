@@ -10,6 +10,14 @@ This is a new class
 package com.marianhello.bgloc;
 
 import android.os.Bundle;
+import com.margelo.nitro.nitrobackgroundgeolocation.generated.ActivityDefaults;
+import com.margelo.nitro.nitrobackgroundgeolocation.generated.DebugDefaults;
+import com.margelo.nitro.nitrobackgroundgeolocation.generated.HttpDefaults;
+import com.margelo.nitro.nitrobackgroundgeolocation.generated.LifecycleDefaults;
+import com.margelo.nitro.nitrobackgroundgeolocation.generated.NotificationDefaults;
+import com.margelo.nitro.nitrobackgroundgeolocation.generated.StorageDefaults;
+import com.margelo.nitro.nitrobackgroundgeolocation.generated.TrackingDefaults;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.Nullable;
@@ -127,30 +135,31 @@ public class Config implements Parcelable
 
     public static Config getDefault() {
         Config config = new Config();
-        config.stationaryRadius = 50f;
-        config.distanceFilter = 50;
-        config.desiredAccuracy = 100;
-        config.debug = false;
-        config.notificationTitle = "Background tracking";
-        config.notificationText = "ENABLED";
-        config.notificationIconLarge = "";
-        config.notificationIconSmall = "";
-        config.notificationIconColor = "";
-        config.locationProvider = DISTANCE_FILTER_PROVIDER;
-        config.interval = 5000; //milliseconds
-        config.fastestInterval = 1000; //milliseconds
-        config.activitiesInterval = 10000; //milliseconds
-        config.stopOnTerminate = true;
-        config.startOnBoot = false;
-        config.startForeground = true;
-        config.notificationsEnabled = true;
-        config.stopOnStillActivity = true;
-        config.url = "";
-        config.syncUrl = "";
-        config.syncThreshold = 100;
-        config.httpHeaders = null;
-        config.maxLocations = 10000;
-        config.template = null;
+        // Every default comes from the Config Contract, not from here.
+        config.locationProvider = TrackingDefaults.locationProvider;
+        config.desiredAccuracy = TrackingDefaults.desiredAccuracy;
+        config.stationaryRadius = TrackingDefaults.stationaryRadius;
+        config.distanceFilter = TrackingDefaults.distanceFilter;
+        config.interval = TrackingDefaults.interval;
+        config.fastestInterval = TrackingDefaults.fastestInterval;
+        config.stopOnTerminate = LifecycleDefaults.stopOnTerminate;
+        config.startOnBoot = LifecycleDefaults.startOnBoot;
+        config.activitiesInterval = ActivityDefaults.activitiesInterval;
+        config.stopOnStillActivity = ActivityDefaults.stopOnStillActivity;
+        config.notificationsEnabled = NotificationDefaults.notificationsEnabled;
+        config.startForeground = NotificationDefaults.startForeground;
+        config.notificationTitle = NotificationDefaults.notificationTitle;
+        config.notificationText = NotificationDefaults.notificationText;
+        config.notificationIconColor = NotificationDefaults.notificationIconColor;
+        config.notificationIconLarge = NotificationDefaults.notificationIconLarge;
+        config.notificationIconSmall = NotificationDefaults.notificationIconSmall;
+        config.url = HttpDefaults.url;
+        config.syncUrl = HttpDefaults.syncUrl;
+        config.syncThreshold = HttpDefaults.syncThreshold;
+        config.httpHeaders = HttpDefaults.httpHeaders;
+        config.template = HttpDefaults.postTemplate;
+        config.maxLocations = StorageDefaults.maxLocations;
+        config.debug = DebugDefaults.debug;
 
         return config;
     }

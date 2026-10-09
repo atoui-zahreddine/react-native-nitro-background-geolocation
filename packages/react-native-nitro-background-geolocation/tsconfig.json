@@ -2,6 +2,7 @@
   "extends": "../../tsconfig",
   "compilerOptions": {
     "rootDir": ".",
+    "allowImportingTsExtensions": true,
     "paths": {
       "react-native-nitro-background-geolocation": ["./src/index"]
     }

@@ -1,5 +1,6 @@
 package com.margelo.nitro.nitrobackgroundgeolocation
 
+import com.margelo.nitro.nitrobackgroundgeolocation.generated.LocationOptionsDefaults
 import android.app.Application
 import android.os.Bundle
 import android.os.Handler
@@ -140,9 +141,9 @@ class NitroBackgroundGeolocation :
 
     override fun getCurrentLocation(options: LocationOptions): Promise<Location> {
         return Promise.parallel {
-            val timeout = options.timeout?.toInt() ?: 30000
-            val maximumAge = options.maximumAge?.toLong() ?: 0L
-            val enableHighAccuracy = options.enableHighAccuracy ?: false
+            val timeout = options.timeout?.toInt() ?: LocationOptionsDefaults.timeout
+            val maximumAge = options.maximumAge?.toLong() ?: LocationOptionsDefaults.maximumAge
+            val enableHighAccuracy = options.enableHighAccuracy ?: LocationOptionsDefaults.enableHighAccuracy
             val bgLocation = facade.getCurrentLocation(timeout, maximumAge, enableHighAccuracy)
             ConfigMapper.toJsLocation(bgLocation)
         }
@@ -179,7 +180,7 @@ class NitroBackgroundGeolocation :
         }
     }
 
-    override fun getConfig(): Promise<ConfigureOptions> {
+    override fun getConfig(): Promise<AppliedConfig> {
         return Promise.parallel {
             val nativeConfig = facade.config
             ConfigMapper.toJsConfig(nativeConfig)

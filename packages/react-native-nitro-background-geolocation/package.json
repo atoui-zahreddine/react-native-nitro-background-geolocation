@@ -38,7 +38,10 @@
     "clean": "del-cli lib",
     "prepare": "bob build",
     "nitrogen": "nitrogen",
+    "generate:config": "node --experimental-transform-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/generate-config.mts",
     "typecheck": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "eslint \"**/*.{js,ts,tsx}\""
   },
   "keywords": [
@@ -60,20 +63,22 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@react-native/babel-preset": "0.85.0",
+    "@react-native/babel-preset": "0.86.3",
+    "@types/node": "^26.1.2",
     "@types/react": "^19.2.0",
     "del-cli": "^7.0.0",
-    "nitrogen": "^0.35.6",
-    "react": "19.2.0",
-    "react-native": "0.83.6",
-    "react-native-builder-bob": "^0.41.0",
-    "react-native-nitro-modules": "^0.35.6",
-    "typescript": "^6.0.2"
+    "nitrogen": "^0.37.1",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-builder-bob": "^0.43.1",
+    "react-native-nitro-modules": "^0.37.1",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.10"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-nitro-modules": "^0.35.6"
+    "react-native-nitro-modules": "^0.37.1"
   },
   "react-native-builder-bob": {
     "source": "src",

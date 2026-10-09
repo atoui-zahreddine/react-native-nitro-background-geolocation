@@ -39,7 +39,7 @@ data class ServiceStatus(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       isRunning,
       locationServicesEnabled,
       authorization

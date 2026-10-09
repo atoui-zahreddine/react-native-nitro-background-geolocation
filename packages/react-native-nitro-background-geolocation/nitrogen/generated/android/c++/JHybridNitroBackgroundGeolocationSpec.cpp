@@ -15,14 +15,46 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct StationaryLocation
 namespace margelo::nitro::nitrobackgroundgeolocation { struct ServiceStatus; }
 // Forward declaration of `AuthorizationStatus` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { enum class AuthorizationStatus; }
-// Forward declaration of `ConfigureOptions` to properly resolve imports.
-namespace margelo::nitro::nitrobackgroundgeolocation { struct ConfigureOptions; }
+// Forward declaration of `AppliedConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct AppliedConfig; }
+// Forward declaration of `TrackingConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct TrackingConfig; }
 // Forward declaration of `LocationProvider` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { enum class LocationProvider; }
 // Forward declaration of `LocationAccuracy` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { enum class LocationAccuracy; }
+// Forward declaration of `ActivityType` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { enum class ActivityType; }
+// Forward declaration of `LifecycleConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct LifecycleConfig; }
+// Forward declaration of `ActivityConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct ActivityConfig; }
+// Forward declaration of `NotificationConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct NotificationConfig; }
+// Forward declaration of `HttpConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct HttpConfig; }
+// Forward declaration of `StorageConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct StorageConfig; }
+// Forward declaration of `DebugConfig` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct DebugConfig; }
 // Forward declaration of `LogEntry` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct LogEntry; }
+// Forward declaration of `ConfigureOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct ConfigureOptions; }
+// Forward declaration of `TrackingOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct TrackingOptions; }
+// Forward declaration of `LifecycleOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct LifecycleOptions; }
+// Forward declaration of `ActivityOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct ActivityOptions; }
+// Forward declaration of `NotificationOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct NotificationOptions; }
+// Forward declaration of `HttpOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct HttpOptions; }
+// Forward declaration of `StorageOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct StorageOptions; }
+// Forward declaration of `DebugOptions` to properly resolve imports.
+namespace margelo::nitro::nitrobackgroundgeolocation { struct DebugOptions; }
 // Forward declaration of `LocationOptions` to properly resolve imports.
 namespace margelo::nitro::nitrobackgroundgeolocation { struct LocationOptions; }
 // Forward declaration of `NativeLogLevel` to properly resolve imports.
@@ -45,31 +77,60 @@ namespace margelo::nitro::nitrobackgroundgeolocation { struct BackgroundGeolocat
 #include "JServiceStatus.hpp"
 #include "AuthorizationStatus.hpp"
 #include "JAuthorizationStatus.hpp"
-#include "ConfigureOptions.hpp"
-#include "JConfigureOptions.hpp"
-#include <NitroModules/Null.hpp>
+#include "AppliedConfig.hpp"
+#include "JAppliedConfig.hpp"
+#include "TrackingConfig.hpp"
+#include "JTrackingConfig.hpp"
 #include "LocationProvider.hpp"
-#include <variant>
-#include "JVariant_NullType_LocationProvider.hpp"
-#include <NitroModules/JNull.hpp>
 #include "JLocationProvider.hpp"
 #include "LocationAccuracy.hpp"
-#include "JVariant_NullType_LocationAccuracy.hpp"
 #include "JLocationAccuracy.hpp"
-#include "JVariant_NullType_Double.hpp"
-#include "JVariant_NullType_Boolean.hpp"
-#include "JVariant_NullType_String.hpp"
+#include "ActivityType.hpp"
+#include "JActivityType.hpp"
+#include "LifecycleConfig.hpp"
+#include "JLifecycleConfig.hpp"
+#include "ActivityConfig.hpp"
+#include "JActivityConfig.hpp"
+#include "NotificationConfig.hpp"
+#include "JNotificationConfig.hpp"
+#include "HttpConfig.hpp"
+#include "JHttpConfig.hpp"
+#include <NitroModules/Null.hpp>
 #include <unordered_map>
-#include "JVariant_NullType_Map_String__String_.hpp"
+#include <variant>
+#include "JNullableHeaders.hpp"
+#include <NitroModules/JNull.hpp>
 #include <NitroModules/AnyMap.hpp>
-#include "JVariant_NullType_AnyMap.hpp"
+#include "JNullableAnyMap.hpp"
 #include <NitroModules/JAnyMap.hpp>
+#include "StorageConfig.hpp"
+#include "JStorageConfig.hpp"
+#include "DebugConfig.hpp"
+#include "JDebugConfig.hpp"
 #include <vector>
 #include "LogEntry.hpp"
 #include "JLogEntry.hpp"
 #include <functional>
 #include "JFunc_void.hpp"
 #include <NitroModules/JNICallable.hpp>
+#include "ConfigureOptions.hpp"
+#include "JConfigureOptions.hpp"
+#include "TrackingOptions.hpp"
+#include "JTrackingOptions.hpp"
+#include "LifecycleOptions.hpp"
+#include "JLifecycleOptions.hpp"
+#include "ActivityOptions.hpp"
+#include "JActivityOptions.hpp"
+#include "NotificationOptions.hpp"
+#include "JNotificationOptions.hpp"
+#include "HttpOptions.hpp"
+#include "JHttpOptions.hpp"
+#include "JVariant_NullType_Map_String__String_.hpp"
+#include "JVariant_NullType_AnyMap.hpp"
+#include "StorageOptions.hpp"
+#include "JStorageOptions.hpp"
+#include "DebugOptions.hpp"
+#include "JDebugOptions.hpp"
 #include "LocationOptions.hpp"
 #include "JLocationOptions.hpp"
 #include "NativeLogLevel.hpp"
@@ -210,13 +271,13 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<ConfigureOptions>> JHybridNitroBackgroundGeolocationSpec::getConfig() {
+  std::shared_ptr<Promise<AppliedConfig>> JHybridNitroBackgroundGeolocationSpec::getConfig() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("getConfig");
     auto __result = method(_javaPart);
     return [&]() {
-      auto __promise = Promise<ConfigureOptions>::create();
+      auto __promise = Promise<AppliedConfig>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        auto __result = jni::static_ref_cast<JConfigureOptions>(__boxedResult);
+        auto __result = jni::static_ref_cast<JAppliedConfig>(__boxedResult);
         __promise->resolve(__result->toCpp());
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {

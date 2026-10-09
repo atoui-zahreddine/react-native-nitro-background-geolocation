@@ -15,7 +15,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ enum "NativeLogLevel" and the the Kotlin enum "NativeLogLevel".
+   * The C++ JNI bridge between the C++ enum "NativeLogLevel" and the Kotlin enum "NativeLogLevel".
    */
   struct JNativeLogLevel final: public jni::JavaClass<JNativeLogLevel> {
   public:

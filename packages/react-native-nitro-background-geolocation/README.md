@@ -19,13 +19,19 @@ import BackgroundGeolocation, {
 } from 'react-native-nitro-background-geolocation';
 
 await BackgroundGeolocation.configure({
-  locationProvider: LocationProvider.DISTANCE_FILTER,
-  desiredAccuracy: LocationAccuracy.HIGH,
-  distanceFilter: 10,
-  startOnBoot: true,
-  stopOnTerminate: false,
-  notificationsEnabled: true,
-  startForeground: true,
+  tracking: {
+    locationProvider: LocationProvider.DISTANCE_FILTER,
+    desiredAccuracy: LocationAccuracy.HIGH,
+    distanceFilter: 10,
+  },
+  lifecycle: {
+    startOnBoot: true,
+    stopOnTerminate: false,
+  },
+  notification: {
+    notificationsEnabled: true,
+    startForeground: true,
+  },
 });
 
 const unsubscribe = BackgroundGeolocation.onLocation((location) => {

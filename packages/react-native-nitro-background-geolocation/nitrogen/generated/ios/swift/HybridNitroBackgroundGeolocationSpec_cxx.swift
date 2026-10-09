@@ -245,21 +245,21 @@ open class HybridNitroBackgroundGeolocationSpec_cxx {
   }
   
   @inline(__always)
-  public final func getConfig() -> bridge.Result_std__shared_ptr_Promise_ConfigureOptions___ {
+  public final func getConfig() -> bridge.Result_std__shared_ptr_Promise_AppliedConfig___ {
     do {
       let __result = try self.__implementation.getConfig()
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_ConfigureOptions__ in
-        let __promise = bridge.create_std__shared_ptr_Promise_ConfigureOptions__()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_ConfigureOptions__(__promise)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_AppliedConfig__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_AppliedConfig__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_AppliedConfig__(__promise)
         __result
           .then({ __result in __promiseHolder.resolve(__result) })
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_ConfigureOptions___(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_AppliedConfig___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_ConfigureOptions___(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_AppliedConfig___(__exceptionPtr)
     }
   }
   

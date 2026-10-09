@@ -6,6 +6,7 @@
 //
 
 #import "MAURConfig.h"
+#import "ConfigDefaults.h"
 
 #define isNull(value) (value == nil || value == (id)[NSNull null])
 #define isNotNull(value) (value != nil && value != (id)[NSNull null])
@@ -21,18 +22,19 @@
         return self;
     }
     
-    stationaryRadius = [NSNumber numberWithInt:50];
-    distanceFilter = [NSNumber numberWithInt:50];
-    desiredAccuracy = [NSNumber numberWithInt:100];
-    _debug = [NSNumber numberWithBool:NO];
-    activityType = @"OtherNavigation";
-    activitiesInterval = [NSNumber numberWithInt:10000];
-    _stopOnTerminate = [NSNumber numberWithBool:YES];
-    _saveBatteryOnBackground = [NSNumber numberWithBool:NO];
-    maxLocations = [NSNumber numberWithInt:10000];
-    syncThreshold = [NSNumber numberWithInt:100];
-    _pauseLocationUpdates = [NSNumber numberWithBool:NO];
-    locationProvider = [NSNumber numberWithInt:DISTANCE_FILTER_PROVIDER];
+    // Every default comes from the Config Contract, not from here.
+    stationaryRadius = @(BG_TRACKING_DEFAULT_STATIONARY_RADIUS);
+    distanceFilter = @(BG_TRACKING_DEFAULT_DISTANCE_FILTER);
+    desiredAccuracy = @(BG_TRACKING_DEFAULT_DESIRED_ACCURACY);
+    _debug = @(BG_DEBUG_DEFAULT_DEBUG);
+    activityType = BG_TRACKING_DEFAULT_ACTIVITY_TYPE;
+    activitiesInterval = @(BG_ACTIVITY_DEFAULT_ACTIVITIES_INTERVAL);
+    _stopOnTerminate = @(BG_LIFECYCLE_DEFAULT_STOP_ON_TERMINATE);
+    _saveBatteryOnBackground = @(BG_TRACKING_DEFAULT_SAVE_BATTERY_ON_BACKGROUND);
+    maxLocations = @(BG_STORAGE_DEFAULT_MAX_LOCATIONS);
+    syncThreshold = @(BG_HTTP_DEFAULT_SYNC_THRESHOLD);
+    _pauseLocationUpdates = @(BG_TRACKING_DEFAULT_PAUSE_LOCATION_UPDATES);
+    locationProvider = @(BG_TRACKING_DEFAULT_LOCATION_PROVIDER);
 //    template =
     
     return self;
@@ -57,7 +59,7 @@
     if (isNotNull(config[@"activityType"])) {
         instance.activityType = config[@"activityType"];
     }
-    if (isNull(config[@"activitiesInterval"])) {
+    if (isNotNull(config[@"activitiesInterval"])) {
         instance.activitiesInterval = config[@"activitiesInterval"];
     }
     if (isNotNull(config[@"stopOnTerminate"])) {
@@ -471,7 +473,7 @@
     if ([self hasMaxLocations]) [dict setObject:self.maxLocations forKey:@"maxLocations"];
     if ([self hasPauseLocationUpdates]) [dict setObject:self._pauseLocationUpdates forKey:@"pauseLocationUpdates"];
     if ([self hasLocationProvider]) [dict setObject:self.locationProvider forKey:@"locationProvider"];
-    [dict setObject:self._template forKey:@"postTemplate"];
+    if ([self hasTemplate]) [dict setObject:self._template forKey:@"postTemplate"];
 
     return dict;
 }

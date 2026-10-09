@@ -17,7 +17,7 @@ namespace margelo::nitro::nitrobackgroundgeolocation {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "BackgroundGeolocationError" and the the Kotlin data class "BackgroundGeolocationError".
+   * The C++ JNI bridge between the C++ struct "BackgroundGeolocationError" and the Kotlin data class "BackgroundGeolocationError".
    */
   struct JBackgroundGeolocationError final: public jni::JavaClass<JBackgroundGeolocationError> {
   public:

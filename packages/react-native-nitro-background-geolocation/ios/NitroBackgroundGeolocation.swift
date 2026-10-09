@@ -135,9 +135,9 @@ final class NitroBackgroundGeolocation: HybridNitroBackgroundGeolocationSpec {
                 throw BridgeError.deallocated
             }
 
-            let timeout = Int32(options.timeout ?? Double(Int32.max))
-            let maximumAge = Int(options.maximumAge ?? Double(Int.max))
-            let enableHighAccuracy = options.enableHighAccuracy ?? false
+            let timeout = Int32(options.timeout ?? LocationOptionsDefaults.timeout)
+            let maximumAge = Int(options.maximumAge ?? LocationOptionsDefaults.maximumAge)
+            let enableHighAccuracy = options.enableHighAccuracy ?? LocationOptionsDefaults.enableHighAccuracy
 
             do {
                 let location = try self.facade.getCurrentLocation(
@@ -179,13 +179,13 @@ final class NitroBackgroundGeolocation: HybridNitroBackgroundGeolocationSpec {
         }
     }
 
-    func getConfig() throws -> Promise<ConfigureOptions> {
+    func getConfig() throws -> Promise<AppliedConfig> {
         Promise.parallel { [weak self] in
             guard let self else {
                 throw BridgeError.deallocated
             }
 
-            return try Self.makeConfigureOptions(from: self.facade.getConfig())
+            return try Self.makeAppliedConfig(from: self.facade.getConfig())
         }
     }
 
@@ -443,58 +443,12 @@ final class NitroBackgroundGeolocation: HybridNitroBackgroundGeolocationSpec {
 
     private static func makeNativeConfig(from options: ConfigureOptions) throws -> MAURConfig {
         let dictionary = NSMutableDictionary()
-
-        applyLocationProvider(options.locationProvider, key: "locationProvider", into: dictionary)
-        applyLocationAccuracy(options.desiredAccuracy, key: "desiredAccuracy", into: dictionary)
-        applyDouble(options.stationaryRadius, key: "stationaryRadius", into: dictionary)
-        applyBool(options.debug, key: "debug", into: dictionary)
-        applyDouble(options.distanceFilter, key: "distanceFilter", into: dictionary)
-        applyBool(options.stopOnTerminate, key: "stopOnTerminate", into: dictionary)
-        applyString(options.activityType, key: "activityType", into: dictionary)
-        applyDouble(options.activitiesInterval, key: "activitiesInterval", into: dictionary)
-        applyBool(options.pauseLocationUpdates, key: "pauseLocationUpdates", into: dictionary)
-        applyBool(options.saveBatteryOnBackground, key: "saveBatteryOnBackground", into: dictionary)
-        applyString(options.url, key: "url", into: dictionary)
-        applyString(options.syncUrl, key: "syncUrl", into: dictionary)
-        applyDouble(options.syncThreshold, key: "syncThreshold", into: dictionary)
-        applyHeaders(options.httpHeaders, key: "httpHeaders", into: dictionary)
-        applyDouble(options.maxLocations, key: "maxLocations", into: dictionary)
-        try applyAnyMap(options.postTemplate, key: "postTemplate", into: dictionary)
-
+        try ConfigContractMapper.apply(options, into: dictionary)
         return MAURConfig.fromDictionary(dictionary as? [AnyHashable: Any] ?? [:])
     }
 
-    private static func makeConfigureOptions(from config: MAURConfig) throws -> ConfigureOptions {
-        let dictionary = config.toDictionary() as? [String: Any] ?? [:]
-        return ConfigureOptions(
-            locationProvider: locationProviderVariant(dictionary["locationProvider"]),
-            desiredAccuracy: locationAccuracyVariant(dictionary["desiredAccuracy"]),
-            stationaryRadius: doubleVariant(dictionary["stationaryRadius"]),
-            debug: boolVariant(dictionary["debug"]),
-            distanceFilter: doubleVariant(dictionary["distanceFilter"]),
-            stopOnTerminate: boolVariant(dictionary["stopOnTerminate"]),
-            startOnBoot: nil,
-            interval: nil,
-            fastestInterval: nil,
-            activitiesInterval: doubleVariant(dictionary["activitiesInterval"]),
-            stopOnStillActivity: nil,
-            notificationsEnabled: nil,
-            startForeground: nil,
-            notificationTitle: nil,
-            notificationText: nil,
-            notificationIconColor: nil,
-            notificationIconLarge: nil,
-            notificationIconSmall: nil,
-            activityType: stringVariant(dictionary["activityType"]),
-            pauseLocationUpdates: boolVariant(dictionary["pauseLocationUpdates"]),
-            saveBatteryOnBackground: boolVariant(dictionary["saveBatteryOnBackground"]),
-            url: stringVariant(dictionary["url"]),
-            syncUrl: stringVariant(dictionary["syncUrl"]),
-            syncThreshold: doubleVariant(dictionary["syncThreshold"]),
-            httpHeaders: headersVariant(dictionary["httpHeaders"]),
-            maxLocations: doubleVariant(dictionary["maxLocations"]),
-            postTemplate: try anyMapVariant(dictionary["postTemplate"])
-        )
+    private static func makeAppliedConfig(from config: MAURConfig) throws -> AppliedConfig {
+        try ConfigContractMapper.read(config.toDictionary() as NSDictionary)
     }
 
     private static func makeNativeLogLevelName(_ level: NativeLogLevel) -> String {
@@ -528,192 +482,5 @@ final class NitroBackgroundGeolocation: HybridNitroBackgroundGeolocationSpec {
                 stackTrace: (dictionary["stackTrace"] as? String) ?? ""
             )
         }
-    }
-
-    private static func applyString(_ value: Variant_NullType_String?, key: String, into dictionary: NSMutableDictionary) {
-        guard let value else { return }
-        switch value {
-        case .first:
-            dictionary[key] = NSNull()
-        case .second(let string):
-            dictionary[key] = string
-        }
-    }
-
-    private static func applyBool(_ value: Variant_NullType_Bool?, key: String, into dictionary: NSMutableDictionary) {
-        guard let value else { return }
-        switch value {
-        case .first:
-            dictionary[key] = NSNull()
-        case .second(let bool):
-            dictionary[key] = bool
-        }
-    }
-
-    private static func applyDouble(_ value: Variant_NullType_Double?, key: String, into dictionary: NSMutableDictionary) {
-        guard let value else { return }
-        switch value {
-        case .first:
-            dictionary[key] = NSNull()
-        case .second(let number):
-            dictionary[key] = number
-        }
-    }
-
-    private static func applyHeaders(_ value: Variant_NullType_Dictionary_String__String_?, key: String, into dictionary: NSMutableDictionary) {
-        guard let value else { return }
-        switch value {
-        case .first:
-            dictionary[key] = NSNull()
-        case .second(let headers):
-            dictionary[key] = headers
-        }
-    }
-
-    private static func applyAnyMap(_ value: Variant_NullType_AnyMap?, key: String, into dictionary: NSMutableDictionary) throws {
-        guard let value else { return }
-        switch value {
-        case .first:
-            dictionary[key] = NSNull()
-        case .second(let anyMap):
-            dictionary[key] = anyMapToDictionary(anyMap)
-        }
-    }
-
-    private static func applyLocationProvider(_ value: Variant_NullType_LocationProvider?, key: String, into dictionary: NSMutableDictionary) {
-        guard let value else { return }
-        switch value {
-        case .first:
-            dictionary[key] = NSNull()
-        case .second(let provider):
-            dictionary[key] = nativeLocationProvider(provider)
-        }
-    }
-
-    private static func applyLocationAccuracy(_ value: Variant_NullType_LocationAccuracy?, key: String, into dictionary: NSMutableDictionary) {
-        guard let value else { return }
-        switch value {
-        case .first:
-            dictionary[key] = NSNull()
-        case .second(let accuracy):
-            dictionary[key] = nativeLocationAccuracy(accuracy)
-        }
-    }
-
-    private static func nativeLocationProvider(_ provider: LocationProvider) -> NSNumber {
-        switch provider {
-        case .distanceFilter:
-            return 0
-        case .activity:
-            return 1
-        case .raw:
-            return 2
-        @unknown default:
-            return 0
-        }
-    }
-
-    private static func nativeLocationAccuracy(_ accuracy: LocationAccuracy) -> NSNumber {
-        switch accuracy {
-        case .high:
-            return 0
-        case .medium:
-            return 100
-        case .low:
-            return 1000
-        case .passive:
-            return 10000
-        @unknown default:
-            return 100
-        }
-    }
-
-    private static func stringVariant(_ value: Any?) -> Variant_NullType_String? {
-        guard let value else { return nil }
-        if value is NSNull {
-            return .first(.null)
-        }
-        return .second((value as? String) ?? "")
-    }
-
-    private static func boolVariant(_ value: Any?) -> Variant_NullType_Bool? {
-        guard let value else { return nil }
-        if value is NSNull {
-            return .first(.null)
-        }
-        return .second((value as? NSNumber)?.boolValue ?? false)
-    }
-
-    private static func doubleVariant(_ value: Any?) -> Variant_NullType_Double? {
-        guard let value else { return nil }
-        if value is NSNull {
-            return .first(.null)
-        }
-        return .second((value as? NSNumber)?.doubleValue ?? 0)
-    }
-
-    private static func headersVariant(_ value: Any?) -> Variant_NullType_Dictionary_String__String_? {
-        guard let value else { return nil }
-        if value is NSNull {
-            return .first(.null)
-        }
-        return .second((value as? [String: String]) ?? [:])
-    }
-
-    private static func locationProviderVariant(_ value: Any?) -> Variant_NullType_LocationProvider? {
-        guard let value else { return nil }
-        if value is NSNull {
-            return .first(.null)
-        }
-        let rawValue = (value as? NSNumber)?.intValue ?? 0
-        let provider: LocationProvider
-        switch rawValue {
-        case 1:
-            provider = .activity
-        case 2:
-            provider = .raw
-        default:
-            provider = .distanceFilter
-        }
-        return .second(provider)
-    }
-
-    private static func locationAccuracyVariant(_ value: Any?) -> Variant_NullType_LocationAccuracy? {
-        guard let value else { return nil }
-        if value is NSNull {
-            return .first(.null)
-        }
-        let rawValue = (value as? NSNumber)?.intValue ?? 100
-        let accuracy: LocationAccuracy
-        switch rawValue {
-        case 0:
-            accuracy = .high
-        case 1000:
-            accuracy = .low
-        case 10000:
-            accuracy = .passive
-        default:
-            accuracy = .medium
-        }
-        return .second(accuracy)
-    }
-
-    private static func anyMapVariant(_ value: Any?) throws -> Variant_NullType_AnyMap? {
-        guard let value else { return nil }
-        if value is NSNull {
-            return .first(.null)
-        }
-        guard let dictionary = value as? [String: Any] else {
-            return nil
-        }
-        return .second(try AnyMap.fromDictionary(dictionary))
-    }
-
-    private static func anyMapToDictionary(_ anyMap: AnyMap) -> [String: Any] {
-        var dictionary: [String: Any] = [:]
-        for key in anyMap.getAllKeys() {
-            dictionary[key] = anyMap.getAny(key: key)
-        }
-        return dictionary
     }
 }

@@ -10,7 +10,6 @@ package com.margelo.nitro.nitrobackgroundgeolocation
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import dalvik.annotation.optimization.FastNative
 
 
 /**
@@ -59,7 +58,6 @@ class Func_void_StationaryLocation_cxx: Func_void_StationaryLocation {
   override fun invoke(location: StationaryLocation): Unit
     = invoke_cxx(location)
 
-  @FastNative
   private external fun invoke_cxx(location: StationaryLocation): Unit
 }
 
