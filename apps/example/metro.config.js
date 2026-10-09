@@ -26,4 +26,10 @@ config.resolver.extraNodeModules = {
   ),
 };
 
+// 4. Expo serves from the monorepo root, but react-native-harness requests the
+//    entry bundle relative to this app.
+if (process.env.RN_HARNESS) {
+  config.server.unstable_serverRoot = projectRoot;
+}
+
 module.exports = config;

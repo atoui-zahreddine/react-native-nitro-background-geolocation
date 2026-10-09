@@ -87,3 +87,6 @@ android/generated
 # React Native Nitro Modules
 # nitrogen/ is tracked — it contains generated specs needed at build time
 !/cordova-background-geolocation-plugin/
+
+# react-native-harness cache
+.harness/

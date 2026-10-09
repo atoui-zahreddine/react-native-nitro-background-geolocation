@@ -19,6 +19,20 @@
       "inputs": ["src/**", "tsconfig.json", "package.json"],
       "outputs": []
     },
+    "test": {
+      "inputs": ["src/**", "vitest.config.ts", "package.json"],
+      "outputs": []
+    },
+    "test:harness": {
+      "cache": false,
+      "dependsOn": ["^prepare"],
+      "env": [
+        "CI",
+        "HARNESS_ANDROID_AVD",
+        "HARNESS_IOS_DEVICE",
+        "HARNESS_IOS_VERSION"
+      ]
+    },
     "lint": {
       "inputs": ["src/**", "*.{js,ts,tsx}", "package.json"],
       "outputs": []

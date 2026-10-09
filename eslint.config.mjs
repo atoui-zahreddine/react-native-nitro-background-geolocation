@@ -30,6 +30,7 @@ export default defineConfig([
       '**/build/',
       '**/dist/',
       '**/.expo/',
+      '**/.harness/',
       '**/nitrogen/',
       'cordova-background-geolocation-plugin/',
       'apps/docs/.docusaurus/',

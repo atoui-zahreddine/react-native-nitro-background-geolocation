@@ -12,7 +12,8 @@ module.exports = function (api) {
 
   return getConfig(
     {
-      presets: ['babel-preset-expo'],
+      // A no-op unless react-native-harness runs the bundle.
+      presets: ['babel-preset-expo', 'react-native-harness/babel-preset'],
     },
     { root: libRoot, pkg }
   );

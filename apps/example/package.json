@@ -11,7 +11,10 @@
     "build:android": "cd android && ./gradlew assembleDebug -DtestBuildType=debug -Dorg.gradle.jvmargs=-Xmx4g",
     "typecheck": "tsc",
     "test": "vitest run",
-    "lint": "eslint \"**/*.{js,ts,tsx}\""
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "test:harness": "react-native-harness --config jest.harness.config.mjs",
+    "test:harness:ios": "react-native-harness --config jest.harness.config.mjs --harnessRunner ios",
+    "test:harness:android": "react-native-harness --config jest.harness.config.mjs --harnessRunner android"
   },
   "dependencies": {
     "@expo/metro-runtime": "~57.0.16",
@@ -37,8 +40,12 @@
   },
   "private": true,
   "devDependencies": {
+    "@react-native-harness/platform-android": "1.5.0",
+    "@react-native-harness/platform-apple": "1.5.0",
     "expo-dev-client": "~57.0.19",
+    "jest": "^30.5.2",
     "react-native-builder-bob": "^0.43.1",
+    "react-native-harness": "1.5.0",
     "vitest": "^4.1.10"
   }
 }
